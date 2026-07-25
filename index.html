@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Історія України | НМТ Таймлайн</title>
+  <link rel="stylesheet" href="style.css">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;900&display=swap" rel="stylesheet">
+</head>
+<body>
+
+  <header class="navbar">
+    <div class="logo">🇺🇦 Історія України <span>НМТ</span></div>
+    <nav class="nav-links">
+      <button class="nav-btn active" data-tab="timeline">⏳ Хронологія</button>
+      <button class="nav-btn" data-tab="persons">👑 Діячі</button>
+      <button class="nav-btn" data-tab="maps">🗺️ Карти & Пам'ятки</button>
+      <button class="nav-btn" data-tab="cheats">📌 Шпори</button>
+    </nav>
+    <button id="theme-toggle" class="icon-btn" title="Змінити тему">🌙</button>
+  </header>
+
+  <div class="controls-bar">
+    <div class="control-group">
+      <label>Орієнтація:</label>
+      <button id="btn-horizontal" class="btn-toggle active">➡️ Горизонтально</button>
+      <button id="btn-vertical" class="btn-toggle">⬇️ Вертикально</button>
+    </div>
+    
+    <div class="control-group">
+      <label>Інтервал дат:</label>
+      <button id="btn-spacing-equal" class="btn-toggle active">Рівний</button>
+      <button id="btn-spacing-proportional" class="btn-toggle">Пропорційний</button>
+    </div>
+
+    <div class="control-group search-box">
+      <input type="text" id="search-input" placeholder="Пошук події, року, діяча...">
+    </div>
+  </div>
+
+  <main id="tab-timeline" class="tab-content active">
+    
+    <div class="category-filters" id="category-filters">
+      </div>
+
+    <div class="timeline-wrapper horizontal" id="timeline-wrapper">
+      <div class="timeline-track" id="timeline-track">
+        </div>
+    </div>
+
+    <section class="details-panel hidden" id="details-panel">
+      <button class="close-btn" id="close-details">&times;</button>
+      <div class="details-header">
+        <span class="details-year" id="det-year"></span>
+        <h2 id="det-title"></h2>
+        <span class="details-category" id="det-category"></span>
+      </div>
+      <div class="details-body">
+        <div class="details-text" id="det-text"></div>
+        <div class="details-media" id="det-media"></div>
+      </div>
+    </section>
+  </main>
+
+  <script src="app.js"></script>
+</body>
+</html>

@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Історія України | НМТ</title>
+  <title>EduPrep NMT | Інтерактивна платформа</title>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;900&display=swap" rel="stylesheet">
   <style>
     :root {
@@ -104,11 +104,12 @@
       outline: none;
     }
 
-    /* Таймлайн */
+    /* Главный контейнер шкалы */
     .timeline-container {
       position: relative;
       width: 100%;
       margin-top: 1rem;
+      overflow: hidden;
     }
 
     .timeline-scroll-area {
@@ -117,8 +118,15 @@
       position: relative;
       padding: 3rem 1rem;
       width: 100%;
+      cursor: grab;
+      user-select: none;
+      scrollbar-width: none; /* Скрываем скроллбар */
     }
 
+    .timeline-scroll-area::-webkit-scrollbar { display: none; }
+    .timeline-scroll-area:active { cursor: grabbing; }
+
+    /* Горизонтальная ось */
     .timeline-scroll-area.horizontal {
       min-width: 100%;
     }
@@ -127,36 +135,36 @@
       position: absolute;
       top: 50%;
       left: 0;
-      right: 0;
+      right: 1.5rem; /* Обрезаем линию строго перед стрелкой */
       height: 3px;
       background-color: var(--accent-gold);
       z-index: 1;
-      min-width: 100%;
     }
 
     .timeline-scroll-area.horizontal .timeline-ticks {
       display: flex;
-      gap: 3.5rem;
+      gap: 4rem;
       position: relative;
       z-index: 2;
       align-items: center;
       width: max-content;
-      padding-right: 4rem;
+      padding-right: 5rem;
     }
 
+    /* Стрелка без рамки и без хвоста */
     .fixed-arrow-right {
       position: absolute;
-      right: 10px;
+      right: 5px;
       top: 50%;
       transform: translateY(-50%);
-      font-size: 1.2rem;
+      font-size: 1rem;
       color: var(--accent-gold);
       z-index: 10;
       pointer-events: none;
-      background: var(--bg-color);
-      padding: 2px 6px;
-      border-radius: 4px;
-      border: 1px solid var(--border-color);
+      background: transparent;
+      padding: 0;
+      border: none;
+      line-height: 1;
     }
 
     /* Вертикальный режим */
@@ -165,6 +173,7 @@
       align-items: center;
       padding: 2rem 1rem;
       overflow-x: hidden;
+      cursor: default;
     }
 
     .timeline-scroll-area.vertical .timeline-axis-line {
@@ -177,6 +186,7 @@
       height: 100%;
       background-color: var(--accent-gold);
       z-index: 1;
+      right: auto;
     }
 
     .timeline-scroll-area.vertical .timeline-ticks {
@@ -187,6 +197,7 @@
       z-index: 2;
       width: 100%;
       max-width: 360px;
+      padding-right: 0;
     }
 
     .timeline-scroll-area.vertical .tick-item {
@@ -200,13 +211,13 @@
       border: 1px solid var(--border-color);
     }
 
-    /* Элементы точек */
+    /* Точки */
     .tick-item {
       display: flex;
       flex-direction: column;
       align-items: center;
       cursor: pointer;
-      min-width: 120px;
+      min-width: 130px;
       text-align: center;
     }
 
@@ -217,7 +228,7 @@
       border-radius: 50%;
       border: 3px solid var(--bg-color);
       margin: 6px 0;
-      transition: transform 0.2s;
+      transition: transform 0.2s, background-color 0.2s;
     }
 
     .tick-item:hover .tick-mark, .tick-item.active .tick-mark {
@@ -234,11 +245,11 @@
     .tick-short-title {
       font-size: 0.8rem;
       color: var(--text-muted);
-      max-width: 120px;
+      max-width: 130px;
       line-height: 1.2;
     }
 
-    /* Конспект (Баббл) */
+    /* Карточка-конспект */
     .speech-bubble {
       position: relative;
       margin: 1rem;
@@ -290,7 +301,7 @@
       color: var(--accent-gold);
     }
 
-    /* Аккордеоны */
+    /* Раскрывающие элементы */
     .accordion-container {
       margin-top: 1rem;
       display: flex;
@@ -341,7 +352,7 @@
       border: 1px solid var(--border-color);
     }
 
-    /* Модалка */
+    /* Модалка настроек */
     .modal-wrapper {
       display: none;
       position: fixed;
@@ -385,12 +396,12 @@
 
   <header class="header-container">
     <div class="top-row">
-      <div class="logo">Історія України <span>НМТ</span></div>
+      <div class="logo">EduPrep <span>НМТ</span></div>
       <button id="open-settings-btn" class="settings-trigger-btn">⚙ Налаштування</button>
     </div>
 
     <nav class="nav-links">
-      <button class="nav-btn active">Хронологія</button>
+      <button class="nav-btn active">Історія України</button>
       <button class="nav-btn">Діячі</button>
       <button class="nav-btn">Пам'ятки</button>
       <button class="nav-btn">Шпори</button>
@@ -458,6 +469,8 @@
   </div>
 
   <script>
+    var currentActiveId = null;
+
     var eventsData = [
       {
         id: "1",
@@ -538,19 +551,25 @@
       for (var i = 0; i < data.length; i++) {
         (function(item) {
           var tick = document.createElement('div');
-          tick.className = 'tick-item';
+          tick.className = 'tick-item' + (currentActiveId === item.id ? ' active' : '');
           tick.innerHTML = 
             '<div class="tick-year">' + item.year + '</div>' +
             '<div class="tick-mark"></div>' +
             '<div class="tick-short-title">' + item.title + '</div>';
           
-          tick.onclick = function() {
-            var allTicks = document.querySelectorAll('.tick-item');
-            for (var j = 0; j < allTicks.length; j++) {
-              allTicks[j].classList.remove('active');
+          tick.onclick = function(e) {
+            // Если кликнули по той же точке повторно — скрываем баббл!
+            if (currentActiveId === item.id) {
+              closeBubble();
+            } else {
+              var allTicks = document.querySelectorAll('.tick-item');
+              for (var j = 0; j < allTicks.length; j++) {
+                allTicks[j].classList.remove('active');
+              }
+              tick.classList.add('active');
+              currentActiveId = item.id;
+              openBubble(item);
             }
-            tick.classList.add('active');
-            openBubble(item);
           };
 
           container.appendChild(tick);
@@ -596,18 +615,49 @@
       bubble.classList.remove('hidden');
     }
 
-    // Запускаем отрисовку сразу напрямую!
-    renderTimeline(eventsData);
-
-    // События интерфейса
-    document.getElementById('close-bubble').onclick = function() {
+    function closeBubble() {
       document.getElementById('details-bubble').classList.add('hidden');
       var allTicks = document.querySelectorAll('.tick-item');
       for (var j = 0; j < allTicks.length; j++) {
         allTicks[j].classList.remove('active');
       }
-    };
+      currentActiveId = null;
+    }
 
+    // РЕАЛИЗАЦИЯ ТЯНУЧЕЙ ШКАЛЫ (DRAG TO SCROLL)
+    var scrollArea = document.getElementById('scroll-area');
+    var isDown = false;
+    var startX, scrollLeft;
+
+    scrollArea.addEventListener('mousedown', function(e) {
+      isDown = true;
+      startX = e.pageX - scrollArea.offsetLeft;
+      scrollLeft = scrollArea.scrollLeft;
+    });
+
+    scrollArea.addEventListener('mouseleave', function() {
+      isDown = false;
+    });
+
+    scrollArea.addEventListener('mouseup', function() {
+      isDown = false;
+    });
+
+    scrollArea.addEventListener('mousemove', function(e) {
+      if (!isDown) return;
+      e.preventDefault();
+      var x = e.pageX - scrollArea.offsetLeft;
+      var walk = (x - startX) * 1.5; // Скорость прокрутки
+      scrollArea.scrollLeft = scrollLeft - walk;
+    });
+
+    // Отрисовка
+    renderTimeline(eventsData);
+
+    // Закрытие по крестику
+    document.getElementById('close-bubble').onclick = closeBubble;
+
+    // Поиск
     document.getElementById('search-input').oninput = function(e) {
       var val = e.target.value.toLowerCase().trim();
       var filtered = [];
@@ -643,7 +693,6 @@
     };
 
     // Ориентация
-    var scrollArea = document.getElementById('scroll-area');
     var arrow = document.getElementById('main-arrow');
     var horizBtn = document.getElementById('btn-orient-horiz');
     var vertBtn = document.getElementById('btn-orient-vert');
@@ -667,12 +716,12 @@
     var gapWide = document.getElementById('btn-gap-wide');
 
     gapEqual.onclick = function() {
-      ticks.style.gap = '3.5rem';
+      ticks.style.gap = '4rem';
       this.classList.add('active');
       gapWide.classList.remove('active');
     };
     gapWide.onclick = function() {
-      ticks.style.gap = '6.5rem';
+      ticks.style.gap = '7rem';
       this.classList.add('active');
       gapEqual.classList.remove('active');
     };

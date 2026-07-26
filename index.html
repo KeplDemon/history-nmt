@@ -2,7 +2,7 @@
 <html lang="uk">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <meta name="referrer" content="no-referrer">
     <title>EduPrep НМТ — Вся історія</title>
     <style>
@@ -67,6 +67,8 @@
             align-items: center;
             z-index: 50;
             flex-shrink: 0;
+            width: 100%;
+            box-sizing: border-box;
         }
 
         .brand-logo {
@@ -300,13 +302,13 @@
 
         .floating-window {
             position: fixed;
-            top: 20%;
+            top: 50%;
             left: 50%;
-            transform: translateX(-50%);
-            width: 580px;
-            height: 420px;
-            min-width: 320px;
-            min-height: 220px;
+            transform: translate(-50%, -50%);
+            width: min(580px, 92vw);
+            max-height: 85vh;
+            height: auto;
+            min-width: 280px;
             background: var(--card-bg);
             border: 1px solid var(--card-border);
             border-top: 3px solid var(--orange-primary);
@@ -315,8 +317,33 @@
             z-index: 90;
             display: none;
             flex-direction: column;
-            resize: both;
             overflow: hidden;
+        }
+
+        /* Адаптив для мобилок */
+        @media (max-width: 600px) {
+            .header-tools {
+                gap: 0.4rem;
+            }
+            .search-input {
+                width: 130px;
+                font-size: 0.78rem;
+                padding: 0.3rem 0.5rem;
+            }
+            .icon-btn {
+                padding: 0.3rem 0.5rem;
+                font-size: 0.78rem;
+            }
+            .brand-logo {
+                font-size: 1rem;
+            }
+            .floating-window {
+                width: 95vw;
+                height: 80vh;
+                top: 50%;
+                left: 50%;
+                transform: translate(-50%, -50%) !important; /* На мобилке фиксируем по центру */
+            }
         }
 
         .floating-window.open {
@@ -749,7 +776,22 @@
                 });
             }
 
-            document.getElementById('floatingWindow').classList.add('open');
+            const win = document.getElementById('floatingWindow');
+            // Сбрасываем ручные инлайн-стили перетаскивания при каждом открытии:
+            win.style.left = '';
+            win.style.top = '';
+            win.style.transform = '';
+            win.classList.add('open');
+        }
+
+        function closeWindow() {
+            const win = document.getElementById('floatingWindow');
+            win.classList.remove('open');
+            win.style.left = '';
+            win.style.top = '';
+            win.style.transform = '';
+            document.querySelectorAll('.timeline-node-item').forEach(n => n.classList.remove('active'));
+            activeNodeId = null;
         }
 
         function closeWindow() {

@@ -14,7 +14,7 @@
       --text-main: #f8fafc;
       --text-muted: #94a3b8;
       --border-color: #26334d;
-      --bubble-bg: #1e293b;
+      --bubble-bg: #151c2c;
     }
 
     * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Inter', sans-serif; }
@@ -28,6 +28,7 @@
       overflow-x: hidden;
     }
 
+    /* Шапка */
     .header-container {
       background-color: var(--panel-bg);
       border-bottom: 1px solid var(--border-color);
@@ -65,18 +66,19 @@
       color: var(--text-main); padding: 0.5rem 0.8rem; border-radius: 8px; font-size: 0.85rem; outline: none;
     }
 
-    /* Главный контейнер таймлайна */
+    /* ТАЙМЛАЙН КОНТЕЙНЕР */
     .timeline-container {
       position: relative;
       width: 100%;
       margin-top: 1rem;
+      background: var(--bg-color);
     }
 
     .timeline-scroll-area {
       display: flex;
       overflow-x: auto;
       position: relative;
-      padding: 6rem 1rem 6rem 1rem;
+      padding: 5rem 2rem 5rem 1rem;
       width: 100%;
       cursor: grab;
       user-select: none;
@@ -91,7 +93,7 @@
       z-index: 2;
       align-items: center;
       width: max-content;
-      padding-right: 5rem;
+      padding-right: 4rem;
     }
 
     /* Главная ось */
@@ -106,19 +108,18 @@
       transform: translateY(-50%);
     }
 
-    /* СТРЕЛКА НА ПРАВОМ КРАЮ ЭКРАНА (FIXED) */
+    /* СТРЕЛКА СТРОГО НА ЛИНИИСПРАВА (НЕ СЪЕЗЖАЕТ) */
     .fixed-arrow-right {
-      position: fixed;
-      right: 1rem;
+      position: absolute;
+      right: 10px;
       top: 50%;
       transform: translateY(-50%);
-      font-size: 1.2rem;
+      font-size: 1.1rem;
       color: var(--accent-gold);
-      z-index: 50;
+      z-index: 20;
       pointer-events: none;
       background: var(--bg-color);
-      padding: 4px;
-      border-radius: 50%;
+      padding: 2px 5px;
     }
 
     /* Полоска процесса (Над осью) */
@@ -133,7 +134,7 @@
     }
     .period-bar:hover { height: 6px; opacity: 1; }
 
-    /* Элемент точки */
+    /* Точки */
     .tick-wrapper { display: flex; align-items: center; position: relative; }
 
     .tick-item {
@@ -141,16 +142,15 @@
       flex-direction: column;
       align-items: center;
       cursor: pointer;
-      min-width: 110px;
+      min-width: 120px;
       text-align: center;
       position: relative;
       z-index: 3;
     }
 
-    /* ТОЧКА СТРОГО НА ОСИ */
     .tick-mark {
-      width: 16px;
-      height: 16px;
+      width: 14px;
+      height: 14px;
       background: var(--accent-gold);
       border-radius: 50%;
       border: 3px solid var(--bg-color);
@@ -175,66 +175,62 @@
       box-shadow: 0 0 10px #60a5fa;
     }
 
-    /* Блок текста (Сверху или Снизу) */
     .tick-content-box {
       position: absolute;
-      width: 120px;
+      width: 130px;
       display: flex;
       flex-direction: column;
       align-items: center;
     }
 
-    .pos-top { bottom: 25px; }
-    .pos-bottom { top: 25px; }
+    .pos-top { bottom: 22px; }
+    .pos-bottom { top: 22px; }
 
     .tick-year { font-weight: 800; font-size: 0.82rem; color: var(--accent-gold); }
     .tick-short-title { font-size: 0.78rem; color: var(--text-muted); line-height: 1.2; margin-top: 2px; }
 
-    /* Красивый волнистый разрыв времени */
+    /* Волнистая линия разрыва */
     .time-gap-break {
-      width: 30px;
-      height: 12px;
+      width: 25px;
+      height: 10px;
       position: relative;
       z-index: 3;
-      background: radial-gradient(circle, var(--accent-gold) 20%, transparent 20%);
-      background-size: 6px 6px;
-      opacity: 0.6;
+      background: radial-gradient(circle, var(--accent-gold) 25%, transparent 25%);
+      background-size: 5px 5px;
+      opacity: 0.5;
     }
 
-    /* Tooltip */
-    .floating-tooltip {
-      position: fixed;
-      display: none;
-      background: var(--panel-bg);
-      border: 1px solid var(--accent-blue);
-      color: var(--text-main);
-      padding: 0.6rem 0.9rem;
-      border-radius: 8px;
-      font-size: 0.8rem;
-      box-shadow: 0 8px 20px rgba(0,0,0,0.5);
-      z-index: 2000;
-      pointer-events: none;
-      max-width: 260px;
-    }
-    .floating-tooltip-title { font-weight: 700; color: var(--accent-blue); margin-bottom: 3px; }
-
-    /* Конспект */
+    /* Конспект под таймлайном */
     .speech-bubble {
-      position: relative; margin: 1rem; background: var(--bubble-bg);
-      border: 2px solid var(--accent-blue); border-radius: 14px; padding: 1.4rem;
-      box-shadow: 0 10px 25px rgba(0,0,0,0.5);
+      position: relative; 
+      margin: 1.5rem 1rem; 
+      background: var(--bubble-bg);
+      border: 1px solid var(--accent-blue); 
+      border-radius: 12px; 
+      padding: 1.2rem;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.4);
     }
     .speech-bubble.hidden { display: none !important; }
 
     .bubble-close {
-      position: absolute; top: 10px; right: 14px; font-size: 1.6rem;
+      position: absolute; top: 8px; right: 12px; font-size: 1.4rem;
       background: none; border: none; color: var(--text-muted); cursor: pointer;
     }
 
-    .bubble-year { color: var(--accent-gold); font-weight: 900; font-size: 1.15rem; margin-bottom: 4px; display: inline-block; }
-    .bubble-header h3 { font-size: 1.1rem; font-weight: 700; color: var(--text-main); }
-    .bubble-body { margin-top: 1rem; font-size: 0.95rem; line-height: 1.6; color: var(--text-main); }
-    .bubble-terms { margin-top: 1rem; padding-top: 0.8rem; border-top: 1px dashed var(--border-color); font-size: 0.85rem; color: var(--accent-gold); }
+    .bubble-year { color: var(--accent-gold); font-weight: 900; font-size: 1.1rem; margin-bottom: 4px; display: inline-block; }
+    .bubble-header h3 { font-size: 1.05rem; font-weight: 700; color: var(--text-main); }
+    
+    .bubble-body { margin-top: 0.8rem; font-size: 0.9rem; line-height: 1.5; color: #cbd5e1; }
+    .bubble-body ul { margin-left: 1.2rem; margin-top: 0.4rem; }
+    .bubble-body li { margin-bottom: 0.3rem; }
+
+    .bubble-terms { 
+      margin-top: 0.8rem; 
+      padding-top: 0.6rem; 
+      border-top: 1px dashed var(--border-color); 
+      font-size: 0.82rem; 
+      color: var(--accent-gold); 
+    }
   </style>
 </head>
 <body>
@@ -278,15 +274,8 @@
     </div>
   </main>
 
-  <div id="floating-tooltip" class="floating-tooltip">
-    <div id="tooltip-title" class="floating-tooltip-title"></div>
-    <div id="tooltip-desc"></div>
-  </div>
-
   <script src="data.js"></script>
-
   <script>
-    // Римские цифры
     function toRoman(num) {
       var lookup = {M:1000,CM:900,D:500,CD:400,C:100,XC:90,L:50,XL:40,X:10,IX:9,V:5,IV:4,I:1}, roman = '', i;
       for (i in lookup) {
@@ -295,19 +284,16 @@
       return roman;
     }
 
-    // Автоматический конвертер дат в красивый украинский текст
     function parseDateToText(dateInput) {
       if (typeof dateInput === 'string') {
         var parts = dateInput.split('.');
         if (parts.length === 3) {
           var months = ["січня","лютого","березня","квітня","травня","червня","липня","серпня","вересня","жовтня","листопада","грудня"];
-          var mIndex = parseInt(parts[1], 10) - 1;
-          return parseInt(parts[0], 10) + ' ' + months[mIndex] + ' ' + parts[2] + ' р.';
+          return parseInt(parts[0], 10) + ' ' + months[parseInt(parts[1], 10) - 1] + ' ' + parts[2] + ' р.';
         }
         if (parts.length === 2) {
           var monthsCap = ["Січень","Лютий","Березень","Квітень","Травень","Червень","Липень","Серпень","Вересень","Жовтень","Листопад","Грудень"];
-          var mIndex = parseInt(parts[0], 10) - 1;
-          return monthsCap[mIndex] + ' ' + parts[1] + ' р.';
+          return monthsCap[parseInt(parts[0], 10) - 1] + ' ' + parts[1] + ' р.';
         }
       }
 
@@ -317,18 +303,15 @@
       if (num < 0) {
         var abs = Math.abs(num);
         if (abs >= 1000) {
-          var thous = Math.round(abs / 1000);
-          return toRoman(thous) + ' тис. до н. е.';
+          return toRoman(Math.round(abs / 1000)) + ' тис. до н. е.';
         } else {
-          var cent = Math.ceil(abs / 100);
-          return toRoman(cent) + ' ст. до н. е.';
+          return toRoman(Math.ceil(abs / 100)) + ' ст. до н. е.';
         }
       } else {
         return num + ' р.';
       }
     }
 
-    // Расчет числового значения года для дистанций
     function getNumericYear(dateInput) {
       if (typeof dateInput === 'number') return dateInput;
       if (typeof dateInput === 'string') {
@@ -345,19 +328,11 @@
     function renderTimeline(data) {
       var container = document.getElementById('timeline-ticks');
       if (!container) return;
-      
       container.innerHTML = '<div class="timeline-axis-line"></div>';
 
-      if (!data || data.length === 0) return;
-
-      // Сортировка по дате
-      data.sort(function(a, b) {
-        return getNumericYear(a.date) - getNumericYear(b.date);
-      });
+      data.sort(function(a, b) { return getNumericYear(a.date) - getNumericYear(b.date); });
 
       var tickElements = {};
-
-      // Определяем, какие точки входят в процессы (чтобы их текст сместить вниз)
       var pointsInPeriods = {};
       if (typeof periodsData !== 'undefined') {
         periodsData.forEach(function(p) {
@@ -369,29 +344,21 @@
       for (var i = 0; i < data.length; i++) {
         (function(item, index) {
           var displayYear = item.yearText || parseDateToText(item.date);
-          
           var wrapper = document.createElement('div');
           wrapper.className = 'tick-wrapper';
 
-          // Динамический расчет расстояния между точками
-          var gap = 70; 
+          var gap = 80; 
           if (index < data.length - 1) {
             var diff = Math.abs(getNumericYear(data[index+1].date) - getNumericYear(item.date));
-            if (diff > 500) gap = 140;
+            if (diff > 500) gap = 130;
             else if (diff > 100) gap = 100;
-            else if (diff < 5) gap = 50;
           }
 
           var tick = document.createElement('div');
           tick.className = 'tick-item' + (currentActiveId === item.id ? ' active' : '');
           tick.style.marginRight = gap + 'px';
-          tick.setAttribute('data-id', item.id);
 
-          // Умное распределение текст сверху/снизу
-          var positionClass = 'pos-top';
-          if (pointsInPeriods[item.id] || index % 2 !== 0) {
-            positionClass = 'pos-bottom';
-          }
+          var positionClass = (pointsInPeriods[item.id] || index % 2 !== 0) ? 'pos-bottom' : 'pos-top';
 
           tick.innerHTML = 
             '<div class="tick-mark"></div>' +
@@ -413,8 +380,7 @@
 
           wrapper.appendChild(tick);
 
-          // Добавляем красивый разрыв, если пауза огромная
-          if (gap >= 140 && index < data.length - 1) {
+          if (gap >= 130 && index < data.length - 1) {
             var gapMark = document.createElement('div');
             gapMark.className = 'time-gap-break';
             gapMark.style.marginRight = gap + 'px';
@@ -426,16 +392,12 @@
         })(data[i], i);
       }
 
-      setTimeout(function() {
-        renderPeriods(tickElements);
-      }, 50);
+      setTimeout(function() { renderPeriods(tickElements); }, 50);
     }
 
     function renderPeriods(tickElements) {
       if (typeof periodsData === 'undefined') return;
-
       var container = document.getElementById('timeline-ticks');
-      var tooltip = document.getElementById('floating-tooltip');
 
       periodsData.forEach(function(period) {
         var startEl = tickElements[period.startEventId];
@@ -448,40 +410,13 @@
 
           var leftPos = (startRect.left + startRect.width / 2) - containerRect.left;
           var rightPos = (endRect.left + endRect.width / 2) - containerRect.left;
-          var width = rightPos - leftPos;
 
           var bar = document.createElement('div');
           bar.className = 'period-bar';
           bar.style.left = leftPos + 'px';
-          bar.style.width = width + 'px';
-          
-          // Полоса строго над оранжевой осью
+          bar.style.width = (rightPos - leftPos) + 'px';
           bar.style.top = 'calc(50% - 12px)';
           bar.style.backgroundColor = period.color || '#3b82f6';
-
-          function showTooltip(e) {
-            tooltip.style.display = 'block';
-            tooltip.style.left = (e.clientX + 12) + 'px';
-            tooltip.style.top = (e.clientY + 12) + 'px';
-            document.getElementById('tooltip-title').innerText = period.title;
-            document.getElementById('tooltip-desc').innerText = period.description;
-
-            startEl.classList.add('highlighted');
-            endEl.classList.add('highlighted');
-          }
-
-          function hideTooltip() {
-            tooltip.style.display = 'none';
-            startEl.classList.remove('highlighted');
-            endEl.classList.remove('highlighted');
-          }
-
-          bar.onmousemove = showTooltip;
-          bar.onmouseleave = hideTooltip;
-          bar.onclick = function(e) {
-            e.stopPropagation();
-            showTooltip(e);
-          };
 
           container.appendChild(bar);
         }
@@ -511,34 +446,20 @@
       currentActiveId = null;
     }
 
-    // Скролл мышкой / тачпадом
     var scrollArea = document.getElementById('scroll-area');
     var isDown = false, startX, scrollLeft;
-
-    scrollArea.addEventListener('wheel', function(e) {
-      if (e.deltaY !== 0) {
-        e.preventDefault();
-        scrollArea.scrollLeft += e.deltaY;
-      }
-    });
 
     scrollArea.addEventListener('mousedown', function(e) {
       isDown = true;
       startX = e.pageX - scrollArea.offsetLeft;
       scrollLeft = scrollArea.scrollLeft;
     });
-
     scrollArea.addEventListener('mouseleave', function() { isDown = false; });
     scrollArea.addEventListener('mouseup', function() { isDown = false; });
-
     scrollArea.addEventListener('mousemove', function(e) {
       if (!isDown) return;
       var x = e.pageX - scrollArea.offsetLeft;
-      var walk = (x - startX) * 1.5;
-      if (Math.abs(walk) > 5) {
-        e.preventDefault();
-        scrollArea.scrollLeft = scrollLeft - walk;
-      }
+      scrollArea.scrollLeft = scrollLeft - (x - startX) * 1.5;
     });
 
     if (typeof eventsData !== 'undefined') {

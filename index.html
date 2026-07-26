@@ -4,114 +4,95 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="referrer" content="no-referrer">
-    <title>Вся історія на НМТ</title>
+    <title>EduPrep НМТ — Вся історія</title>
     <style>
         :root {
-            /* Оригинальная тёмная графитовая палитра без холодного синего */
-            --bg-main: #0d0e12;
-            --panel-bg: #15161d;
-            --card-bg: #1c1d26;
-            --card-border: #2a2b38;
-            --text-primary: #f3f4f6;
-            --text-secondary: #9ca3af;
-            --accent: #6366f1;
-            --accent-hover: #4f46e5;
-            --accent-light: rgba(99, 102, 241, 0.15);
-            --timeline-line: #374151;
-            --font-size: 15px;
-        }
-
-        body.light-theme {
-            --bg-main: #f3f4f6;
-            --panel-bg: #ffffff;
-            --card-bg: #f9fafb;
-            --card-border: #e5e7eb;
-            --text-primary: #111827;
-            --text-secondary: #4b5563;
-            --accent: #4f46e5;
-            --timeline-line: #d1d5db;
-        }
-
-        body.sepia-theme {
-            --bg-main: #f4ecd8;
-            --panel-bg: #e2d7be;
-            --card-bg: #ebd2b9;
-            --card-border: #d3c0a2;
-            --text-primary: #423223;
-            --text-secondary: #6e5944;
-            --accent: #b45309;
-            --timeline-line: #c8b69e;
+            --bg-main: #0d0f12;
+            --panel-bg: #151821;
+            --card-bg: #1e2230;
+            --card-border: #2d3448;
+            --text-main: #f3f4f6;
+            --text-muted: #9ca3af;
+            
+            /* Оранжевая палитра EduPrep */
+            --orange-primary: #ff6b00;
+            --orange-hover: #ff8533;
+            --orange-glow: rgba(255, 107, 0, 0.4);
+            --orange-light: rgba(255, 107, 0, 0.15);
+            
+            --timeline-axis: #374151;
         }
 
         * {
             box-sizing: border-box;
             margin: 0;
             padding: 0;
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
         }
 
         body {
             background-color: var(--bg-main);
-            color: var(--text-primary);
-            font-size: var(--font-size);
-            min-height: 100vh;
+            color: var(--text-main);
+            height: 100vh;
             display: flex;
             flex-direction: column;
+            overflow: hidden; /* Страница не скроллится, скроллится только шкала */
+            user-select: none;
         }
 
-        /* --- ШАПКА / ТИТУЛКА --- */
+        /* --- ШАПКА ЕDUPREP --- */
         header {
             background-color: var(--panel-bg);
             border-bottom: 1px solid var(--card-border);
-            padding: 0.8rem 1.5rem;
+            padding: 0.75rem 1.5rem;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            position: sticky;
-            top: 0;
-            z-index: 100;
+            z-index: 50;
+            flex-shrink: 0;
         }
 
-        .header-brand {
-            font-size: 1.15rem;
-            font-weight: 700;
-            color: var(--text-primary);
+        .brand-logo {
+            font-size: 1.25rem;
+            font-weight: 800;
+            color: var(--text-main);
             display: flex;
             align-items: center;
-            gap: 0.6rem;
+            gap: 0.5rem;
+            letter-spacing: -0.5px;
         }
 
-        .header-controls {
+        .brand-logo span {
+            color: var(--orange-primary);
+        }
+
+        .header-tools {
             display: flex;
             align-items: center;
-            gap: 0.75rem;
-        }
-
-        .search-box {
-            position: relative;
+            gap: 0.8rem;
         }
 
         .search-input {
             background: var(--card-bg);
             border: 1px solid var(--card-border);
-            color: var(--text-primary);
-            padding: 0.45rem 0.8rem;
+            color: var(--text-main);
+            padding: 0.45rem 0.85rem;
             border-radius: 8px;
             font-size: 0.85rem;
-            width: 220px;
+            width: 230px;
             outline: none;
             transition: border-color 0.2s;
         }
 
         .search-input:focus {
-            border-color: var(--accent);
+            border-color: var(--orange-primary);
         }
 
-        .nav-btn {
+        .icon-btn {
             background: transparent;
             border: 1px solid var(--card-border);
-            color: var(--text-secondary);
-            padding: 0.45rem 0.9rem;
+            color: var(--text-main);
+            padding: 0.45rem 0.85rem;
             border-radius: 8px;
             font-size: 0.85rem;
             font-weight: 600;
@@ -119,410 +100,413 @@
             transition: all 0.2s;
         }
 
-        .nav-btn:hover, .nav-btn.active {
+        .icon-btn:hover {
+            border-color: var(--orange-primary);
+            color: var(--orange-primary);
             background: var(--card-bg);
-            color: var(--text-primary);
-            border-color: var(--accent);
         }
 
-        /* --- ОСНОВНАЯ ОБЛАСТЬ --- */
-        main {
-            flex: 1;
-            position: relative;
-        }
-
-        .tab-page {
-            display: none;
-            width: 100%;
-            height: 100%;
-        }
-
-        .tab-page.active {
-            display: block;
-        }
-
-        /* --- ХРОНОЛОГИЧЕСКАЯ ШКАЛА --- */
-        .timeline-viewport {
-            width: 100%;
-            overflow-x: auto;
-            overflow-y: hidden;
-            padding: 90px 40px 140px 40px;
-            position: relative;
-            min-height: calc(100vh - 65px);
-            user-select: none;
-        }
-
-        .timeline-canvas {
-            position: relative;
-            min-width: max-content;
-        }
-
-        .timeline-line {
-            position: absolute;
-            background-color: var(--timeline-line);
-            height: 3px;
-            top: 100px;
-            left: 0;
-            right: 0;
-            border-radius: 2px;
-        }
-
-        /* Полосы периодов (над шкалой) */
-        .period-segment {
-            position: absolute;
-            height: 14px;
-            top: 70px;
-            border-radius: 7px;
+        /* --- ПРИБИТАЯ СТРЕЛКА НАПРАВЛЕНИЯ ВРЕМЕНИ (СПРАВА) --- */
+        .pinned-arrow {
+            position: fixed;
+            right: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            z-index: 40;
+            background: var(--panel-bg);
+            border: 1px solid var(--orange-primary);
+            color: var(--orange-primary);
+            width: 42px;
+            height: 42px;
+            border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 0.72rem;
-            font-weight: 700;
-            color: #ffffff;
-            padding: 0 10px;
-            white-space: nowrap;
-            box-shadow: 0 2px 6px rgba(0,0,0,0.4);
-            z-index: 1;
-        }
-
-        /* Точка события на шкале */
-        .event-node {
-            position: absolute;
-            top: 91px;
-            transform: translateX(-50%);
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            cursor: pointer;
-            z-index: 2;
-            transition: transform 0.15s ease;
-        }
-
-        .event-node:hover {
-            transform: translateX(-50%) scale(1.12);
-        }
-
-        .node-circle {
-            width: 20px;
-            height: 20px;
-            border-radius: 50%;
-            background-color: var(--accent);
-            border: 4px solid var(--bg-main);
-            box-shadow: 0 0 8px rgba(99, 102, 241, 0.5);
-            transition: all 0.2s;
-        }
-
-        .event-node.selected .node-circle {
-            background-color: #ef4444;
-            box-shadow: 0 0 12px rgba(239, 68, 68, 0.8);
-            transform: scale(1.2);
-        }
-
-        .node-info {
-            margin-top: 10px;
-            text-align: center;
-            width: 140px;
+            font-size: 1.4rem;
+            box-shadow: 0 0 15px var(--orange-glow);
             pointer-events: none;
         }
 
-        .node-year {
-            font-size: 0.85rem;
-            font-weight: 700;
-            color: var(--accent);
+        /* --- КОНТЕЙНЕР ШКАЛЫ ВРЕМЕНИ --- */
+        .timeline-section {
+            flex: 1;
+            position: relative;
+            width: 100%;
+            overflow-x: auto;
+            overflow-y: hidden;
+            cursor: grab;
+            
+            /* Хак для размещения скроллбара СВЕРХУ шкалы */
+            transform: rotateX(180deg);
         }
 
-        .node-heading {
+        .timeline-section:active {
+            cursor: grabbing;
+        }
+
+        /* Кастомный оранжевый скроллбар */
+        .timeline-section::-webkit-scrollbar {
+            height: 8px;
+        }
+        .timeline-section::-webkit-scrollbar-track {
+            background: var(--panel-bg);
+        }
+        .timeline-section::-webkit-scrollbar-thumb {
+            background: var(--orange-primary);
+            border-radius: 4px;
+        }
+
+        .timeline-inner {
+            position: relative;
+            height: 100%;
+            min-height: 380px;
+            padding: 0 80px;
+            /* Возвращаем нормальную ориентацию контенту после переворота скроллбара */
+            transform: rotateX(180deg);
+        }
+
+        /* Главная ось времени */
+        .timeline-axis-line {
+            position: absolute;
+            top: 190px;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: var(--timeline-axis);
+            border-radius: 2px;
+        }
+
+        /* --- ПОЛОСЫ ПЕРИОДОВ (БЕЗ ТЕКСТА) --- */
+        .period-bar-item {
+            position: absolute;
+            top: 168px; /* Чуть выше оси */
+            height: 8px;
+            border-radius: 4px;
+            z-index: 2;
+            cursor: pointer;
+            transition: transform 0.15s, filter 0.15s;
+        }
+
+        .period-bar-item:hover {
+            transform: scaleY(1.5);
+            filter: brightness(1.2);
+        }
+
+        /* --- ТОЧКИ СОБЫТИЙ И ЧЕРЕДОВАНИЕ ПОДПИСЕЙ --- */
+        .timeline-node-item {
+            position: absolute;
+            top: 192px; /* Центровка по оси */
+            transform: translateX(-50%);
+            z-index: 5;
+            cursor: pointer;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .node-dot-circle {
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            background-color: var(--orange-primary);
+            border: 3px solid var(--bg-main);
+            box-shadow: 0 0 10px var(--orange-glow);
+            transition: all 0.2s;
+        }
+
+        .timeline-node-item:hover .node-dot-circle,
+        .timeline-node-item.active .node-dot-circle {
+            background-color: #ffffff;
+            border-color: var(--orange-primary);
+            transform: scale(1.3);
+            box-shadow: 0 0 15px var(--orange-primary);
+        }
+
+        /* Блок с текстом подписи */
+        .node-caption-box {
+            position: absolute;
+            width: 150px;
+            text-align: center;
+            pointer-events: none;
+        }
+
+        /* Подпись СВЕРХУ */
+        .timeline-node-item.pos-top .node-caption-box {
+            bottom: 26px;
+        }
+
+        /* Подпись СНИЗУ */
+        .timeline-node-item.pos-bottom .node-caption-box {
+            top: 26px;
+        }
+
+        .node-date-lbl {
+            font-size: 0.82rem;
+            font-weight: 800;
+            color: var(--orange-primary);
+            margin-bottom: 2px;
+        }
+
+        .node-title-lbl {
             font-size: 0.78rem;
-            color: var(--text-primary);
-            margin-top: 3px;
+            color: var(--text-main);
             line-height: 1.25;
             font-weight: 500;
         }
 
-        /* --- МОДАЛЬНОЕ ОКНО (КОНСПЕКТ) --- */
-        .modal-backdrop {
+        /* --- ВСПЛЫВАЮЩАЯ ПОДСКАЗКА ДЛЯ ПЕРИОДОВ (ПО МЫШКЕ) --- */
+        .period-tooltip {
             position: fixed;
-            top: 0;
-            left: 0;
-            width: 100vw;
-            height: 100vh;
-            background: rgba(0, 0, 0, 0.7);
-            backdrop-filter: blur(5px);
             display: none;
-            justify-content: center;
-            align-items: center;
-            z-index: 1000;
-            padding: 15px;
-        }
-
-        .modal-backdrop.open {
-            display: flex;
-        }
-
-        .modal-window {
+            z-index: 100;
             background: var(--card-bg);
-            border: 1px solid var(--card-border);
-            border-radius: 14px;
-            width: 100%;
-            max-width: 620px;
-            max-height: 85vh;
-            display: flex;
-            flex-direction: column;
-            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.7);
-            animation: popIn 0.2s ease-out;
-            overflow: hidden;
+            border: 1px solid var(--orange-primary);
+            border-radius: 8px;
+            padding: 0.6rem 0.9rem;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.6);
+            pointer-events: none;
+            max-width: 280px;
         }
 
-        @keyframes popIn {
-            from { opacity: 0; transform: scale(0.96); }
-            to { opacity: 1; transform: scale(1); }
-        }
-
-        .modal-top {
-            padding: 1.2rem 1.4rem;
-            border-bottom: 1px solid var(--card-border);
-            display: flex;
-            justify-content: space-between;
-            align-items: flex-start;
-            background: var(--panel-bg);
-        }
-
-        .modal-title-text {
-            font-size: 1.2rem;
+        .period-tooltip-title {
+            font-size: 0.88rem;
             font-weight: 700;
-            color: var(--text-primary);
+            color: var(--orange-primary);
+            margin-bottom: 3px;
+        }
+
+        .period-tooltip-desc {
+            font-size: 0.78rem;
+            color: var(--text-main);
             line-height: 1.3;
         }
 
-        .modal-date-text {
-            font-size: 0.88rem;
-            color: var(--accent);
-            font-weight: 600;
-            margin-top: 4px;
+        /* --- ПАНЕЛЬ КОНСПЕКТА (ПОД ШКАЛОЙ, НЕ ЗАКРЫВАЕТ ВСЁ ОКНО) --- */
+        .note-panel-drawer {
+            position: fixed;
+            bottom: -100%;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 92%;
+            max-width: 800px;
+            height: 48vh;
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+            border-top: 3px solid var(--orange-primary);
+            border-radius: 16px 16px 0 0;
+            box-shadow: 0 -15px 40px rgba(0, 0, 0, 0.8);
+            z-index: 60;
+            display: flex;
+            flex-direction: column;
+            transition: bottom 0.3s cubic-bezier(0.1, 0.9, 0.2, 1);
         }
 
-        .btn-close {
+        .note-panel-drawer.open {
+            bottom: 0;
+        }
+
+        .drawer-header {
+            padding: 1rem 1.4rem;
+            background: var(--panel-bg);
+            border-bottom: 1px solid var(--card-border);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-radius: 14px 14px 0 0;
+        }
+
+        .drawer-title {
+            font-size: 1.15rem;
+            font-weight: 700;
+            color: var(--text-main);
+        }
+
+        .drawer-date {
+            font-size: 0.88rem;
+            color: var(--orange-primary);
+            font-weight: 700;
+            margin-top: 2px;
+        }
+
+        .drawer-close-btn {
             background: transparent;
             border: none;
-            color: var(--text-secondary);
-            font-size: 1.4rem;
+            color: var(--text-muted);
+            font-size: 1.5rem;
             cursor: pointer;
-            padding: 0 0.3rem;
-            line-height: 1;
+            padding: 0 0.4rem;
         }
 
-        .btn-close:hover {
-            color: var(--text-primary);
+        .drawer-close-btn:hover {
+            color: var(--orange-primary);
         }
 
-        .modal-content {
-            padding: 1.4rem;
+        .drawer-body {
+            padding: 1.2rem 1.4rem;
             overflow-y: auto;
             flex: 1;
         }
 
-        /* Галерея изображений */
-        .gallery-container {
+        /* Элементы внутри конспекта */
+        .note-images {
             display: flex;
-            flex-direction: column;
             gap: 12px;
-            margin-bottom: 1.2rem;
+            margin-bottom: 1rem;
+            overflow-x: auto;
         }
 
-        .gallery-item {
-            text-align: center;
-        }
-
-        .gallery-img {
-            max-width: 100%;
-            max-height: 320px;
+        .note-img {
+            max-height: 220px;
             border-radius: 8px;
             border: 1px solid var(--card-border);
             object-fit: contain;
         }
 
-        .gallery-caption {
-            font-size: 0.78rem;
-            color: var(--text-secondary);
-            margin-top: 5px;
-            font-style: italic;
-        }
-
-        /* Верстка текста конспекта */
-        .text-body {
+        .note-text {
             line-height: 1.6;
-            margin-bottom: 1.2rem;
-            font-size: 0.95rem;
+            font-size: 0.92rem;
+            margin-bottom: 1rem;
         }
 
-        .text-body p { margin-bottom: 0.6rem; }
-        .text-body ul { padding-left: 1.2rem; margin-bottom: 0.6rem; }
-        .text-body li { margin-bottom: 0.35rem; }
-
-        /* Термины (Плашки) */
-        .tags-wrapper {
+        .note-tags {
             display: flex;
             flex-wrap: wrap;
             gap: 6px;
-            margin-bottom: 1.2rem;
+            margin-bottom: 1rem;
         }
 
-        .tag-pill {
-            background: var(--accent-light);
-            border: 1px solid var(--accent);
-            color: var(--accent);
-            padding: 0.25rem 0.65rem;
+        .tag-badge {
+            background: var(--orange-light);
+            border: 1px solid var(--orange-primary);
+            color: var(--orange-primary);
+            padding: 0.2rem 0.6rem;
             border-radius: 20px;
-            font-size: 0.78rem;
-            font-weight: 600;
+            font-size: 0.75rem;
+            font-weight: 700;
         }
 
-        /* Раскрывающиеся аккордеоны (<details>) */
+        /* Спойлеры <details> */
         details {
             background: var(--panel-bg);
             border: 1px solid var(--card-border);
             border-radius: 8px;
-            margin-bottom: 10px;
+            margin-bottom: 8px;
             overflow: hidden;
         }
 
         summary {
-            padding: 0.85rem 1rem;
+            padding: 0.75rem 1rem;
             font-weight: 600;
-            font-size: 0.9rem;
+            font-size: 0.88rem;
             cursor: pointer;
-            user-select: none;
-            color: var(--text-primary);
+            color: var(--text-main);
             outline: none;
         }
 
         summary:hover {
-            background: rgba(255, 255, 255, 0.02);
+            background: rgba(255, 107, 0, 0.05);
+            color: var(--orange-primary);
         }
 
-        .accordion-body {
-            padding: 0.9rem 1rem;
+        .acc-content {
+            padding: 0.8rem 1rem;
             border-top: 1px solid var(--card-border);
-            font-size: 0.88rem;
-            line-height: 1.55;
-            color: var(--text-primary);
+            font-size: 0.85rem;
+            line-height: 1.5;
         }
 
-        /* --- НАСТРОЙКИ --- */
-        .settings-card {
-            max-width: 480px;
-            margin: 2.5rem auto;
+        /* МОДАЛКА НАСТРОЕК */
+        .settings-modal-backdrop {
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(0,0,0,0.7);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 200;
+        }
+
+        .settings-modal-backdrop.open {
+            display: flex;
+        }
+
+        .settings-modal {
             background: var(--card-bg);
             border: 1px solid var(--card-border);
             border-radius: 12px;
             padding: 1.5rem;
-        }
-
-        .settings-card h2 {
-            margin-bottom: 1.2rem;
-            font-size: 1.15rem;
-            text-align: center;
-        }
-
-        .form-row {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 0.8rem 0;
-            border-bottom: 1px solid var(--card-border);
-        }
-
-        .form-row:last-child { border-bottom: none; }
-
-        select {
-            background: var(--panel-bg);
-            color: var(--text-primary);
-            border: 1px solid var(--card-border);
-            padding: 0.4rem 0.6rem;
-            border-radius: 6px;
-            outline: none;
-            font-size: 0.85rem;
+            width: 380px;
         }
     </style>
 </head>
 <body>
 
     <header>
-        <div class="header-brand">
-            <span>📖</span> Вся історія на НМТ
+        <div class="brand-logo">
+            <span>EduPrep</span> НМТ
         </div>
-        <div class="header-controls">
-            <div class="search-box">
-                <input type="text" id="searchInput" class="search-input" placeholder="🔍 Пошук дати або події..." oninput="searchEvents()">
-            </div>
-            <button class="nav-btn active" onclick="switchPage('timeline')">Шкала</button>
-            <button class="nav-btn" onclick="switchPage('settings')">⚙️ Налаштування</button>
+        <div class="header-tools">
+            <input type="text" id="searchInput" class="search-input" placeholder="🔍 Пошук дати або події..." oninput="handleSearch()">
+            <button class="icon-btn" onclick="toggleSettingsModal(true)">⚙️ Налаштування</button>
         </div>
     </header>
 
-    <main>
-        <div id="page-timeline" class="tab-page active">
-            <div class="timeline-viewport" id="timelineViewport">
-                <div class="timeline-canvas" id="timelineCanvas">
-                    <div class="timeline-line" id="timelineLine"></div>
-                    <div id="periodsContainer"></div>
-                    <div id="nodesContainer"></div>
-                </div>
-            </div>
+    <div class="pinned-arrow" title="Плин часу">→</div>
+
+    <div class="period-tooltip" id="periodTooltip">
+        <div class="period-tooltip-title" id="ttTitle"></div>
+        <div class="period-tooltip-desc" id="ttDesc"></div>
+    </div>
+
+    <div class="timeline-section" id="timelineViewport">
+        <div class="timeline-inner" id="timelineInner">
+            <div class="timeline-axis-line" id="timelineAxis"></div>
+            <div id="periodsLayer"></div>
+            <div id="nodesLayer"></div>
         </div>
+    </div>
 
-        <div id="page-settings" class="tab-page">
-            <div class="settings-card">
-                <h2>⚙️ Налаштування</h2>
-                
-                <div class="form-row">
-                    <span>Тема оформлення:</span>
-                    <select id="themeSelect" onchange="setTheme(this.value)">
-                        <option value="dark">Темна (Графіт)</option>
-                        <option value="light">Світла</option>
-                        <option value="sepia">Сепія</option>
-                    </select>
-                </div>
-
-                <div class="form-row">
-                    <span>Відстань між датами:</span>
-                    <select id="spacingSelect" onchange="setSpacing(this.value)">
-                        <option value="fixed">Широка (Рівномірна)</option>
-                        <option value="dynamic">Динамічна (за роками)</option>
-                    </select>
-                </div>
+    <div class="note-panel-drawer" id="noteDrawer">
+        <div class="drawer-header">
+            <div>
+                <div class="drawer-title" id="dTitle">Назва події</div>
+                <div class="drawer-date" id="dDate">Дата</div>
             </div>
+            <button class="drawer-close-btn" onclick="closeDrawer()">✕</button>
         </div>
-    </main>
-
-    <div class="modal-backdrop" id="modalBackdrop" onclick="handleBackdropClick(event)">
-        <div class="modal-window">
-            <div class="modal-top">
-                <div>
-                    <div class="modal-title-text" id="mTitle">Заголовок</div>
-                    <div class="modal-date-text" id="mDate">Дата</div>
-                </div>
-                <button class="btn-close" onclick="hideModal()">✕</button>
+        <div class="drawer-body" id="dBody">
             </div>
-            <div class="modal-content" id="mContent">
-                </div>
+    </div>
+
+    <div class="settings-modal-backdrop" id="settingsBackdrop">
+        <div class="settings-modal">
+            <h3 style="margin-bottom: 1rem; color: var(--orange-primary);">⚙️ Налаштування</h3>
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+                <span>Відстань між датами:</span>
+                <select id="spacingSelect" style="background: var(--panel-bg); color: #fff; border: 1px solid var(--card-border); padding: 0.3rem 0.6rem; border-radius: 6px;" onchange="setSpacingMode(this.value)">
+                    <option value="fixed">Широка (Рівномірна)</option>
+                    <option value="dynamic">Динамічна (за роками)</option>
+                </select>
+            </div>
+            <button class="icon-btn" style="width: 100%; text-align: center;" onclick="toggleSettingsModal(false)">Закрити</button>
         </div>
     </div>
 
     <script src="data.js"></script>
 
     <script>
-        const MONTHS = ["січня", "лютого", "березня", "квітня", "травня", "червня", "липня", "серпня", "вересня", "жовтня", "листопада", "грудня"];
+        const MONTHS_UA = ["січня", "лютого", "березня", "квітня", "травня", "червня", "липня", "серпня", "вересня", "жовтня", "листопада", "грудня"];
+        const COLOR_PALETTE = ["#ff6b00", "#10b981", "#3b82f6", "#8b5cf6", "#ec4899", "#f59e0b", "#06b6d4"];
 
-        let currentActiveId = null;
-        let spacingMode = 'fixed'; // 'fixed' | 'dynamic'
+        let activeNodeId = null;
+        let spacingMode = 'fixed';
 
-        // Преобразование дат в числовое значение для координат
-        function calculateYearVal(rawDate) {
-            if (typeof rawDate === 'number') return rawDate;
-            if (!rawDate) return 0;
+        // --- 1. ПАРСИНГ ДАТ И КООРДИНАТ --- //
 
-            const str = String(rawDate).trim();
+        function parseToYearVal(raw) {
+            if (typeof raw === 'number') return raw;
+            if (!raw) return 0;
+            const str = String(raw).trim();
             const parts = str.split('.');
 
             if (parts.length === 3) return parseFloat(parts[2]) + (parseFloat(parts[1]) / 12);
@@ -530,209 +514,258 @@
             return parseFloat(str) || 0;
         }
 
-        // Красивое форматирование даты если yearText не указан
-        function formatYearDisplay(item) {
+        function formatYearText(item) {
             if (item.yearText) return item.yearText;
+            const raw = item.date;
 
-            const val = item.date;
-            if (typeof val === 'number') {
-                if (val < 0) {
-                    const abs = Math.abs(val);
+            if (typeof raw === 'number') {
+                if (raw < 0) {
+                    const abs = Math.abs(raw);
                     if (abs >= 1000000) return `${abs / 1000000} млн р. тому`;
                     if (abs >= 1000) return `${abs / 1000} тис. р. тому`;
                     return `${abs} р. до н.е.`;
                 }
-                return `${val} р.`;
+                return `${raw} р.`;
             }
 
-            const str = String(val).trim();
+            const str = String(raw).trim();
             const parts = str.split('.');
 
             if (parts.length === 3) {
                 const day = parseInt(parts[0], 10);
-                const month = MONTHS[parseInt(parts[1], 10) - 1] || '';
+                const month = MONTHS_UA[parseInt(parts[1], 10) - 1] || '';
                 return `${day} ${month} ${parts[2]} р.`;
             } else if (parts.length === 2) {
-                const month = MONTHS[parseInt(parts[0], 10) - 1] || '';
-                return `${month} ${parts[1]} р.`;
+                const month = MONTHS_UA[parseInt(parts[0], 10) - 1] || '';
+                return `${month} ${parts[0]} ${parts[1]} р.`;
             }
-
             return `${str} р.`;
         }
 
-        // Рендеринг шкалы
-        function buildTimeline() {
+        // --- 2. РЕНДЕР ШКАЛЫ И УЗЛОВ --- //
+
+        function renderTimeline() {
             if (typeof eventsData === 'undefined') return;
 
-            const canvas = document.getElementById('timelineCanvas');
-            const nodesDiv = document.getElementById('nodesContainer');
-            const periodsDiv = document.getElementById('periodsContainer');
-            const line = document.getElementById('timelineLine');
+            const inner = document.getElementById('timelineInner');
+            const nodesLayer = document.getElementById('nodesLayer');
+            const periodsLayer = document.getElementById('periodsLayer');
+            const axisLine = document.getElementById('timelineAxis');
 
-            nodesDiv.innerHTML = '';
-            periodsDiv.innerHTML = '';
+            nodesLayer.innerHTML = '';
+            periodsLayer.innerHTML = '';
 
-            const sorted = [...eventsData].sort((a, b) => calculateYearVal(a.date) - calculateYearVal(b.date));
+            const sorted = [...eventsData].sort((a, b) => parseToYearVal(a.date) - parseToYearVal(b.date));
 
             const positions = {};
             let maxPos = 0;
-            const gap = 180;
+            const gap = 190;
 
             sorted.forEach((ev, idx) => {
                 let posX = 0;
                 if (spacingMode === 'fixed') {
-                    posX = 60 + idx * gap;
+                    posX = 80 + idx * gap;
                 } else {
-                    if (idx === 0) posX = 60;
+                    if (idx === 0) posX = 80;
                     else {
-                        const prevYear = calculateYearVal(sorted[idx - 1].date);
-                        const currYear = calculateYearVal(ev.date);
+                        const prevYear = parseToYearVal(sorted[idx - 1].date);
+                        const currYear = parseToYearVal(ev.date);
                         const diff = Math.max(1, currYear - prevYear);
-                        const step = Math.min(380, Math.max(130, Math.log10(diff + 1) * 90));
+                        const step = Math.min(400, Math.max(130, Math.log10(diff + 1) * 95));
                         posX = positions[sorted[idx - 1].id] + step;
                     }
                 }
                 positions[ev.id] = posX;
-                maxPos = posX + 160;
+                maxPos = posX + 200;
             });
 
-            canvas.style.width = `${maxPos}px`;
-            line.style.width = `${maxPos}px`;
+            inner.style.width = `${maxPos}px`;
+            axisLine.style.width = `${maxPos}px`;
 
-            // Рисуем точки событий
-            sorted.forEach(ev => {
-                const posX = positions[ev.id];
-                const node = document.createElement('div');
-                node.className = `event-node ${currentActiveId === ev.id ? 'selected' : ''}`;
-                node.id = `node-${ev.id}`;
-                node.style.left = `${posX}px`;
-
-                node.innerHTML = `
-                    <div class="node-circle"></div>
-                    <div class="node-info">
-                        <div class="node-year">${formatYearDisplay(ev)}</div>
-                        <div class="node-heading">${ev.title}</div>
-                    </div>
-                `;
-
-                node.onclick = () => openModal(ev);
-                nodesDiv.appendChild(node);
-            });
-
-            // Рисуем отрезки периодов над шкалой
+            // Вычисляем диапазоны периодов для чередования
+            const periodsRanges = [];
             if (typeof periodsData !== 'undefined') {
-                periodsData.forEach(p => {
+                periodsData.forEach((p, index) => {
                     const startX = positions[p.startEventId];
                     const endX = positions[p.endEventId];
 
                     if (startX !== undefined && endX !== undefined) {
+                        const color = p.color || COLOR_PALETTE[index % COLOR_PALETTE.length];
+                        
                         const bar = document.createElement('div');
-                        bar.className = 'period-segment';
+                        bar.className = 'period-bar-item';
                         bar.style.left = `${startX}px`;
                         bar.style.width = `${endX - startX}px`;
-                        bar.style.backgroundColor = p.color || '#6366f1';
-                        bar.innerText = p.title;
-                        periodsDiv.appendChild(bar);
+                        bar.style.backgroundColor = color;
+
+                        // Тултип при наведении
+                        bar.onmousemove = (e) => showPeriodTooltip(e, p);
+                        bar.onmouseleave = hidePeriodTooltip;
+
+                        periodsLayer.appendChild(bar);
+                        periodsRanges.push({ startX, endX });
                     }
                 });
             }
+
+            // Отрисовка точек дат с логикой переключения СВЕРХУ / СНИЗУ
+            sorted.forEach((ev, idx) => {
+                const posX = positions[ev.id];
+
+                // Базовое чередование: нечётные сверху, чётные снизу
+                let isTop = (idx % 2 === 0);
+
+                // Если точка попадает в координаты какого-то промежутка (который сверху оси) — принудительно ставим снизу!
+                const insidePeriod = periodsRanges.some(r => posX >= r.startX && posX <= r.endX);
+                if (insidePeriod) {
+                    isTop = false; 
+                }
+
+                const node = document.createElement('div');
+                node.className = `timeline-node-item ${isTop ? 'pos-top' : 'pos-bottom'} ${activeNodeId === ev.id ? 'active' : ''}`;
+                node.id = `node-${ev.id}`;
+                node.style.left = `${posX}px`;
+
+                node.innerHTML = `
+                    <div class="node-dot-circle"></div>
+                    <div class="node-caption-box">
+                        <div class="node-date-lbl">${formatYearText(ev)}</div>
+                        <div class="node-title-lbl">${ev.title}</div>
+                    </div>
+                `;
+
+                node.onclick = () => openDrawer(ev);
+                nodesLayer.appendChild(node);
+            });
         }
 
-        // Открытие модалки конспекта
-        function openModal(ev) {
-            if (currentActiveId === ev.id) {
-                hideModal();
+        // --- 3. ТУЛТИП ДЛЯ ПЕРИОДОВ --- //
+
+        function showPeriodTooltip(e, p) {
+            const tt = document.getElementById('periodTooltip');
+            document.getElementById('ttTitle').innerText = p.title;
+            document.getElementById('ttDesc').innerText = p.description || '';
+
+            tt.style.display = 'block';
+            tt.style.left = `${e.clientX + 12}px`;
+            tt.style.top = `${e.clientY + 12}px`;
+        }
+
+        function hidePeriodTooltip() {
+            document.getElementById('periodTooltip').style.display = 'none';
+        }
+
+        // --- 4. ОКНО КОНСПЕКТА (DRAWER) --- //
+
+        function openDrawer(ev) {
+            if (activeNodeId === ev.id) {
+                closeDrawer();
                 return;
             }
 
-            currentActiveId = ev.id;
-            document.querySelectorAll('.event-node').forEach(n => n.classList.remove('selected'));
-            const nodeEl = document.getElementById(`node-${ev.id}`);
-            if (nodeEl) nodeEl.classList.add('selected');
+            activeNodeId = ev.id;
+            document.querySelectorAll('.timeline-node-item').forEach(n => n.classList.remove('active'));
+            const activeEl = document.getElementById(`node-${ev.id}`);
+            if (activeEl) activeEl.classList.add('active');
 
-            document.getElementById('mTitle').innerText = ev.title;
-            document.getElementById('mDate').innerText = formatYearDisplay(ev);
+            document.getElementById('dTitle').innerText = ev.title;
+            document.getElementById('dDate').innerText = formatYearText(ev);
 
-            const container = document.getElementById('mContent');
-            container.innerHTML = '';
+            const body = document.getElementById('dBody');
+            body.innerHTML = '';
 
-            // Галерея картинок
+            // Картинки
             if (ev.images && ev.images.length > 0) {
-                const gal = document.createElement('div');
-                gal.className = 'gallery-container';
+                const imgsDiv = document.createElement('div');
+                imgsDiv.className = 'note-images';
                 ev.images.forEach(img => {
-                    gal.innerHTML += `
-                        <div class="gallery-item">
-                            <img src="${img.url}" class="gallery-img" alt="${img.caption || ''}">
-                            ${img.caption ? `<div class="gallery-caption">${img.caption}</div>` : ''}
-                        </div>
-                    `;
+                    imgsDiv.innerHTML += `<img src="${img.url}" class="note-img" title="${img.caption || ''}">`;
                 });
-                container.appendChild(gal);
+                body.appendChild(imgsDiv);
             }
 
-            // Основной текст
+            // Текст
             if (ev.details && ev.details.fullText) {
                 const txt = document.createElement('div');
-                txt.className = 'text-body';
+                txt.className = 'note-text';
                 txt.innerHTML = ev.details.fullText;
-                container.appendChild(txt);
+                body.appendChild(txt);
             }
 
             // Термины
             if (ev.details && ev.details.terms && ev.details.terms.length > 0) {
                 const tags = document.createElement('div');
-                tags.className = 'tags-wrapper';
-                ev.details.terms.forEach(term => {
-                    tags.innerHTML += `<span class="tag-pill"># ${term}</span>`;
+                tags.className = 'note-tags';
+                ev.details.terms.forEach(t => {
+                    tags.innerHTML += `<span class="tag-badge"># ${t}</span>`;
                 });
-                container.appendChild(tags);
+                body.appendChild(tags);
             }
 
-            // Раскрывающиеся аккордеоны (<details>)
+            // Аккордеоны
             if (ev.details && ev.details.accordions && ev.details.accordions.length > 0) {
                 ev.details.accordions.forEach(acc => {
                     const det = document.createElement('details');
                     det.innerHTML = `
                         <summary>${acc.title}</summary>
-                        <div class="accordion-body">${acc.content}</div>
+                        <div class="acc-content">${acc.content}</div>
                     `;
-                    container.appendChild(det);
+                    body.appendChild(det);
                 });
             }
 
-            document.getElementById('modalBackdrop').classList.add('open');
+            document.getElementById('noteDrawer').classList.add('open');
         }
 
-        function hideModal() {
-            document.getElementById('modalBackdrop').classList.remove('open');
-            document.querySelectorAll('.event-node').forEach(n => n.classList.remove('selected'));
-            currentActiveId = null;
+        function closeDrawer() {
+            document.getElementById('noteDrawer').classList.remove('open');
+            document.querySelectorAll('.timeline-node-item').forEach(n => n.classList.remove('active'));
+            activeNodeId = null;
         }
 
-        function handleBackdropClick(e) {
-            if (e.target.id === 'modalBackdrop') hideModal();
-        }
+        // --- 5. УПРАВЛЕНИЕ СКРОЛЛОМ (DRAG & KEYBOARD) --- //
 
-        // Навигация и поиск
-        function switchPage(page) {
-            document.querySelectorAll('.tab-page').forEach(p => p.classList.remove('active'));
-            document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+        const viewport = document.getElementById('timelineViewport');
+        let isMouseDown = false;
+        let startMouseX, scrollLeftPos;
 
-            document.getElementById(`page-${page}`).classList.add('active');
-            event.target.classList.add('active');
-        }
+        // Перетаскивание мышкой (LMB Drag)
+        viewport.addEventListener('mousedown', (e) => {
+            isMouseDown = true;
+            startMouseX = e.pageX - viewport.offsetLeft;
+            scrollLeftPos = viewport.scrollLeft;
+        });
 
-        function setTheme(theme) {
-            document.body.className = theme === 'dark' ? '' : `${theme}-theme`;
-        }
+        viewport.addEventListener('mouseleave', () => { isMouseDown = false; });
+        viewport.addEventListener('mouseup', () => { isMouseDown = false; });
 
-        function setSpacing(mode) {
-            spacingMode = mode;
-            buildTimeline();
-        }
+        viewport.addEventListener('mousemove', (e) => {
+            if (!isMouseDown) return;
+            e.preventDefault();
+            const x = e.pageX - viewport.offsetLeft;
+            const walk = (x - startMouseX) * 1.6;
+            viewport.scrollLeft = scrollLeftPos - walk;
+        });
 
-        function searchEvents() {
+        // Прокрутка колесиком
+        viewport.addEventListener('wheel', (e) => {
+            if (e.deltaY !== 0) {
+                e.preventDefault();
+                viewport.scrollLeft += e.deltaY;
+            }
+        }, { passive: false });
+
+        // Управление клавишами (Стрелки)
+        window.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowRight') {
+                viewport.scrollLeft += 120;
+            } else if (e.key === 'ArrowLeft') {
+                viewport.scrollLeft -= 120;
+            }
+        });
+
+        // Поиск
+        function handleSearch() {
             const q = document.getElementById('searchInput').value.toLowerCase().trim();
             if (!q) return;
 
@@ -743,15 +776,24 @@
             );
 
             if (match) {
-                const node = document.getElementById(`node-${match.id}`);
-                if (node) {
-                    node.scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'center' });
-                    openModal(match);
+                const el = document.getElementById(`node-${match.id}`);
+                if (el) {
+                    el.scrollIntoView({ behavior: 'smooth', inline: 'center' });
+                    openDrawer(match);
                 }
             }
         }
 
-        window.onload = buildTimeline;
+        function toggleSettingsModal(show) {
+            document.getElementById('settingsBackdrop').classList.toggle('open', show);
+        }
+
+        function setSpacingMode(mode) {
+            spacingMode = mode;
+            renderTimeline();
+        }
+
+        window.onload = renderTimeline;
     </script>
 </body>
 </html>

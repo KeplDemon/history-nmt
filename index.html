@@ -1,0 +1,662 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Історія України | НМТ</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;900&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-color: #0b0f19;
+      --panel-bg: #151c2c;
+      --accent-gold: #f59e0b;
+      --accent-blue: #3b82f6;
+      --text-main: #f8fafc;
+      --text-muted: #94a3b8;
+      --border-color: #26334d;
+      --bubble-bg: #1e293b;
+    }
+
+    body.light-theme {
+      --bg-color: #f1f5f9;
+      --panel-bg: #ffffff;
+      --text-main: #0f172a;
+      --text-muted: #64748b;
+      --border-color: #cbd5e1;
+      --bubble-bg: #ffffff;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Inter', sans-serif; }
+
+    body {
+      background-color: var(--bg-color);
+      color: var(--text-main);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* Шапка */
+    .header-container {
+      background-color: var(--panel-bg);
+      border-bottom: 1px solid var(--border-color);
+      padding: 0.8rem 1rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.6rem;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    .top-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .logo { font-weight: 900; font-size: 1.1rem; }
+    .logo span { color: var(--accent-gold); }
+
+    .settings-trigger-btn {
+      background: none;
+      border: 1px solid var(--border-color);
+      border-radius: 6px;
+      color: var(--text-main);
+      font-size: 0.85rem;
+      font-weight: 600;
+      cursor: pointer;
+      padding: 0.3rem 0.6rem;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 0.4rem;
+      overflow-x: auto;
+      scrollbar-width: none;
+    }
+    .nav-links::-webkit-scrollbar { display: none; }
+
+    .nav-btn {
+      background: none;
+      border: none;
+      color: var(--text-muted);
+      font-size: 0.85rem;
+      font-weight: 600;
+      padding: 0.3rem 0.6rem;
+      border-radius: 6px;
+      white-space: nowrap;
+      cursor: pointer;
+    }
+    .nav-btn.active {
+      color: var(--text-main);
+      background-color: var(--border-color);
+    }
+
+    .search-box input {
+      width: 100%;
+      background: var(--bg-color);
+      border: 1px solid var(--border-color);
+      color: var(--text-main);
+      padding: 0.5rem 0.8rem;
+      border-radius: 8px;
+      font-size: 0.85rem;
+      outline: none;
+    }
+
+    /* Главный контейнер таймлайна */
+    .timeline-container {
+      position: relative;
+      width: 100%;
+      margin-top: 1rem;
+    }
+
+    .timeline-scroll-area {
+      display: flex;
+      overflow-x: auto;
+      position: relative;
+      padding: 3rem 1rem;
+      width: 100%;
+    }
+
+    /* ГОРИЗОНТАЛЬНЫЙ РЕЖИМ */
+    .timeline-scroll-area.horizontal {
+      min-width: 100%;
+    }
+
+    .timeline-scroll-area.horizontal .timeline-axis-line {
+      position: absolute;
+      top: 50%;
+      left: 0;
+      right: 0;
+      height: 3px;
+      background-color: var(--accent-gold);
+      z-index: 1;
+      min-width: 100%;
+    }
+
+    .timeline-scroll-area.horizontal .timeline-ticks {
+      display: flex;
+      gap: 3.5rem;
+      position: relative;
+      z-index: 2;
+      align-items: center;
+      width: max-content;
+      padding-right: 4rem;
+    }
+
+    .fixed-arrow-right {
+      position: absolute;
+      right: 10px;
+      top: 50%;
+      transform: translateY(-50%);
+      font-size: 1.2rem;
+      color: var(--accent-gold);
+      z-index: 10;
+      pointer-events: none;
+      background: var(--bg-color);
+      padding: 2px 6px;
+      border-radius: 4px;
+      border: 1px solid var(--border-color);
+    }
+
+    /* ВЕРТИКАЛЬНЫЙ РЕЖИМ */
+    .timeline-scroll-area.vertical {
+      flex-direction: column;
+      align-items: center;
+      padding: 2rem 1rem;
+      overflow-x: hidden;
+    }
+
+    .timeline-scroll-area.vertical .timeline-axis-line {
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 3px;
+      height: 100%;
+      background-color: var(--accent-gold);
+      z-index: 1;
+    }
+
+    .timeline-scroll-area.vertical .timeline-ticks {
+      display: flex;
+      flex-direction: column;
+      gap: 2.5rem;
+      position: relative;
+      z-index: 2;
+      width: 100%;
+      max-width: 360px;
+    }
+
+    .timeline-scroll-area.vertical .tick-item {
+      width: 100%;
+      flex-direction: row;
+      justify-content: space-between;
+      align-items: center;
+      background: var(--panel-bg);
+      padding: 0.8rem 1rem;
+      border-radius: 10px;
+      border: 1px solid var(--border-color);
+    }
+
+    .tick-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      cursor: pointer;
+      min-width: 120px;
+      text-align: center;
+    }
+
+    .tick-mark {
+      width: 14px;
+      height: 14px;
+      background: var(--accent-gold);
+      border-radius: 50%;
+      border: 2px solid var(--bg-color);
+      margin: 6px 0;
+      transition: transform 0.2s;
+    }
+
+    .tick-item:hover .tick-mark, .tick-item.active .tick-mark {
+      transform: scale(1.5);
+      background: var(--accent-blue);
+    }
+
+    .tick-year {
+      font-weight: 800;
+      font-size: 0.85rem;
+      color: var(--accent-gold);
+    }
+
+    .tick-short-title {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      max-width: 120px;
+      line-height: 1.2;
+    }
+
+    /* УВЕЛИЧЕННЫЙ КОНСПЕКТ (БАББЛ) */
+    .speech-bubble {
+      position: relative;
+      margin: 1rem;
+      background: var(--bubble-bg);
+      border: 2px solid var(--accent-blue);
+      border-radius: 14px;
+      padding: 1.4rem;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.5);
+    }
+    .speech-bubble.hidden { display: none !important; }
+
+    .bubble-close {
+      position: absolute;
+      top: 10px;
+      right: 14px;
+      font-size: 1.6rem;
+      background: none;
+      border: none;
+      color: var(--text-muted);
+      cursor: pointer;
+    }
+
+    .bubble-year { 
+      color: var(--accent-gold); 
+      font-weight: 900; 
+      font-size: 1.15rem; 
+      display: inline-block;
+      margin-bottom: 4px;
+    }
+
+    .bubble-header h3 {
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: var(--text-main);
+    }
+
+    .bubble-body { 
+      margin-top: 1rem; 
+      font-size: 0.95rem; 
+      line-height: 1.6; 
+      color: var(--text-main);
+    }
+
+    .bubble-terms {
+      margin-top: 1rem;
+      padding-top: 0.8rem;
+      border-top: 1px dashed var(--border-color);
+      font-size: 0.85rem;
+      color: var(--accent-gold);
+    }
+
+    /* РАСКРЫВАЮЩИЕСЯ ПЛАШКИ (АККОРДЕОНЫ) */
+    .accordion-container {
+      margin-top: 1rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.6rem;
+    }
+
+    .accordion-item {
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      background: var(--panel-bg);
+      overflow: hidden;
+    }
+
+    .accordion-header {
+      padding: 0.7rem 1rem;
+      font-size: 0.85rem;
+      font-weight: 700;
+      color: var(--accent-gold);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      cursor: pointer;
+      user-select: none;
+    }
+
+    .accordion-header::after {
+      content: '▼';
+      font-size: 0.7rem;
+      transition: transform 0.2s;
+    }
+
+    .accordion-item.open .accordion-header::after {
+      transform: rotate(180deg);
+    }
+
+    .accordion-content {
+      display: none;
+      padding: 0.8rem 1rem;
+      border-top: 1px solid var(--border-color);
+      background: var(--bg-color);
+      font-size: 0.85rem;
+      line-height: 1.4;
+    }
+
+    .accordion-item.open .accordion-content {
+      display: block;
+    }
+
+    .accordion-content img {
+      max-width: 100%;
+      border-radius: 8px;
+      margin-top: 0.5rem;
+      border: 1px solid var(--border-color);
+    }
+
+    /* Модалка настроек */
+    .modal-wrapper {
+      display: none;
+      position: fixed;
+      top: 0; left: 0; width: 100%; height: 100%;
+      z-index: 1000;
+    }
+    .modal-wrapper.open { display: block !important; }
+
+    .modal-overlay {
+      position: absolute;
+      top: 0; left: 0; width: 100%; height: 100%;
+      background: rgba(0,0,0,0.7);
+    }
+
+    .modal-content {
+      position: absolute;
+      top: 50%; left: 50%;
+      transform: translate(-50%, -50%);
+      background: var(--panel-bg);
+      border: 1px solid var(--border-color);
+      border-radius: 12px;
+      padding: 1.2rem;
+      width: 90%;
+      max-width: 380px;
+      z-index: 1001;
+    }
+
+    .modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; }
+    .modal-close { background: none; border: none; font-size: 1.4rem; color: var(--text-main); cursor: pointer; }
+    .setting-item { margin-bottom: 1.2rem; }
+    .setting-item label { display: block; font-size: 0.8rem; color: var(--text-muted); margin-bottom: 0.4rem; }
+    .toggle-group { display: flex; gap: 0.5rem; }
+    .btn-toggle {
+      flex: 1; padding: 0.5rem 0.3rem; background: var(--bg-color); border: 1px solid var(--border-color);
+      color: var(--text-main); border-radius: 6px; cursor: pointer; font-size: 0.75rem; text-align: center;
+    }
+    .btn-toggle.active { background: var(--accent-blue); border-color: var(--accent-blue); }
+  </style>
+</head>
+<body>
+
+  <header class="header-container">
+    <div class="top-row">
+      <div class="logo">Історія України <span>НМТ</span></div>
+      <button id="open-settings-btn" class="settings-trigger-btn">⚙ Налаштування</button>
+    </div>
+
+    <nav class="nav-links">
+      <button class="nav-btn active">Хронологія</button>
+      <button class="nav-btn">Діячі</button>
+      <button class="nav-btn">Пам'ятки</button>
+      <button class="nav-btn">Шпори</button>
+    </nav>
+
+    <div class="search-box">
+      <input type="text" id="search-input" placeholder="Пошук року, події чи терміну...">
+    </div>
+  </header>
+
+  <main>
+    <div class="timeline-container">
+      <div class="fixed-arrow-right" id="main-arrow">►</div>
+      <div class="timeline-scroll-area horizontal" id="scroll-area">
+        <div class="timeline-axis-line"></div>
+        <div class="timeline-ticks" id="timeline-ticks">
+          </div>
+      </div>
+    </div>
+
+    <div id="details-bubble" class="speech-bubble hidden">
+      <button class="bubble-close" id="close-bubble">&times;</button>
+      <div class="bubble-header">
+        <span class="bubble-year" id="det-year"></span>
+        <h3 id="det-title"></h3>
+      </div>
+      <div class="bubble-body" id="det-body"></div>
+      
+      <div class="accordion-container" id="det-accordions"></div>
+
+      <div class="bubble-terms" id="det-terms"></div>
+    </div>
+  </main>
+
+  <div id="settings-modal" class="modal-wrapper">
+    <div class="modal-overlay" id="modal-overlay"></div>
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3>Налаштування</h3>
+        <button id="close-settings-btn" class="modal-close">&times;</button>
+      </div>
+      <div class="modal-body">
+        
+        <div class="setting-item">
+          <label>Тема оформлення:</label>
+          <div class="toggle-group">
+            <button id="btn-theme-dark" class="btn-toggle active">Темна</button>
+            <button id="btn-theme-light" class="btn-toggle">Світла</button>
+          </div>
+        </div>
+
+        <div class="setting-item">
+          <label>Орієнтація шкали:</label>
+          <div class="toggle-group">
+            <button id="btn-orient-horiz" class="btn-toggle active">Горизонтальна</button>
+            <button id="btn-orient-vert" class="btn-toggle">Вертикальна</button>
+          </div>
+        </div>
+
+        <div class="setting-item">
+          <label>Відстань між датами:</label>
+          <div class="toggle-group">
+            <button id="btn-gap-equal" class="btn-toggle active">Нормальна</button>
+            <button id="btn-gap-wide" class="btn-toggle">Широка</button>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // База событий с персоналиями, памятниками и картами
+    const eventsData = [
+      {
+        id: "1",
+        year: "1 млн р. тому",
+        title: "Поява першої людини",
+        details: {
+          fullText: "<b>Палеоліт (Кам'яний вік).</b> Поява найдавніших людей на території України.<br>Стоянки: <b>с. Королеве (Закарпаття)</b>, Мізин, Кирилівка, Межиріч.",
+          terms: ["Палеоліт", "Привласнювальне господарство", "Стоянка"],
+          accordions: [
+            {
+              title: "🗺 Карта палеолітичних стоянок",
+              content: "Стоянка Королеве — найдавніша стоянка в Україні.<br><img src='https://upload.wikimedia.org/wikipedia/commons/thumb/d/d4/Ukraine_topographic_map-blank.svg/640px-Ukraine_topographic_map-blank.svg.png' alt='Карта стоянок'>"
+            }
+          ]
+        }
+      },
+      {
+        id: "2",
+        year: "IV - III тис. до н.е.",
+        title: "Трипільська культура",
+        details: {
+          fullText: "<b>Енеоліт (Мідно-кам'яний вік).</b> Освоєння міді, землеробство, мальована кераміка, протоміста.",
+          terms: ["Енеоліт", "Відтворювальне господарство", "Протоміста"],
+          accordions: [
+            {
+              title: "👤 Видатна постать: Вікентій Хвойка",
+              content: "<b>Вікентій Хвойка</b> — археолог, який у 1893-1896 рр. відкрив трипільську культуру поблизу с. Трипілля на Київщині."
+            },
+            {
+              title: "🏺 Пам'ятка: Трипільська мальована кераміка",
+              content: "Основними орнаментами є спіралі, лінії та зображення тварин (бики, змії).<br><img src='https://upload.wikimedia.org/wikipedia/commons/thumb/7/70/Trypillia_pottery.jpg/440px-Trypillia_pottery.jpg' alt='Кераміка'>"
+            }
+          ]
+        }
+      },
+      {
+        id: "3",
+        year: "VII - III ст. до н.е.",
+        title: "Велика Скіфія",
+        details: {
+          fullText: "Могутня держава кочовиків-скіфів у Північному Причорномор'ї.",
+          terms: ["Курган", "Пектораль", "Звіриний стиль"],
+          accordions: [
+            {
+              title: "🏆 Пам'ятка: Золота Пектораль",
+              content: "Шедевр еліністичного мистецтва з кургану <b>Товста Могила</b> (відкрив Б. Мозолевський у 1971 р.).<br><img src='https://upload.wikimedia.org/wikipedia/commons/thumb/1/1a/Golden_pectoral_from_Tovsta_Mohyla.jpg/640px-Golden_pectoral_from_Tovsta_Mohyla.jpg' alt='Пектораль'>"
+            },
+            {
+              title: "⚔️ Золотий гребінь з кургану Солоха",
+              content: "Зображення бойової сценки скіфських воїнів. Виконаний у «звіриному стилі»."
+            }
+          ]
+        }
+      },
+      {
+        id: "4",
+        year: "860 р.",
+        title: "Похід Аскольда на Царгород",
+        details: {
+          fullText: "Перший задокументований морський похід київського князя Аскольда на Візантію (Константинополь). Внаслідок походу була укладена перша відома русько-візантійська угода, а Аскольд прийняв християнство.",
+          terms: ["Аскольд", "Візантія", "Християнізація"],
+          accordions: [
+            {
+              title: "👤 Князь Аскольд",
+              content: "Правив у Києві разом із Діром. Здійснив вдалий похід на Царгород у 860 році."
+            },
+            {
+              title: "🗺 Карта морського походу на Константинополь",
+              content: "Маршрут з Києва по Дніпру до Чорного моря та Босфору."
+            }
+          ]
+        }
+      }
+    ];
+
+    function renderTimeline(data) {
+      const container = document.getElementById('timeline-ticks');
+      if (!container) return;
+      container.innerHTML = '';
+
+      if (data.length === 0) {
+        container.innerHTML = '<div style="padding: 20px; color: #94a3b8;">Подій не знайдено</div>';
+        return;
+      }
+
+      data.forEach((item) => {
+        const tick = document.createElement('div');
+        tick.className = 'tick-item';
+        tick.innerHTML = `
+          <div class="tick-year">${item.year}</div>
+          <div class="tick-mark"></div>
+          <div class="tick-short-title">${item.title}</div>
+        `;
+        
+        tick.onclick = () => {
+          document.querySelectorAll('.tick-item').forEach(el => el.classList.remove('active'));
+          tick.classList.add('active');
+          openBubble(item);
+        };
+
+        container.appendChild(tick);
+      });
+    }
+
+    function openBubble(item) {
+      const bubble = document.getElementById('details-bubble');
+      document.getElementById('det-year').innerText = item.year;
+      document.getElementById('det-title').innerText = item.title;
+      document.getElementById('det-body').innerHTML = item.details.fullText;
+      
+      // Генерация аккордеонов (карт, деятелей, памятников)
+      const accContainer = document.getElementById('det-accordions');
+      accContainer.innerHTML = '';
+
+      if (item.details.accordions && item.details.accordions.length > 0) {
+        item.details.accordions.forEach(acc => {
+          const accItem = document.createElement('div');
+          accItem.className = 'accordion-item';
+          accItem.innerHTML = `
+            <div class="accordion-header">${acc.title}</div>
+            <div class="accordion-content">${acc.content}</div>
+          `;
+          
+          accItem.querySelector('.accordion-header').onclick = () => {
+            accItem.classList.toggle('open');
+          };
+
+          accContainer.appendChild(accItem);
+        });
+      }
+
+      // Термины
+      const termsBox = document.getElementById('det-terms');
+      if (item.details.terms && item.details.terms.length > 0) {
+        termsBox.innerHTML = `<b>Терміни НМТ:</b> ${item.details.terms.join(' • ')}`;
+        termsBox.style.display = 'block';
+      } else {
+        termsBox.style.display = 'none';
+      }
+      
+      bubble.classList.remove('hidden');
+    }
+
+    window.onload = () => {
+      renderTimeline(eventsData);
+
+      document.getElementById('close-bubble').onclick = () => {
+        document.getElementById('details-bubble').classList.add('hidden');
+        document.querySelectorAll('.tick-item').forEach(el => el.classList.remove('active'));
+      };
+
+      document.getElementById('search-input').oninput = function(e) {
+        const val = e.target.value.toLowerCase().trim();
+        const filtered = eventsData.filter(item => 
+          item.year.toLowerCase().includes(val) || 
+          item.title.toLowerCase().includes(val) ||
+          item.details.fullText.toLowerCase().includes(val)
+        );
+        renderTimeline(filtered);
+      };
+
+      // Модалка
+      const modal = document.getElementById('settings-modal');
+      document.getElementById('open-settings-btn').onclick = () => modal.classList.add('open');
+      document.getElementById('close-settings-btn').onclick = () => modal.classList.remove('open');
+      document.getElementById('modal-overlay').onclick = () => modal.classList.remove('open');
+
+      // Тема
+      const lightBtn = document.getElementById('btn-theme-light');
+      const darkBtn = document.getElementById('btn-theme-dark');
+      lightBtn.onclick = function() {
+        document.body.classList.add('light-theme');
+        this.classList.add('active');
+        darkBtn.classList.remove('active');
+      };
+      darkBtn.onclick = function() {
+        document.body.classList.remove('light-theme');
+        this.classList.add('active');
+        lightBtn.classList.remove('active');
+      };
+
+      // Ориентация
+      const scrollArea = document.getElementById('scroll-area');
+      const arrow = document.getElementById('main-arrow');
+      document.getElementById('btn-orient-horiz').onclick = function() {
+        scrollArea.className = 'timeline-scroll-area horizontal';
+        arrow.style.display = 'block';
+        this.classList.add('active');
+        document.getElementById('btn-orient-vert').classList.remove('active');
+      }

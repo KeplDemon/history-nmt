@@ -8,7 +8,7 @@ const eventsData = [
     yearText: "1 млн р. тому",
     title: "Стоянка Королеве",
     images: [
-      { url: "https://mukachevo.net/uploads/media/images/image/24/94/2494a2d4119e4ab4bd8872839b639685j22kjggfvxzv313_image.jpg", caption: "Археологічні розкопки стоянки Королеве" }
+      { url: "https://mukachevo.net/uploads/media/images/image/24/94/2494a2d4119e4ab4bd8872839b639685j22kjggfvxzv313_image.jpg", caption: "Реконструкція стоянки Королеве" }
     ],
     details: {
       fullText: `

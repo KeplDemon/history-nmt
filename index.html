@@ -179,18 +179,18 @@
             border-left: 14px solid var(--orange-primary);
         }
 
-        /* Прозрачная стрелка-указатель у края экрана */
+        /* Прибитая стрелка у края экрана */
         .pinned-pointer-arrow {
             position: fixed;
             right: 15px;
-            top: 0; /* Высота вычисляется в JS */
+            top: 0;
             transform: translateY(-50%);
             z-index: 40;
-            background: transparent; /* Убрали все серые плашки и обводки */
+            background: transparent;
             color: var(--orange-primary);
             font-size: 1.3rem;
             pointer-events: none;
-            transition: opacity 0.25s ease; /* Плавное исчезновение */
+            transition: opacity 0.25s ease;
         }
 
         .period-bar-item {
@@ -476,7 +476,7 @@
         </div>
     </header>
 
-    <div class="pinned-pointer-arrow">▶</div>
+    <div class="pinned-pointer-arrow" id="pinnedArrow">▶</div>
 
     <div class="period-tooltip" id="periodTooltip">
         <div class="period-tooltip-title" id="ttTitle"></div>
@@ -575,6 +575,25 @@
             return `${str} р.`;
         }
 
+        function updateArrowVisibility() {
+            const vp = document.getElementById('timelineViewport');
+            const arrow = document.getElementById('pinnedArrow');
+            const axis = document.getElementById('timelineAxis');
+            if (!vp || !arrow || !axis) return;
+
+            const rect = axis.getBoundingClientRect();
+            arrow.style.top = `${rect.top + (rect.height / 2)}px`;
+
+            const maxScroll = vp.scrollWidth - vp.clientWidth;
+            const remainingScroll = maxScroll - vp.scrollLeft;
+
+            if (remainingScroll < 150) {
+                arrow.style.opacity = Math.max(0, remainingScroll / 150);
+            } else {
+                arrow.style.opacity = 1;
+            }
+        }
+
         function renderTimeline() {
             if (typeof eventsData === 'undefined') return;
 
@@ -664,6 +683,8 @@
                 node.onclick = () => openWindow(ev);
                 nodesLayer.appendChild(node);
             });
+
+            setTimeout(updateArrowVisibility, 50);
         }
 
         function showPeriodTooltip(e, p) {
@@ -732,6 +753,7 @@
         }
 
         function closeWindow() {
+            document.getElementById('floatingWindow').classList.remove('remove');
             document.getElementById('floatingWindow').classList.remove('open');
             document.querySelectorAll('.timeline-node-item').forEach(n => n.classList.remove('active'));
             activeNodeId = null;
@@ -740,6 +762,9 @@
         const viewport = document.getElementById('timelineViewport');
         let isMouseDown = false;
         let startX, scrollLeft;
+
+        viewport.addEventListener('scroll', updateArrowVisibility);
+        window.addEventListener('resize', updateArrowVisibility);
 
         viewport.addEventListener('mousedown', (e) => {
             if (e.target.closest('.timeline-node-item') || e.target.closest('.period-bar-item')) return;

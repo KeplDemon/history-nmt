@@ -179,19 +179,18 @@
             border-left: 14px solid var(--orange-primary);
         }
 
-        /* Маркер направления у края экрана */
+        /* Прозрачная стрелка-указатель у края экрана */
         .pinned-pointer-arrow {
             position: fixed;
-            right: 0;
-            top: calc(50px + 130px);
+            right: 15px;
+            top: 0; /* Высота вычисляется в JS */
             transform: translateY(-50%);
             z-index: 40;
-            background: linear-gradient(to left, var(--panel-bg) 60%, transparent);
+            background: transparent; /* Убрали все серые плашки и обводки */
             color: var(--orange-primary);
-            padding: 8px 6px 8px 15px;
-            font-size: 1.1rem;
+            font-size: 1.3rem;
             pointer-events: none;
-            border-radius: 8px 0 0 8px;
+            transition: opacity 0.25s ease; /* Плавное исчезновение */
         }
 
         .period-bar-item {

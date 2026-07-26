@@ -55,7 +55,7 @@
       align-items: center;
     }
 
-    .logo { font-weight: 900; font-size: 1rem; }
+    .logo { font-weight: 900; font-size: 1.1rem; }
     .logo span { color: var(--accent-gold); }
 
     .settings-trigger-btn {
@@ -81,7 +81,7 @@
       background: none;
       border: none;
       color: var(--text-muted);
-      font-size: 0.8rem;
+      font-size: 0.85rem;
       font-weight: 600;
       padding: 0.3rem 0.6rem;
       border-radius: 6px;
@@ -104,17 +104,53 @@
       outline: none;
     }
 
-    /* Шкала времени */
+    /* Главный контейнер таймлайна */
     .timeline-container {
       position: relative;
       width: 100%;
       margin-top: 1rem;
     }
 
+    .timeline-scroll-area {
+      display: flex;
+      overflow-x: auto;
+      position: relative;
+      padding: 3rem 1rem;
+      width: 100%;
+    }
+
+    /* ГОРИЗОНТАЛЬНЫЙ РЕЖИМ */
+    .timeline-scroll-area.horizontal {
+      min-width: 100%;
+    }
+
+    .timeline-scroll-area.horizontal .timeline-axis-line {
+      position: absolute;
+      top: 50%;
+      left: 0;
+      right: 0;
+      height: 3px;
+      background-color: var(--accent-gold);
+      z-index: 1;
+      min-width: 100%;
+    }
+
+    .timeline-scroll-area.horizontal .timeline-ticks {
+      display: flex;
+      gap: 3.5rem;
+      position: relative;
+      z-index: 2;
+      align-items: center;
+      width: max-content;
+      padding-right: 4rem; /* Запас под стрелку */
+    }
+
+    /* Стрелка привязана к линии */
     .fixed-arrow-right {
-      position: fixed;
+      position: absolute;
       right: 10px;
-      top: 45%;
+      top: 50%;
+      transform: translateY(-50%);
       font-size: 1.2rem;
       color: var(--accent-gold);
       z-index: 10;
@@ -125,50 +161,26 @@
       border: 1px solid var(--border-color);
     }
 
-    .timeline-scroll-area {
-      display: flex;
-      overflow-x: auto;
-      position: relative;
-      padding: 3rem 4rem 3rem 1.5rem;
-      width: 100%;
-    }
-
-    /* Горизонтальный режим */
-    .timeline-scroll-area.horizontal .timeline-axis-line {
-      position: absolute;
-      top: 50%;
-      left: 0;
-      width: 100%;
-      min-width: max-content;
-      height: 3px;
-      background-color: var(--accent-gold);
-      z-index: 1;
-    }
-
-    .timeline-scroll-area.horizontal .timeline-ticks {
-      display: flex;
-      gap: 3.5rem;
-      position: relative;
-      z-index: 2;
-      align-items: center;
-      width: max-content;
-    }
-
-    /* Вертикальный режим */
+    /* ВЕРТИКАЛЬНЫЙ РЕЖИМ */
     .timeline-scroll-area.vertical {
       flex-direction: column;
       align-items: center;
       padding: 2rem 1rem;
+      overflow-x: hidden;
     }
+
     .timeline-scroll-area.vertical .timeline-axis-line {
       position: absolute;
-      top: 0; bottom: 0;
+      top: 0;
+      bottom: 0;
       left: 50%;
+      transform: translateX(-50%);
       width: 3px;
       height: 100%;
       background-color: var(--accent-gold);
       z-index: 1;
     }
+
     .timeline-scroll-area.vertical .timeline-ticks {
       display: flex;
       flex-direction: column;
@@ -176,7 +188,18 @@
       position: relative;
       z-index: 2;
       width: 100%;
-      max-width: 400px;
+      max-width: 360px;
+    }
+
+    .timeline-scroll-area.vertical .tick-item {
+      width: 100%;
+      flex-direction: row;
+      justify-content: space-between;
+      align-items: center;
+      background: var(--panel-bg);
+      padding: 0.8rem 1rem;
+      border-radius: 10px;
+      border: 1px solid var(--border-color);
     }
 
     .tick-item {
@@ -210,39 +233,65 @@
     }
 
     .tick-short-title {
-      font-size: 0.75rem;
+      font-size: 0.8rem;
       color: var(--text-muted);
       max-width: 120px;
-      line-height: 1.1;
+      line-height: 1.2;
     }
 
-    /* Конспект (Баббл) */
+    /* УВЕЛИЧЕННЫЙ КОНСПЕКТ (БАББЛ) */
     .speech-bubble {
       position: relative;
-      margin: 10px;
+      margin: 1rem;
       background: var(--bubble-bg);
       border: 2px solid var(--accent-blue);
-      border-radius: 12px;
-      padding: 1.2rem;
-      box-shadow: 0 8px 20px rgba(0,0,0,0.4);
+      border-radius: 14px;
+      padding: 1.4rem;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.5);
     }
     .speech-bubble.hidden { display: none !important; }
 
     .bubble-close {
       position: absolute;
-      top: 8px;
-      right: 12px;
-      font-size: 1.4rem;
+      top: 10px;
+      right: 14px;
+      font-size: 1.6rem;
       background: none;
       border: none;
       color: var(--text-muted);
       cursor: pointer;
     }
 
-    .bubble-year { color: var(--accent-gold); font-weight: 800; font-size: 1.1rem; }
-    .bubble-body { margin-top: 0.8rem; font-size: 0.85rem; line-height: 1.5; }
+    .bubble-year { 
+      color: var(--accent-gold); 
+      font-weight: 900; 
+      font-size: 1.15rem; 
+      display: inline-block;
+      margin-bottom: 4px;
+    }
 
-    /* Настройки (Модалка) */
+    .bubble-header h3 {
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: var(--text-main);
+    }
+
+    .bubble-body { 
+      margin-top: 1rem; 
+      font-size: 0.95rem; 
+      line-height: 1.6; 
+      color: var(--text-main);
+    }
+
+    .bubble-terms {
+      margin-top: 1rem;
+      padding-top: 0.8rem;
+      border-top: 1px dashed var(--border-color);
+      font-size: 0.85rem;
+      color: var(--accent-gold);
+    }
+
+    /* Модальное окно настроек */
     .modal-wrapper {
       display: none;
       position: fixed;
@@ -316,9 +365,10 @@
       <button class="bubble-close" id="close-bubble">&times;</button>
       <div class="bubble-header">
         <span class="bubble-year" id="det-year"></span>
-        <h3 id="det-title" style="margin-top:4px;"></h3>
+        <h3 id="det-title"></h3>
       </div>
       <div class="bubble-body" id="det-body"></div>
+      <div class="bubble-terms" id="det-terms"></div>
     </div>
   </main>
 
@@ -350,7 +400,7 @@
         <div class="setting-item">
           <label>Відстань між датами:</label>
           <div class="toggle-group">
-            <button id="btn-gap-equal" class="btn-toggle active">Рівна</button>
+            <button id="btn-gap-equal" class="btn-toggle active">Нормальна</button>
             <button id="btn-gap-wide" class="btn-toggle">Широка</button>
           </div>
         </div>
@@ -360,50 +410,51 @@
   </div>
 
   <script>
+    // События строго по материалам Turbo ZNO
     const eventsData = [
       {
         id: "1",
         year: "1 млн р. тому",
-        title: "Перша людина",
+        title: "Поява першої людини",
         details: {
-          fullText: "<b>Палеоліт.</b> Стоянка <b>с. Королеве (Закарпаття)</b>.<br>Також: Мізин, Кирилівка, Межиріч, Киїк-Коба, Амвросіївка.",
-          terms: ["Палеоліт", "Стоянка"]
+          fullText: "<b>Палеоліт (Кам'яний вік).</b> Поява перших мавпоподібних людей на території України.<br><br>📍 <b>Найвідоміші стоянки:</b><br>• <b>с. Королеве (Закарпаття)</b> — найдавніша стоянка в Україні (1 млн років тому).<br>• Мізин, Кирилівка, Межиріч, Киїк-Коба, Амвросіївка.",
+          terms: ["Палеоліт", "Привласнювальне господарство", "Стоянка"]
         }
       },
       {
         id: "2",
-        year: "IV-III тис. до н.е.",
-        title: "Трипільська культура",
+        year: "IV - III тис. до н.е.",
+        title: "Розквіт Трипільців",
         details: {
-          fullText: "<b>Енеоліт.</b> Освоєння міді, землеробство, мальована кераміка, протоміста. Відкрив В. Хвойка.",
-          terms: ["Енеоліт", "Протоміста"]
+          fullText: "<b>Енеоліт (Мідно-кам'яний вік).</b> Перші землероби на території України.<br><br>💡 <b>Особливості:</b><br>• Відкрив Вікентій Хвойка.<br>• Мальована кераміка (орнаменти).<br>• Будівництво протоміст (великих поселень).<br>• Відтворювальне господарство.",
+          terms: ["Енеоліт", "Відтворювальне господарство", "Протоміста"]
         }
       },
       {
         id: "3",
-        year: "IX-VIII ст. до н.е.",
+        year: "IX - VIII ст. до н.е.",
         title: "Кіммерійці",
         details: {
-          fullText: "Перший кочовий народ на території України (згаданий Гомером). Освоїли залізо.",
+          fullText: "<b>Залізний вік.</b> Перший кочовий народ на території України, назва якого зафіксована у писемних джерелах (Гомер «Одіссея»).<br><br>⚔️ Освоили виплавку заліза, були вершниками и воїнами.",
           terms: ["Залізний вік", "Кочівники"]
         }
       },
       {
         id: "4",
-        year: "VII-III ст. до н.е.",
+        year: "VII - III ст. до н.е.",
         title: "Скіфи",
         details: {
-          fullText: "Велика Скіфія. Кургани (Товста Могила, Пектораль), похід Дарія I.",
-          terms: ["Курган", "Пектораль"]
+          fullText: "<b>Велика Скіфія.</b> Могутній кочовий народ.<br><br>🏆 <b>Головні факти:</b><br>• Похід перського царя Дарія I проти скіфів (невдалий для Дарія).<br>• Кургани (поховання): <b>Товста Могила</b> (знайдено Золоту Пектораль), Солоха, Чортомлик.<br>• Звіриний стиль у мистецтві.",
+          terms: ["Курган", "Пектораль", "Звіриний стиль"]
         }
       },
       {
         id: "5",
-        year: "III ст.до н.е. - III ст. н.е.",
+        year: "III ст. до н.е. - III ст. н.е.",
         title: "Сармати",
         details: {
-          fullText: "Кочові племена, матріархальні елементи, важка кіннота (катафрактарії).",
-          terms: ["Сармати"]
+          fullText: "Кочові племена, які витіснили скіфів.<br><br>🏹 <b>Особливості:</b><br>• Важка кіннота (катафрактарії).<br>• Збереження елементів матріархату (жінки-воїни).",
+          terms: ["Сармати", "Матріархат"]
         }
       }
     ];
@@ -414,7 +465,7 @@
       container.innerHTML = '';
 
       if (data.length === 0) {
-        container.innerHTML = '<div style="padding: 20px; color: #94a3b8;">Нічого не знайдено</div>';
+        container.innerHTML = '<div style="padding: 20px; color: #94a3b8;">Подій не знайдено</div>';
         return;
       }
 
@@ -441,26 +492,27 @@
       const bubble = document.getElementById('details-bubble');
       document.getElementById('det-year').innerText = item.year;
       document.getElementById('det-title').innerText = item.title;
+      document.getElementById('det-body').innerHTML = item.details.fullText;
       
-      let contentHtml = `<p>${item.details.fullText}</p>`;
+      const termsBox = document.getElementById('det-terms');
       if (item.details.terms && item.details.terms.length > 0) {
-        contentHtml += `<div style="margin-top:10px; font-size: 0.8rem; color: #f59e0b;"><b>Терміни:</b> ${item.details.terms.join(', ')}</div>`;
+        termsBox.innerHTML = `<b>Ключові терміни НМТ:</b> ${item.details.terms.join(' • ')}`;
+        termsBox.style.display = 'block';
+      } else {
+        termsBox.style.display = 'none';
       }
       
-      document.getElementById('det-body').innerHTML = contentHtml;
       bubble.classList.remove('hidden');
     }
 
     window.onload = () => {
       renderTimeline(eventsData);
 
-      // Закрытие конспекта
       document.getElementById('close-bubble').onclick = () => {
         document.getElementById('details-bubble').classList.add('hidden');
         document.querySelectorAll('.tick-item').forEach(el => el.classList.remove('active'));
       };
 
-      // Поиск
       document.getElementById('search-input').oninput = function(e) {
         const val = e.target.value.toLowerCase().trim();
         const filtered = eventsData.filter(item => 
@@ -471,7 +523,7 @@
         renderTimeline(filtered);
       };
 
-      // Модалка настроек
+      // Модалка
       const modal = document.getElementById('settings-modal');
       document.getElementById('open-settings-btn').onclick = () => modal.classList.add('open');
       document.getElementById('close-settings-btn').onclick = () => modal.classList.remove('open');
@@ -515,7 +567,7 @@
         document.getElementById('btn-gap-wide').classList.remove('active');
       };
       document.getElementById('btn-gap-wide').onclick = function() {
-        ticks.style.gap = '7rem';
+        ticks.style.gap = '6.5rem';
         this.classList.add('active');
         document.getElementById('btn-gap-equal').classList.remove('active');
       };

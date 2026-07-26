@@ -3,37 +3,86 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Історія України | НМТ Таймлайн</title>
+  <title>Історія України | НМТ</title>
   <link rel="stylesheet" href="style.css">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;900&display=swap" rel="stylesheet">
 </head>
 <body>
 
   <header class="navbar">
-    <div class="logo">🇺🇦 Історія України <span>НМТ</span></div>
+    <div class="logo">Історія України <span>НМТ</span></div>
+    
     <nav class="nav-links">
-      <button class="nav-btn active" data-tab="timeline">⏳ Хронологія</button>
-      <button class="nav-btn" data-tab="persons">👑 Діячі</button>
-      <button class="nav-btn" data-tab="maps">🗺️ Карти & Пам'ятки</button>
-      <button class="nav-btn" data-tab="cheats">📌 Шпори</button>
+      <button class="nav-btn active" data-tab="timeline">Хронологія</button>
+      <button class="nav-btn" data-tab="persons">Діячі</button>
+      <button class="nav-btn" data-tab="maps">Пам'ятки</button>
+      <button class="nav-btn" data-tab="cheats">Шпори</button>
     </nav>
-    <button id="theme-toggle" class="icon-btn" title="Змінити тему">🌙</button>
+
+    <button id="open-settings-btn" class="settings-trigger-btn" aria-label="Налаштування">⚙</button>
   </header>
 
-  <div class="controls-bar">
-    <div class="control-group">
-      <label>Орієнтація:</label>
-      <button id="btn-horizontal" class="btn-toggle active">➡️ Горизонтально</button>
-      <button id="btn-vertical" class="btn-toggle">⬇️ Вертикально</button>
+  <div id="settings-modal" class="modal hidden">
+    <div class="modal-overlay" id="modal-overlay"></div>
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3>Налаштування</h3>
+        <button id="close-settings-btn" class="modal-close">&times;</button>
+      </div>
+      <div class="modal-body">
+        <div class="setting-item">
+          <label>Орієнтація:</label>
+          <div class="toggle-group">
+            <button id="btn-horizontal" class="btn-toggle active">Горизонтальна</button>
+            <button id="btn-vertical" class="btn-toggle">Вертикальна</button>
+          </div>
+        </div>
+        <div class="setting-item">
+          <label>Інтервал дат:</label>
+          <div class="toggle-group">
+            <button id="btn-spacing-equal" class="btn-toggle active">Рівний</button>
+            <button id="btn-spacing-proportional" class="btn-toggle">Пропорційний</button>
+          </div>
+        </div>
+        <div class="setting-item">
+          <label>Тема оформлення:</label>
+          <div class="toggle-group">
+            <button id="btn-theme-dark" class="btn-toggle active">Темна</button>
+            <button id="btn-theme-light" class="btn-toggle">Світла</button>
+          </div>
+        </div>
+      </div>
     </div>
-    
-    <div class="control-group">
-      <label>Інтервал дат:</label>
-      <button id="btn-spacing-equal" class="btn-toggle active">Рівний</button>
-      <button id="btn-spacing-proportional" class="btn-toggle">Пропорційний</button>
+  </div>
+
+  <main id="tab-timeline" class="tab-content active">
+
+    <div class="timeline-container">
+      <div class="fixed-arrow-right">►</div>
+      
+      <div class="timeline-scroll-area" id="timeline-scroll">
+        <div class="timeline-axis-line"></div>
+        <div class="timeline-ticks" id="timeline-ticks">
+          </div>
+      </div>
     </div>
 
-    <div class="control-group search-box">
+    <div id="details-bubble" class="speech-bubble hidden">
+      <div class="bubble-arrow" id="bubble-arrow"></div>
+      <button class="bubble-close" id="close-bubble">&times;</button>
+      <div class="bubble-header">
+        <span class="bubble-year" id="det-year"></span>
+        <h3 id="det-title"></h3>
+      </div>
+      <div class="bubble-body" id="det-body">
+        </div>
+    </div>
+
+  </main>
+
+  <script src="app.js"></script>
+</body>
+</html>
       <input type="text" id="search-input" placeholder="Пошук події, року, діяча...">
     </div>
   </div>

@@ -9,9 +9,12 @@
 </head>
 <body>
 
-  <header class="navbar">
-    <div class="logo">Історія України <span>НМТ</span></div>
-    
+  <header class="header-container">
+    <div class="top-row">
+      <div class="logo">Історія України <span>НМТ</span></div>
+      <button id="open-settings-btn" class="settings-trigger-btn" aria-label="Налаштування">⚙</button>
+    </div>
+
     <nav class="nav-links">
       <button class="nav-btn active" data-tab="timeline">Хронологія</button>
       <button class="nav-btn" data-tab="persons">Діячі</button>
@@ -19,7 +22,9 @@
       <button class="nav-btn" data-tab="cheats">Шпори</button>
     </nav>
 
-    <button id="open-settings-btn" class="settings-trigger-btn" aria-label="Налаштування">⚙</button>
+    <div class="search-box">
+      <input type="text" id="search-input" placeholder="Пошук року, події чи терміну...">
+    </div>
   </header>
 
   <div id="settings-modal" class="modal hidden">
@@ -31,9 +36,49 @@
       </div>
       <div class="modal-body">
         <div class="setting-item">
+          <label>Тема оформлення:</label>
+          <div class="toggle-group">
+            <button id="btn-theme-dark" class="btn-toggle active">Темна</button>
+            <button id="btn-theme-light" class="btn-toggle">Світла</button>
+          </div>
+        </div>
+        <div class="setting-item">
           <label>Орієнтація:</label>
           <div class="toggle-group">
             <button id="btn-horizontal" class="btn-toggle active">Горизонтальна</button>
+            <button id="btn-vertical" class="btn-toggle">Вертикальна</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <main id="tab-timeline" class="tab-content active">
+
+    <div class="timeline-container" id="timeline-container">
+      <div class="fixed-arrow-right">►</div>
+      
+      <div class="timeline-scroll-area" id="timeline-scroll">
+        <div class="timeline-axis-line"></div>
+        <div class="timeline-ticks" id="timeline-ticks">
+          </div>
+      </div>
+    </div>
+
+    <div id="details-bubble" class="speech-bubble hidden">
+      <button class="bubble-close" id="close-bubble">&times;</button>
+      <div class="bubble-header">
+        <span class="bubble-year" id="det-year"></span>
+        <h3 id="det-title"></h3>
+      </div>
+      <div class="bubble-body" id="det-body"></div>
+    </div>
+
+  </main>
+
+  <script src="app.js"></script>
+</body>
+</html>
             <button id="btn-vertical" class="btn-toggle">Вертикальна</button>
           </div>
         </div>

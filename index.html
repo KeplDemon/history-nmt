@@ -1,632 +1,807 @@
 <!DOCTYPE html>
 <html lang="uk">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>EduPrep NMT | Інтерактивна платформа</title>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;900&display=swap" rel="stylesheet">
-  <style>
-    :root {
-      --bg-color: #0b0f19;
-      --panel-bg: #151c2c;
-      --accent-gold: #f59e0b;
-      --accent-blue: #3b82f6;
-      --text-main: #f8fafc;
-      --text-muted: #94a3b8;
-      --border-color: #26334d;
-      --bubble-bg: #151c2c;
-    }
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="referrer" content="no-referrer">
+    <title>Вся історія на НМТ</title>
+    <style>
+        :root {
+            --bg-color: #0b0f19;
+            --panel-bg: rgba(22, 30, 46, 0.85);
+            --card-bg: #1e293b;
+            --card-border: #334155;
+            --text-main: #f1f5f9;
+            --text-muted: #94a3b8;
+            --accent: #38bdf8;
+            --accent-glow: rgba(56, 189, 248, 0.3);
+            --timeline-line: #475569;
+            --font-size-base: 15px;
+            --node-gap: 180px;
+        }
 
-    * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Inter', sans-serif; }
+        body.light-theme {
+            --bg-color: #f1f5f9;
+            --panel-bg: rgba(255, 255, 255, 0.9);
+            --card-bg: #ffffff;
+            --card-border: #cbd5e1;
+            --text-main: #0f172a;
+            --text-muted: #64748b;
+            --accent: #0284c7;
+            --accent-glow: rgba(2, 132, 199, 0.2);
+            --timeline-line: #cbd5e1;
+        }
 
-    body {
-      background-color: var(--bg-color);
-      color: var(--text-main);
-      min-height: 100vh;
-      display: flex;
-      flex-direction: column;
-      overflow-x: hidden;
-    }
+        body.sepia-theme {
+            --bg-color: #fbf0d9;
+            --panel-bg: rgba(243, 229, 171, 0.9);
+            --card-bg: #fff8e7;
+            --card-border: #d7c4b0;
+            --text-main: #433422;
+            --text-muted: #7f6a54;
+            --accent: #b45309;
+            --accent-glow: rgba(180, 83, 9, 0.2);
+            --timeline-line: #d7c4b0;
+        }
 
-    /* Header & Navigation */
-    .header-container {
-      background-color: var(--panel-bg);
-      border-bottom: 1px solid var(--border-color);
-      padding: 0.8rem 1.2rem;
-      display: flex;
-      flex-direction: column;
-      gap: 0.8rem;
-      position: sticky;
-      top: 0;
-      z-index: 100;
-    }
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+        }
 
-    .top-row { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 0.8rem; }
-    .logo { font-weight: 900; font-size: 1.2rem; }
-    .logo span { color: var(--accent-gold); }
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            font-size: var(--font-size-base);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            overflow-x: hidden;
+        }
 
-    .nav-tabs { display: flex; gap: 0.5rem; overflow-x: auto; }
-    .nav-btn {
-      background: transparent;
-      border: 1px solid var(--border-color);
-      color: var(--text-muted);
-      padding: 0.4rem 0.85rem;
-      border-radius: 6px;
-      font-size: 0.82rem;
-      font-weight: 600;
-      cursor: pointer;
-      white-space: nowrap;
-      transition: all 0.2s;
-    }
-    .nav-btn:hover, .nav-btn.active {
-      background: var(--border-color);
-      color: var(--accent-gold);
-      border-color: var(--accent-gold);
-    }
+        /* ХЕДЕР И ШАПКА */
+        header {
+            background: var(--panel-bg);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid var(--card-border);
+            padding: 0.8rem 1.5rem;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
 
-    .search-box input {
-      width: 100%; background: var(--bg-color); border: 1px solid var(--border-color);
-      color: var(--text-main); padding: 0.55rem 0.9rem; border-radius: 8px; font-size: 0.85rem; outline: none;
-    }
-    .search-box input:focus { border-color: var(--accent-blue); }
+        .header-title {
+            font-weight: 700;
+            font-size: 1.1rem;
+            color: var(--text-main);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
 
-    /* Timeline Section */
-    .timeline-container {
-      position: relative;
-      width: 100%;
-      margin-top: 1rem;
-    }
+        .nav-group {
+            display: flex;
+            gap: 0.5rem;
+            align-items: center;
+        }
 
-    .timeline-scroll-area {
-      display: flex;
-      overflow-x: auto;
-      position: relative;
-      padding: 5.5rem 2rem 5.5rem 1rem;
-      width: 100%;
-      cursor: grab;
-      user-select: none;
-      scrollbar-width: none;
-    }
-    .timeline-scroll-area::-webkit-scrollbar { display: none; }
-    .timeline-scroll-area:active { cursor: grabbing; }
+        .search-input {
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+            color: var(--text-main);
+            padding: 0.4rem 0.8rem;
+            border-radius: 6px;
+            outline: none;
+            width: 220px;
+            font-size: 0.85rem;
+        }
 
-    .timeline-ticks {
-      display: flex;
-      position: relative;
-      z-index: 2;
-      align-items: center;
-      width: max-content;
-      padding-right: 4rem;
-    }
+        .nav-btn {
+            background: transparent;
+            border: 1px solid var(--card-border);
+            color: var(--text-muted);
+            padding: 0.4rem 0.8rem;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 0.85rem;
+            transition: all 0.2s;
+        }
 
-    .timeline-axis-line {
-      position: absolute;
-      top: 50%;
-      left: 0;
-      right: 0;
-      height: 3px;
-      background-color: var(--accent-gold);
-      z-index: 1;
-      transform: translateY(-50%);
-    }
+        .nav-btn:hover, .nav-btn.active {
+            color: var(--accent);
+            border-color: var(--accent);
+            background: var(--card-bg);
+        }
 
-    .fixed-arrow-right {
-      position: absolute;
-      right: 12px;
-      top: 50%;
-      transform: translateY(-50%);
-      font-size: 1.1rem;
-      color: var(--accent-gold);
-      z-index: 20;
-      pointer-events: none;
-      background: var(--bg-color);
-      padding: 2px 6px;
-      border-radius: 4px;
-    }
+        /* ОСНОВНОЙ КОНТЕЙНЕР */
+        main {
+            flex: 1;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+        }
 
-    /* Process Bar (Periods) */
-    .period-bar {
-      position: absolute;
-      height: 5px;
-      border-radius: 3px;
-      cursor: pointer;
-      transition: transform 0.15s, height 0.15s, opacity 0.2s;
-      z-index: 4;
-      opacity: 0.88;
-    }
-    .period-bar:hover { height: 8px; opacity: 1; transform: translateY(-1px); }
+        .view-section {
+            display: none;
+            width: 100%;
+            height: 100%;
+        }
 
-    .tick-wrapper { display: flex; align-items: center; position: relative; }
+        .view-section.active {
+            display: block;
+        }
 
-    .tick-item {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      cursor: pointer;
-      min-width: 110px;
-      text-align: center;
-      position: relative;
-      z-index: 3;
-    }
+        /* ИНТЕРАКТИВНАЯ ШКАЛА */
+        .timeline-wrapper {
+            width: 100%;
+            overflow-x: auto;
+            overflow-y: hidden;
+            padding: 100px 50px 150px 50px;
+            position: relative;
+            min-height: calc(100vh - 60px);
+            cursor: grab;
+        }
 
-    .tick-mark {
-      width: 14px;
-      height: 14px;
-      background: var(--accent-gold);
-      border-radius: 50%;
-      border: 3px solid var(--bg-color);
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      z-index: 5;
-      transition: transform 0.2s, background-color 0.2s;
-    }
+        .timeline-wrapper.vertical {
+            overflow-x: hidden;
+            overflow-y: auto;
+            padding: 50px 20px;
+        }
 
-    .tick-item:hover .tick-mark, 
-    .tick-item.active .tick-mark {
-      transform: translate(-50%, -50%) scale(1.4);
-      background: var(--accent-blue);
-    }
+        .timeline-container {
+            position: relative;
+            min-width: max-content;
+        }
 
-    .tick-item.highlighted .tick-mark {
-      transform: translate(-50%, -50%) scale(1.4);
-      background: #60a5fa !important;
-      border-color: #ffffff !important;
-      box-shadow: 0 0 10px #60a5fa;
-    }
+        /* Главная ось */
+        .timeline-axis {
+            position: absolute;
+            background-color: var(--timeline-line);
+            border-radius: 2px;
+        }
 
-    .tick-content-box {
-      position: absolute;
-      width: 130px;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-    }
+        .timeline-wrapper:not(.vertical) .timeline-axis {
+            height: 4px;
+            top: 120px;
+            left: 0;
+            right: 0;
+        }
 
-    .pos-top { bottom: 22px; }
-    .pos-bottom { top: 22px; }
+        .timeline-wrapper.vertical .timeline-axis {
+            width: 4px;
+            left: 100px;
+            top: 0;
+            bottom: 0;
+        }
 
-    .tick-year { font-weight: 800; font-size: 0.82rem; color: var(--accent-gold); }
-    .tick-short-title { font-size: 0.78rem; color: var(--text-muted); line-height: 1.2; margin-top: 2px; }
+        /* Периоды (полоски над шкалой) */
+        .period-bar {
+            position: absolute;
+            height: 12px;
+            border-radius: 6px;
+            top: 85px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.75rem;
+            font-weight: bold;
+            color: #fff;
+            text-shadow: 0 1px 2px rgba(0,0,0,0.8);
+            box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+            white-space: nowrap;
+            padding: 0 8px;
+        }
 
-    .time-gap-break {
-      width: 25px;
-      height: 10px;
-      position: relative;
-      z-index: 3;
-      background: radial-gradient(circle, var(--accent-gold) 25%, transparent 25%);
-      background-size: 5px 5px;
-      opacity: 0.5;
-    }
+        /* Узлы/Точки событий */
+        .timeline-node {
+            position: absolute;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            cursor: pointer;
+            transform: translateX(-50%);
+            transition: transform 0.2s;
+        }
 
-    /* Floating Tooltip */
-    .floating-tooltip {
-      position: fixed;
-      display: none;
-      background: var(--panel-bg);
-      border: 1px solid var(--accent-blue);
-      color: var(--text-main);
-      padding: 0.6rem 0.9rem;
-      border-radius: 8px;
-      font-size: 0.8rem;
-      box-shadow: 0 8px 20px rgba(0,0,0,0.5);
-      z-index: 2000;
-      pointer-events: none;
-      max-width: 260px;
-    }
-    .floating-tooltip-title { font-weight: 700; color: var(--accent-blue); margin-bottom: 3px; }
+        .timeline-wrapper:not(.vertical) .timeline-node {
+            top: 110px;
+        }
 
-    /* Speech Bubble / Summary Panel */
-    .speech-bubble {
-      position: relative; 
-      margin: 1.5rem 1rem; 
-      background: var(--bubble-bg);
-      border: 1px solid var(--accent-blue); 
-      border-radius: 12px; 
-      padding: 1.2rem;
-      box-shadow: 0 8px 20px rgba(0,0,0,0.4);
-    }
-    .speech-bubble.hidden { display: none !important; }
+        .timeline-node:hover {
+            transform: translateX(-50%) scale(1.1);
+        }
 
-    .bubble-close {
-      position: absolute; top: 10px; right: 14px; font-size: 1.5rem;
-      background: none; border: none; color: var(--text-muted); cursor: pointer;
-    }
+        .node-dot {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background-color: var(--accent);
+            border: 4px solid var(--bg-color);
+            box-shadow: 0 0 10px var(--accent-glow);
+            z-index: 2;
+        }
 
-    .bubble-year { color: var(--accent-gold); font-weight: 900; font-size: 1.15rem; margin-bottom: 4px; display: inline-block; }
-    .bubble-header h3 { font-size: 1.1rem; font-weight: 700; color: var(--text-main); }
-    
-    .bubble-body { margin-top: 0.8rem; font-size: 0.9rem; line-height: 1.5; color: #cbd5e1; }
-    .bubble-body ul { margin-left: 1.2rem; margin-top: 0.4rem; }
-    .bubble-body li { margin-bottom: 0.3rem; }
+        .timeline-node.active .node-dot {
+            background-color: #ef4444;
+            box-shadow: 0 0 12px rgba(239, 68, 68, 0.8);
+        }
 
-    /* Gallery */
-    .images-gallery {
-      display: flex;
-      gap: 12px;
-      margin-top: 1rem;
-      overflow-x: auto;
-      padding-bottom: 6px;
-    }
-    .img-card {
-      background: var(--bg-color);
-      border: 1px solid var(--border-color);
-      border-radius: 8px;
-      padding: 6px;
-      flex: 0 0 auto;
-      max-width: 240px;
-    }
-    .img-card img {
-      width: 100%;
-      height: 130px;
-      object-fit: cover;
-      border-radius: 6px;
-    }
-    .img-caption {
-      font-size: 0.74rem;
-      color: var(--text-muted);
-      margin-top: 5px;
-      text-align: center;
-    }
+        .node-label {
+            margin-top: 10px;
+            text-align: center;
+            max-width: 140px;
+            pointer-events: none;
+        }
 
-    /* Accordions */
-    .accordion-container { margin-top: 1rem; display: flex; flex-direction: column; gap: 0.5rem; }
-    .accordion-item { border: 1px solid var(--border-color); border-radius: 8px; background: var(--bg-color); overflow: hidden; }
-    .accordion-header { padding: 0.65rem 0.85rem; font-size: 0.85rem; font-weight: 700; color: var(--accent-gold); display: flex; justify-content: space-between; align-items: center; cursor: pointer; }
-    .accordion-header::after { content: '▼'; font-size: 0.65rem; transition: transform 0.2s; }
-    .accordion-item.open .accordion-header::after { transform: rotate(180deg); }
-    .accordion-content { display: none; padding: 0.8rem; border-top: 1px solid var(--border-color); font-size: 0.85rem; line-height: 1.45; color: #cbd5e1; }
-    .accordion-item.open .accordion-content { display: block; }
-    .accordion-content img { max-width: 100%; border-radius: 6px; margin-top: 8px; }
+        .node-date {
+            font-weight: 700;
+            font-size: 0.85rem;
+            color: var(--accent);
+        }
 
-    .bubble-terms { 
-      margin-top: 0.9rem; 
-      padding-top: 0.6rem; 
-      border-top: 1px dashed var(--border-color); 
-      font-size: 0.83rem; 
-      color: var(--accent-gold); 
-    }
-  </style>
+        .node-title {
+            font-size: 0.8rem;
+            color: var(--text-main);
+            margin-top: 2px;
+            line-height: 1.2;
+        }
+
+        /* МОДАЛЬНОЕ ОКНО (КОНСПЕКТ) */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.6);
+            backdrop-filter: blur(4px);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            padding: 20px;
+        }
+
+        .modal-overlay.active {
+            display: flex;
+        }
+
+        .modal-card {
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+            border-radius: 12px;
+            width: 100%;
+            max-width: 650px;
+            max-height: 85vh;
+            display: flex;
+            flex-direction: column;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.5);
+            animation: modalFadeIn 0.25s ease-out;
+        }
+
+        @keyframes modalFadeIn {
+            from { opacity: 0; transform: scale(0.95); }
+            to { opacity: 1; transform: scale(1); }
+        }
+
+        .modal-header {
+            padding: 1.2rem;
+            border-bottom: 1px solid var(--card-border);
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+        }
+
+        .modal-title {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: var(--text-main);
+        }
+
+        .modal-date {
+            font-size: 0.9rem;
+            color: var(--accent);
+            font-weight: 600;
+            margin-top: 2px;
+        }
+
+        .close-btn {
+            background: transparent;
+            border: none;
+            color: var(--text-muted);
+            font-size: 1.5rem;
+            cursor: pointer;
+            line-height: 1;
+            padding: 0 0.4rem;
+        }
+
+        .close-btn:hover {
+            color: var(--text-main);
+        }
+
+        .modal-body {
+            padding: 1.2rem;
+            overflow-y: auto;
+            flex: 1;
+        }
+
+        /* Картинки в конспекте */
+        .modal-images {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin-bottom: 1rem;
+        }
+
+        .modal-img-wrapper {
+            width: 100%;
+            text-align: center;
+        }
+
+        .modal-img {
+            max-width: 100%;
+            max-height: 320px;
+            border-radius: 8px;
+            object-fit: contain;
+            border: 1px solid var(--card-border);
+        }
+
+        .modal-img-caption {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            margin-top: 4px;
+            font-style: italic;
+        }
+
+        /* Текстовая верстка конспекта */
+        .full-text {
+            line-height: 1.6;
+            margin-bottom: 1rem;
+        }
+
+        .full-text p { margin-bottom: 0.6rem; }
+        .full-text ul { padding-left: 1.2rem; margin-bottom: 0.6rem; }
+        .full-text li { margin-bottom: 0.3rem; }
+
+        /* Термины (Теги) */
+        .terms-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+            margin-bottom: 1rem;
+        }
+
+        .term-badge {
+            background: var(--panel-bg);
+            border: 1px solid var(--accent);
+            color: var(--accent);
+            padding: 0.2rem 0.6rem;
+            border-radius: 20px;
+            font-size: 0.78rem;
+            font-weight: 600;
+        }
+
+        /* Спойлеры / Аккордеоны (<details>) */
+        details {
+            background: var(--panel-bg);
+            border: 1px solid var(--card-border);
+            border-radius: 8px;
+            margin-bottom: 8px;
+            overflow: hidden;
+        }
+
+        summary {
+            padding: 0.8rem;
+            font-weight: 600;
+            cursor: pointer;
+            user-select: none;
+            outline: none;
+            color: var(--text-main);
+        }
+
+        summary:hover {
+            background: rgba(255,255,255,0.03);
+        }
+
+        .accordion-content {
+            padding: 0.8rem;
+            border-top: 1px solid var(--card-border);
+            font-size: 0.9rem;
+        }
+
+        /* НАСТРОЙКИ */
+        .settings-panel {
+            max-width: 500px;
+            margin: 3rem auto;
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+            border-radius: 12px;
+            padding: 1.5rem;
+        }
+
+        .setting-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.8rem 0;
+            border-bottom: 1px solid var(--card-border);
+        }
+
+        .setting-row:last-child { border-bottom: none; }
+
+        select, input[type="range"] {
+            background: var(--bg-color);
+            color: var(--text-main);
+            border: 1px solid var(--card-border);
+            padding: 0.4rem 0.6rem;
+            border-radius: 6px;
+            outline: none;
+        }
+    </style>
 </head>
 <body>
 
-  <header class="header-container">
-    <div class="top-row">
-      <div class="logo">EduPrep <span>НМТ</span></div>
-      <nav class="nav-tabs">
-        <button class="nav-btn active">Хронологія</button>
-        <button class="nav-btn">Карти</button>
-        <button class="nav-btn">Терміни</button>
-        <button class="nav-btn">Тести</button>
-        <button class="nav-btn">⚙️ Налаштування</button>
-      </nav>
-    </div>
-    <div class="search-box">
-      <input type="text" id="search-input" placeholder="Пошук року, події чи терміну...">
-    </div>
-  </header>
-
-  <main>
-    <div class="timeline-container">
-      <div class="timeline-scroll-area" id="scroll-area">
-        <div class="timeline-ticks" id="timeline-ticks">
-          <div class="timeline-axis-line"></div>
+    <header>
+        <div class="header-title">
+            <span>📖</span> Вся історія на НМТ
         </div>
-      </div>
-      <div class="fixed-arrow-right">►</div>
+        <div class="nav-group">
+            <input type="text" id="searchInput" class="search-input" placeholder="🔍 Пошук події чи дати..." oninput="handleSearch()">
+            <button class="nav-btn active" onclick="switchTab('timeline')">Шкала</button>
+            <button class="nav-btn" onclick="switchTab('settings')">⚙️ Налаштування</button>
+        </div>
+    </header>
+
+    <main>
+        <div id="timeline-view" class="view-section active">
+            <div class="timeline-wrapper" id="timelineWrapper">
+                <div class="timeline-container" id="timelineContainer">
+                    <div class="timeline-axis" id="timelineAxis"></div>
+                    <div id="periodsLayer"></div>
+                    <div id="nodesLayer"></div>
+                </div>
+            </div>
+        </div>
+
+        <div id="settings-view" class="view-section">
+            <div class="settings-panel">
+                <h2 style="margin-bottom: 1rem;">⚙️ Налаштування</h2>
+                
+                <div class="setting-row">
+                    <span>Тема оформлення:</span>
+                    <select id="themeSelect" onchange="changeTheme(this.value)">
+                        <option value="dark">Темна</option>
+                        <option value="light">Світла</option>
+                        <option value="sepia">Сепія</option>
+                    </select>
+                </div>
+
+                <div class="setting-row">
+                    <span>Орієнтація шкали:</span>
+                    <select id="orientationSelect" onchange="changeOrientation(this.value)">
+                        <option value="horizontal">Горизонтальна</option>
+                        <option value="vertical">Вертикальна</option>
+                    </select>
+                </div>
+
+                <div class="setting-row">
+                    <span>Відстань між точками:</span>
+                    <select id="spacingSelect" onchange="changeSpacing(this.value)">
+                        <option value="fixed">Рівномірна (Широка)</option>
+                        <option value="dynamic">Динамічна (по роках)</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <div class="modal-overlay" id="modalOverlay" onclick="closeModalOnOverlay(event)">
+        <div class="modal-card">
+            <div class="modal-header">
+                <div>
+                    <div class="modal-title" id="modalTitle">Назва події</div>
+                    <div class="modal-date" id="modalDate">Дата</div>
+                </div>
+                <button class="close-btn" onclick="closeModal()">✕</button>
+            </div>
+            <div class="modal-body" id="modalBody">
+                </div>
+        </div>
     </div>
 
-    <div id="details-bubble" class="speech-bubble hidden">
-      <button class="bubble-close" id="close-bubble">&times;</button>
-      <div class="bubble-header">
-        <span class="bubble-year" id="det-year"></span>
-        <h3 id="det-title"></h3>
-      </div>
-      <div class="bubble-body" id="det-body"></div>
-      <div id="det-images" class="images-gallery"></div>
-      <div class="accordion-container" id="det-accordions"></div>
-      <div class="bubble-terms" id="det-terms"></div>
-    </div>
-  </main>
+    <script src="data.js"></script>
 
-  <div id="floating-tooltip" class="floating-tooltip">
-    <div id="tooltip-title" class="floating-tooltip-title"></div>
-    <div id="tooltip-desc"></div>
-  </div>
+    <script>
+        // Месяцы для авто-форматирования дат
+        const MONTHS_UA = [
+            "січня", "лютого", "березня", "квітня", "травня", "червня",
+            "липня", "серпня", "вересня", "жовтня", "листопада", "грудня"
+        ];
 
-  <script src="data.js?v=2"></script>
-  <script>
-    function toRoman(num) {
-      var lookup = {M:1000,CM:900,D:500,CD:400,C:100,XC:90,L:50,XL:40,X:10,IX:9,V:5,IV:4,I:1}, roman = '', i;
-      for (i in lookup) { while (num >= lookup[i]) { roman += i; num -= lookup[i]; } }
-      return roman;
-    }
+        let activeEventId = null;
+        let spacingMode = 'fixed'; // 'fixed' или 'dynamic'
+        let orientation = 'horizontal';
 
-    function parseDateToText(dateInput) {
-      if (typeof dateInput === 'string') {
-        var parts = dateInput.split('.');
-        if (parts.length === 3) {
-          var months = ["січня","лютого","березня","квітня","травня","червня","липня","серпня","вересня","жовтня","листопада","грудня"];
-          return parseInt(parts[0], 10) + ' ' + months[parseInt(parts[1], 10) - 1] + ' ' + parts[2] + ' р.';
-        }
-        if (parts.length === 2) {
-          var monthsCap = ["Січень","Лютий","Березень","Квітень","Травень","Червень","Липень","Серпень","Вересень","Жовтень","Листопад","Грудень"];
-          return monthsCap[parseInt(parts[0], 10) - 1] + ' ' + parts[1] + ' р.';
-        }
-      }
+        // --- 1. ПАРСИНГ И ОБРАБОТКА ДАТ --- //
 
-      var num = parseFloat(dateInput);
-      if (isNaN(num)) return dateInput;
+        // Превращает любую дату в числовой год для расчёта координат
+        function parseToYearNumber(dateVal) {
+            if (typeof dateVal === 'number') return dateVal;
+            if (!dateVal) return 0;
 
-      if (num < 0) {
-        var abs = Math.abs(num);
-        if (abs >= 10000) return Math.round(abs / 1000) + ' тис. до н. е.';
-        if (abs >= 1000) return (abs / 1000).toFixed(1).replace('.0','') + ' тис. до н. е.';
-        var century = Math.ceil(abs / 100);
-        return toRoman(century) + ' ст. до н. е.';
-      } else {
-        return num + ' р.';
-      }
-    }
+            const str = String(dateVal).trim();
+            const parts = str.split('.');
 
-    function getNumericYear(dateInput) {
-      if (typeof dateInput === 'number') return dateInput;
-      if (typeof dateInput === 'string') {
-        var parts = dateInput.split('.');
-        if (parts.length === 3) return parseFloat(parts[2]) + (parseFloat(parts[1])/12);
-        if (parts.length === 2) return parseFloat(parts[1]) + (parseFloat(parts[0])/12);
-        return parseFloat(dateInput) || 0;
-      }
-      return 0;
-    }
-
-    function getRandomColor(index) {
-      var palette = ['#3b82f6', '#10b981', '#f59e0b', '#8b5cf6', '#ec4899', '#06b6d4', '#f97316'];
-      if (index < palette.length) return palette[index];
-      return 'hsl(' + (index * 137.5 % 360) + ', 70%, 50%)';
-    }
-
-    var currentActiveId = null;
-
-    function renderTimeline(data) {
-      var container = document.getElementById('timeline-ticks');
-      if (!container) return;
-      container.innerHTML = '<div class="timeline-axis-line"></div>';
-
-      data.sort(function(a, b) { return getNumericYear(a.date) - getNumericYear(b.date); });
-
-      var pointPositions = {};
-      if (typeof periodsData !== 'undefined') {
-        periodsData.forEach(function(p, pIdx) {
-          var isTopPeriod = (pIdx % 2 === 0);
-          var startYr = getNumericYear(data.find(e => e.id === p.startEventId)?.date);
-          var endYr = getNumericYear(data.find(e => e.id === p.endEventId)?.date);
-
-          data.forEach(function(item) {
-            var itemYr = getNumericYear(item.date);
-            if (itemYr >= startYr && itemYr <= endYr) {
-              pointPositions[item.id] = isTopPeriod ? 'pos-bottom' : 'pos-top';
-            }
-          });
-        });
-      }
-
-      var tickElements = {};
-
-      for (var i = 0; i < data.length; i++) {
-        (function(item, index) {
-          var displayYear = item.yearText || parseDateToText(item.date);
-          var wrapper = document.createElement('div');
-          wrapper.className = 'tick-wrapper';
-
-          var gap = 110; 
-          if (index < data.length - 1) {
-            var diff = Math.abs(getNumericYear(data[index+1].date) - getNumericYear(item.date));
-            if (diff > 2000) gap = 170;
-          }
-
-          var tick = document.createElement('div');
-          tick.className = 'tick-item' + (currentActiveId === item.id ? ' active' : '');
-          tick.style.marginRight = gap + 'px';
-
-          var positionClass = pointPositions[item.id] || (index % 2 === 0 ? 'pos-top' : 'pos-bottom');
-
-          tick.innerHTML = 
-            '<div class="tick-mark"></div>' +
-            '<div class="tick-content-box ' + positionClass + '">' +
-              '<div class="tick-year">' + displayYear + '</div>' +
-              '<div class="tick-short-title">' + item.title + '</div>' +
-            '</div>';
-          
-          tick.onclick = function() {
-            if (currentActiveId === item.id) {
-              closeBubble();
+            if (parts.length === 3) {
+                // Формат "06.12.1240"
+                return parseFloat(parts[2]) + (parseFloat(parts[1]) / 12);
+            } else if (parts.length === 2) {
+                // Формат "06.1991"
+                return parseFloat(parts[1]) + (parseFloat(parts[0]) / 12);
             } else {
-              document.querySelectorAll('.tick-item').forEach(function(el) { el.classList.remove('active'); });
-              tick.classList.add('active');
-              currentActiveId = item.id;
-              openBubble(item, displayYear);
+                // Формат "1240"
+                return parseFloat(str) || 0;
             }
-          };
-
-          wrapper.appendChild(tick);
-
-          if (gap >= 170 && index < data.length - 1) {
-            var gapMark = document.createElement('div');
-            gapMark.className = 'time-gap-break';
-            gapMark.style.marginRight = gap + 'px';
-            wrapper.appendChild(gapMark);
-          }
-
-          container.appendChild(wrapper);
-          tickElements[item.id] = tick;
-        })(data[i], i);
-      }
-
-      setTimeout(function() { renderPeriods(tickElements); }, 50);
-    }
-
-    function renderPeriods(tickElements) {
-      if (typeof periodsData === 'undefined') return;
-      var container = document.getElementById('timeline-ticks');
-      var tooltip = document.getElementById('floating-tooltip');
-
-      periodsData.forEach(function(period, index) {
-        var startEl = tickElements[period.startEventId];
-        var endEl = tickElements[period.endEventId];
-
-        if (startEl && endEl) {
-          var startRect = startEl.getBoundingClientRect();
-          var endRect = endEl.getBoundingClientRect();
-          var containerRect = container.getBoundingClientRect();
-
-          var leftPos = (startRect.left + startRect.width / 2) - containerRect.left;
-          var rightPos = (endRect.left + endRect.width / 2) - containerRect.left;
-
-          var bar = document.createElement('div');
-          bar.className = 'period-bar';
-          bar.style.left = leftPos + 'px';
-          bar.style.width = (rightPos - leftPos) + 'px';
-          
-          var isTop = (index % 2 === 0);
-          if (isTop) {
-            bar.style.top = 'calc(50% - 16px)';
-          } else {
-            bar.style.top = 'calc(50% + 12px)';
-          }
-
-          bar.style.backgroundColor = period.color || getRandomColor(index);
-
-          function showTooltip(e) {
-            tooltip.style.display = 'block';
-            tooltip.style.left = (e.clientX + 12) + 'px';
-            tooltip.style.top = (e.clientY + 12) + 'px';
-            document.getElementById('tooltip-title').innerText = period.title;
-            document.getElementById('tooltip-desc').innerText = period.description;
-
-            startEl.classList.add('highlighted');
-            endEl.classList.add('highlighted');
-          }
-
-          function hideTooltip() {
-            tooltip.style.display = 'none';
-            startEl.classList.remove('highlighted');
-            endEl.classList.remove('highlighted');
-          }
-
-          bar.onmousemove = showTooltip;
-          bar.onmouseleave = hideTooltip;
-          bar.onclick = function(e) {
-            e.stopPropagation();
-            showTooltip(e);
-          };
-
-          container.appendChild(bar);
         }
-      });
-    }
 
-    function openBubble(item, displayYear) {
-      var bubble = document.getElementById('details-bubble');
-      document.getElementById('det-year').innerText = displayYear;
-      document.getElementById('det-title').innerText = item.title;
-      document.getElementById('det-body').innerHTML = item.details.fullText;
-      
-      var imgContainer = document.getElementById('det-images');
-      imgContainer.innerHTML = '';
-      if (item.images && item.images.length > 0) {
-        item.images.forEach(function(img) {
-          var card = document.createElement('div');
-          card.className = 'img-card';
-          card.innerHTML = '<img src="' + img.url + '" alt="' + img.caption + '"><div class="img-caption">' + img.caption + '</div>';
-          imgContainer.appendChild(card);
-        });
-        imgContainer.style.display = 'flex';
-      } else {
-        imgContainer.style.display = 'none';
-      }
+        // Авто-генератор yearText если он отсутствует в data.js
+        function getFormattedYearText(item) {
+            if (item.yearText) return item.yearText;
 
-      var accContainer = document.getElementById('det-accordions');
-      accContainer.innerHTML = '';
-      if (item.details.accordions && item.details.accordions.length > 0) {
-        item.details.accordions.forEach(function(acc) {
-          var accItem = document.createElement('div');
-          accItem.className = 'accordion-item';
-          accItem.innerHTML = 
-            '<div class="accordion-header">' + acc.title + '</div>' +
-            '<div class="accordion-content">' + acc.content + '</div>';
-          
-          accItem.querySelector('.accordion-header').onclick = function() {
-            accItem.classList.toggle('open');
-          };
-          accContainer.appendChild(accItem);
-        });
-      }
+            const raw = item.date;
+            if (typeof raw === 'number') {
+                if (raw < 0) {
+                    const abs = Math.abs(raw);
+                    if (abs >= 1000000) return `${abs / 1000000} млн р. тому`;
+                    if (abs >= 1000) return `${abs / 1000} тис. р. тому`;
+                    return `${abs} р. до н.е.`;
+                }
+                return `${raw} р.`;
+            }
 
-      var termsBox = document.getElementById('det-terms');
-      if (item.details.terms && item.details.terms.length > 0) {
-        termsBox.innerHTML = '<b>Терміни НМТ:</b> ' + item.details.terms.join(' • ');
-        termsBox.style.display = 'block';
-      } else {
-        termsBox.style.display = 'none';
-      }
-      
-      bubble.classList.remove('hidden');
-    }
+            const str = String(raw).trim();
+            const parts = str.split('.');
 
-    function closeBubble() {
-      document.getElementById('details-bubble').classList.add('hidden');
-      document.querySelectorAll('.tick-item').forEach(function(el) { el.classList.remove('active'); });
-      currentActiveId = null;
-    }
+            if (parts.length === 3) {
+                const day = parseInt(parts[0], 10);
+                const month = MONTHS_UA[parseInt(parts[1], 10) - 1] || '';
+                return `${day} ${month} ${parts[2]} р.`;
+            } else if (parts.length === 2) {
+                const month = MONTHS_UA[parseInt(parts[0], 10) - 1] || '';
+                return `${month} ${parts[1]} р.`;
+            }
 
-    // Horizontal Scroll with Mouse Wheel + Drag
-    var scrollArea = document.getElementById('scroll-area');
-    
-    scrollArea.addEventListener('wheel', function(e) {
-      if (e.deltaY !== 0) {
-        e.preventDefault();
-        scrollArea.scrollLeft += e.deltaY * 1.3;
-      }
-    }, { passive: false });
+            return `${str} р.`;
+        }
 
-    var isDown = false, startX, scrollLeft;
-    scrollArea.addEventListener('mousedown', function(e) {
-      isDown = true;
-      startX = e.pageX - scrollArea.offsetLeft;
-      scrollLeft = scrollArea.scrollLeft;
-    });
-    scrollArea.addEventListener('mouseleave', function() { isDown = false; });
-    scrollArea.addEventListener('mouseup', function() { isDown = false; });
-    scrollArea.addEventListener('mousemove', function(e) {
-      if (!isDown) return;
-      var x = e.pageX - scrollArea.offsetLeft;
-      scrollArea.scrollLeft = scrollLeft - (x - startX) * 1.5;
-    });
+        // --- 2. РЕНДЕР ШКАЛЫ И СОБЫТИЙ --- //
 
-    // Search input filtering
-    document.getElementById('search-input').addEventListener('input', function(e) {
-      var query = e.target.value.toLowerCase().trim();
-      if (!query) {
-        renderTimeline(eventsData);
-        return;
-      }
-      var filtered = eventsData.filter(function(item) {
-        var titleMatch = item.title.toLowerCase().includes(query);
-        var textMatch = item.details.fullText.toLowerCase().includes(query);
-        var termMatch = item.details.terms && item.details.terms.some(t => t.toLowerCase().includes(query));
-        var yearMatch = item.yearText ? item.yearText.toLowerCase().includes(query) : false;
-        return titleMatch || textMatch || termMatch || yearMatch;
-      });
-      renderTimeline(filtered);
-    });
+        function renderTimeline() {
+            if (typeof eventsData === 'undefined') return;
 
-    if (typeof eventsData !== 'undefined') {
-      renderTimeline(eventsData);
-    }
+            const container = document.getElementById('timelineContainer');
+            const nodesLayer = document.getElementById('nodesLayer');
+            const periodsLayer = document.getElementById('periodsLayer');
+            const axis = document.getElementById('timelineAxis');
 
-    document.getElementById('close-bubble').onclick = closeBubble;
-  </script>
+            nodesLayer.innerHTML = '';
+            periodsLayer.innerHTML = '';
+
+            // Сортируем события по времени
+            const sortedEvents = [...eventsData].sort((a, b) => parseToYearNumber(a.date) - parseToYearNumber(b.date));
+
+            let totalLength = 0;
+            const nodePositions = {};
+
+            // Расчёт позиций
+            const baseGap = 180;
+            sortedEvents.forEach((ev, index) => {
+                let pos = 0;
+                if (spacingMode === 'fixed') {
+                    pos = 50 + index * baseGap;
+                } else {
+                    // Динамический расчёт
+                    if (index === 0) pos = 50;
+                    else {
+                        const prevYear = parseToYearNumber(sortedEvents[index - 1].date);
+                        const currYear = parseToYearNumber(ev.date);
+                        const diff = Math.max(1, currYear - prevYear);
+                        // Логарифмическое сжатие для древних эпох
+                        const step = Math.min(400, Math.max(120, Math.log10(diff + 1) * 100));
+                        pos = nodePositions[sortedEvents[index - 1].id] + step;
+                    }
+                }
+                nodePositions[ev.id] = pos;
+                totalLength = pos + 150;
+            });
+
+            // Устанавливаем размер оси
+            if (orientation === 'horizontal') {
+                container.style.width = `${totalLength}px`;
+                container.style.height = '300px';
+                axis.style.width = `${totalLength}px`;
+            }
+
+            // Отрисовка точек событий
+            sortedEvents.forEach(ev => {
+                const pos = nodePositions[ev.id];
+                const node = document.createElement('div');
+                node.className = `timeline-node ${activeEventId === ev.id ? 'active' : ''}`;
+                node.id = `node-${ev.id}`;
+                node.style.left = `${pos}px`;
+
+                const dateText = getFormattedYearText(ev);
+
+                node.innerHTML = `
+                    <div class="node-dot"></div>
+                    <div class="node-label">
+                        <div class="node-date">${dateText}</div>
+                        <div class="node-title">${ev.title}</div>
+                    </div>
+                `;
+
+                node.onclick = () => toggleEventModal(ev);
+                nodesLayer.appendChild(node);
+            });
+
+            // Отрисовка полосок периодов (periodsData)
+            if (typeof periodsData !== 'undefined') {
+                periodsData.forEach(period => {
+                    const startPos = nodePositions[period.startEventId];
+                    const endPos = nodePositions[period.endEventId];
+
+                    if (startPos !== undefined && endPos !== undefined) {
+                        const bar = document.createElement('div');
+                        bar.className = 'period-bar';
+                        bar.style.left = `${startPos}px`;
+                        bar.style.width = `${endPos - startPos}px`;
+                        bar.style.backgroundColor = period.color || '#3b82f6';
+                        bar.innerText = period.title;
+                        bar.title = period.description || '';
+                        periodsLayer.appendChild(bar);
+                    }
+                });
+            }
+        }
+
+        // --- 3. МОДАЛЬНОЕ ОКНО КОНСПЕКТА --- //
+
+        function toggleEventModal(ev) {
+            if (activeEventId === ev.id) {
+                closeModal();
+                return;
+            }
+
+            activeEventId = ev.id;
+            document.querySelectorAll('.timeline-node').forEach(n => n.classList.remove('active'));
+            const activeNode = document.getElementById(`node-${ev.id}`);
+            if (activeNode) activeNode.classList.add('active');
+
+            document.getElementById('modalTitle').innerText = ev.title;
+            document.getElementById('modalDate').innerText = getFormattedYearText(ev);
+
+            const body = document.getElementById('modalBody');
+            body.innerHTML = '';
+
+            // Галерея картинок
+            if (ev.images && ev.images.length > 0) {
+                const imgContainer = document.createElement('div');
+                imgContainer.className = 'modal-images';
+                ev.images.forEach(img => {
+                    imgContainer.innerHTML += `
+                        <div class="modal-img-wrapper">
+                            <img src="${img.url}" class="modal-img" alt="${img.caption || ''}">
+                            ${img.caption ? `<div class="modal-img-caption">${img.caption}</div>` : ''}
+                        </div>
+                    `;
+                });
+                body.appendChild(imgContainer);
+            }
+
+            // Основной конспект
+            if (ev.details && ev.details.fullText) {
+                const fullTextDiv = document.createElement('div');
+                fullTextDiv.className = 'full-text';
+                fullTextDiv.innerHTML = ev.details.fullText;
+                body.appendChild(fullTextDiv);
+            }
+
+            // Термины
+            if (ev.details && ev.details.terms && ev.details.terms.length > 0) {
+                const termsDiv = document.createElement('div');
+                termsDiv.className = 'terms-container';
+                ev.details.terms.forEach(term => {
+                    termsDiv.innerHTML += `<span class="term-badge"># ${term}</span>`;
+                });
+                body.appendChild(termsDiv);
+            }
+
+            // Раскрывающиеся аккордеоны (<details>)
+            if (ev.details && ev.details.accordions && ev.details.accordions.length > 0) {
+                ev.details.accordions.forEach(acc => {
+                    const det = document.createElement('details');
+                    det.innerHTML = `
+                        <summary>${acc.title}</summary>
+                        <div class="accordion-content">${acc.content}</div>
+                    `;
+                    body.appendChild(det);
+                });
+            }
+
+            document.getElementById('modalOverlay').classList.add('active');
+        }
+
+        function closeModal() {
+            document.getElementById('modalOverlay').classList.remove('active');
+            document.querySelectorAll('.timeline-node').forEach(n => n.classList.remove('active'));
+            activeEventId = null;
+        }
+
+        function closeModalOnOverlay(e) {
+            if (e.target.id === 'modalOverlay') closeModal();
+        }
+
+        // --- 4. НАВИГАЦИЯ И НАСТРОЙКИ --- //
+
+        function switchTab(tab) {
+            document.querySelectorAll('.view-section').forEach(s => s.classList.remove('active'));
+            document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+
+            if (tab === 'timeline') {
+                document.getElementById('timeline-view').classList.add('active');
+                event.target.classList.add('active');
+            } else {
+                document.getElementById('settings-view').classList.add('active');
+                event.target.classList.add('active');
+            }
+        }
+
+        function changeTheme(theme) {
+            document.body.className = theme === 'dark' ? '' : `${theme}-theme`;
+        }
+
+        function changeSpacing(mode) {
+            spacingMode = mode;
+            renderTimeline();
+        }
+
+        function changeOrientation(orient) {
+            orientation = orient;
+            const wrapper = document.getElementById('timelineWrapper');
+            if (orient === 'vertical') wrapper.classList.add('vertical');
+            else wrapper.classList.remove('vertical');
+            renderTimeline();
+        }
+
+        function handleSearch() {
+            const query = document.getElementById('searchInput').value.toLowerCase();
+            if (!query) return;
+
+            const match = eventsData.find(ev => 
+                ev.title.toLowerCase().includes(query) || 
+                (ev.yearText && ev.yearText.toLowerCase().includes(query)) ||
+                String(ev.date).includes(query)
+            );
+
+            if (match) {
+                const node = document.getElementById(`node-${match.id}`);
+                if (node) {
+                    node.scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'center' });
+                    toggleEventModal(match);
+                }
+            }
+        }
+
+        // Запуск при загрузке страницы
+        window.onload = () => {
+            renderTimeline();
+        };
+    </script>
 </body>
 </html>

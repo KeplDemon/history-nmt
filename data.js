@@ -439,7 +439,7 @@ const periodsData = [
     title: "Розквіт Руси-України",
     startEventId: "ev_882",
     endEventId: "ev_1097",
-    color: "#f59e0b", // Оранжевый
+    color: "", 
     description: "Доба єдиної централізованої монархії від Олега до початку роздробленості."
   },
   {

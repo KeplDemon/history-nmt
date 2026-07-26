@@ -423,7 +423,7 @@ const periodsData = [
     title: "Трипільська культура",
     startEventId: "ev_trip_start",
     endEventId: "ev_trip_end",
-    color: "#3b82f6",
+    color: "#3b82f6", // Синий
     description: "Доба енеоліту, розквіт підсічного землеробства та мальованої кераміки."
   },
   {
@@ -431,7 +431,7 @@ const periodsData = [
     title: "Панування Скіфії",
     startEventId: "ev_skify_start",
     endEventId: "ev_sarmaty",
-    color: "#10b981",
+    color: "#10b981", // Зеленый
     description: "Період кочового панування та військово-демократичного об'єднання у степах."
   },
   {
@@ -439,7 +439,7 @@ const periodsData = [
     title: "Розквіт Руси-України",
     startEventId: "ev_882",
     endEventId: "ev_1097",
-    color: "#f59e0b",
+    color: "#f59e0b", // Оранжевый
     description: "Доба єдиної централізованої монархії від Олега до початку роздробленості."
   },
   {
@@ -447,7 +447,7 @@ const periodsData = [
     title: "Галицько-Волинська держава",
     startEventId: "ev_1199",
     endEventId: "ev_1253",
-    color: "#8b5cf6",
+    color: "#8b5cf6", // Фиолетовый
     description: "Період піднесення Королівства Русі за Романа Мстиславича та Данила Галицького."
   }
 ];

@@ -14,16 +14,14 @@
             --text-main: #f3f4f6;
             --text-muted: #9ca3af;
             
-            /* Оранжевая палитра EduPrep */
             --orange-primary: #ff6b00;
             --orange-hover: #ff8533;
             --orange-glow: rgba(255, 107, 0, 0.4);
             --orange-light: rgba(255, 107, 0, 0.15);
             
-            --timeline-axis: #374151;
+            --timeline-axis: #ff6b00;
         }
 
-        /* Светлая тема */
         body.light-theme {
             --bg-main: #f3f4f6;
             --panel-bg: #ffffff;
@@ -31,10 +29,8 @@
             --card-border: #e5e7eb;
             --text-main: #111827;
             --text-muted: #4b5563;
-            --timeline-axis: #9ca3af;
         }
 
-        /* Сепия тема */
         body.sepia-theme {
             --bg-main: #f4ecd8;
             --panel-bg: #e2d7be;
@@ -42,7 +38,6 @@
             --card-border: #d3c0a2;
             --text-main: #423223;
             --text-muted: #6e5944;
-            --timeline-axis: #c8b69e;
         }
 
         * {
@@ -63,7 +58,6 @@
             transition: background-color 0.3s;
         }
 
-        /* --- ШАПКА --- */
         header {
             background-color: var(--panel-bg);
             border-bottom: 1px solid var(--card-border);
@@ -126,7 +120,6 @@
             color: var(--orange-primary);
         }
 
-        /* --- РЕГУЛИРУЕМАЯ И ПОДНЯТАЯ ШКАЛА --- */
         .timeline-section {
             flex: 1;
             position: relative;
@@ -134,8 +127,8 @@
             overflow-x: auto;
             overflow-y: hidden;
             cursor: grab;
-            transform: rotateX(180deg); /* Скроллбар сверху */
-            padding-top: 10px; /* Шкала поднята ближе к верху */
+            transform: rotateX(180deg);
+            padding-top: 10px;
         }
 
         .timeline-section:active {
@@ -164,29 +157,43 @@
         /* Ось времени */
         .timeline-axis-line {
             position: absolute;
-            top: 130px; /* Высота посадки оси */
+            top: 130px;
             left: 0;
-            right: 0;
             height: 4px;
-            background: var(--timeline-axis);
+            background: var(--orange-primary);
             border-radius: 2px;
             transform: translateY(-50%);
         }
 
-        /* --- ПРИБИТЫЙ УКАЗАТЕЛЬ НАПРАВЛЕНИЯ СПРАВА --- */
-        .pinned-pointer-arrow {
-            position: fixed;
-            right: 12px;
-            top: calc(50px + 130px); /* Центровка по оси */
+        /* Наконечник стрелки в конце шкалы */
+        .timeline-axis-line::after {
+            content: '';
+            position: absolute;
+            right: -12px;
+            top: 50%;
             transform: translateY(-50%);
-            z-index: 40;
-            color: var(--orange-primary);
-            font-size: 1.4rem;
-            filter: drop-shadow(0 0 6px var(--orange-glow));
-            pointer-events: none;
+            width: 0;
+            height: 0;
+            border-top: 7px solid transparent;
+            border-bottom: 7px solid transparent;
+            border-left: 14px solid var(--orange-primary);
         }
 
-        /* --- ПЕРИОДЫ (ЧЕРЕДОВАНИЕ СВЕРХУ И СНИЗУ) --- */
+        /* Маркер направления у края экрана */
+        .pinned-pointer-arrow {
+            position: fixed;
+            right: 0;
+            top: calc(50px + 130px);
+            transform: translateY(-50%);
+            z-index: 40;
+            background: linear-gradient(to left, var(--panel-bg) 60%, transparent);
+            color: var(--orange-primary);
+            padding: 8px 6px 8px 15px;
+            font-size: 1.1rem;
+            pointer-events: none;
+            border-radius: 8px 0 0 8px;
+        }
+
         .period-bar-item {
             position: absolute;
             height: 8px;
@@ -197,11 +204,11 @@
         }
 
         .period-bar-item.pos-top {
-            top: 108px; /* Над осью */
+            top: 108px;
         }
 
         .period-bar-item.pos-bottom {
-            top: 144px; /* Под осью */
+            top: 144px;
         }
 
         .period-bar-item:hover {
@@ -209,10 +216,9 @@
             filter: brightness(1.2);
         }
 
-        /* --- ТОЧКИ СОБЫТИЙ С ТОЧНЫМ ЦЕНТРИРОВАНИЕМ --- */
         .timeline-node-item {
             position: absolute;
-            top: 130px; /* По центру оси */
+            top: 130px;
             transform: translate(-50%, -50%);
             z-index: 5;
             cursor: pointer;
@@ -268,7 +274,6 @@
             margin-top: 2px;
         }
 
-        /* --- ПОДСКАЗКА ПЕРИОДА ПРИ НАВЕДЕНИИ --- */
         .period-tooltip {
             position: fixed;
             display: none;
@@ -294,7 +299,6 @@
             margin-top: 2px;
         }
 
-        /* --- ПЛАВАЮЩЕЕ ПЕРЕТАСКИВАЕМОЕ И РЕГУЛИРУЕМОЕ ОКНО КОНСПЕКТА --- */
         .floating-window {
             position: fixed;
             top: 20%;
@@ -312,7 +316,7 @@
             z-index: 90;
             display: none;
             flex-direction: column;
-            resize: both; /* Можно растягивать за угол */
+            resize: both;
             overflow: hidden;
         }
 
@@ -327,7 +331,7 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            cursor: move; /* Курсор для перетаскивания */
+            cursor: move;
             user-select: none;
         }
 
@@ -362,7 +366,6 @@
             flex: 1;
         }
 
-        /* Контент модалки */
         .note-images {
             display: flex;
             gap: 10px;
@@ -422,7 +425,6 @@
             line-height: 1.45;
         }
 
-        /* МОДАЛКА НАСТРОЕК */
         .settings-backdrop {
             position: fixed;
             top: 0; left: 0; right: 0; bottom: 0;
@@ -498,8 +500,7 @@
             </div>
             <button class="window-close-btn" onclick="closeWindow()">✕</button>
         </div>
-        <div class="window-body" id="wBody">
-            </div>
+        <div class="window-body" id="wBody"></div>
     </div>
 
     <div class="settings-backdrop" id="settingsBackdrop">
@@ -534,7 +535,7 @@
         const COLOR_PALETTE = ["#ff6b00", "#10b981", "#3b82f6", "#8b5cf6", "#ec4899", "#f59e0b", "#06b6d4"];
 
         let activeNodeId = null;
-        let spacingMode = 'dynamic'; // Динамическая по умолчанию!
+        let spacingMode = 'dynamic';
 
         function parseToYearVal(raw) {
             if (typeof raw === 'number') return raw;
@@ -575,7 +576,6 @@
             return `${str} р.`;
         }
 
-        // РЕНДЕР ШКАЛЫ
         function renderTimeline() {
             if (typeof eventsData === 'undefined') return;
 
@@ -611,12 +611,11 @@
                 maxPos = posX + 180;
             });
 
-            inner.style.width = `${maxPos}px`;
-            axisLine.style.width = `${maxPos}px`;
+            inner.style.width = `${maxPos + 80}px`;
+            axisLine.style.width = `${maxPos + 20}px`;
 
             const periodsRanges = [];
             
-            // 1. Отрисовка периодов с ЧЕРЕДОВАНИЕМ (Сверху / Снизу)
             if (typeof periodsData !== 'undefined') {
                 periodsData.forEach((p, index) => {
                     const startX = positions[p.startEventId];
@@ -624,7 +623,7 @@
 
                     if (startX !== undefined && endX !== undefined) {
                         const color = p.color || COLOR_PALETTE[index % COLOR_PALETTE.length];
-                        const isTopPeriod = (index % 2 === 0); // Чередуем периоды!
+                        const isTopPeriod = (index % 2 === 0);
                         
                         const bar = document.createElement('div');
                         bar.className = `period-bar-item ${isTopPeriod ? 'pos-top' : 'pos-bottom'}`;
@@ -641,12 +640,10 @@
                 });
             }
 
-            // 2. Отрисовка точек
             sorted.forEach((ev, idx) => {
                 const posX = positions[ev.id];
                 let isTop = (idx % 2 === 0);
 
-                // Если точка совпадает с периодом — уводим текст на противоположную сторону
                 const overlap = periodsRanges.find(r => posX >= r.startX && posX <= r.endX);
                 if (overlap) {
                     isTop = !overlap.isTop;
@@ -684,7 +681,6 @@
             document.getElementById('periodTooltip').style.display = 'none';
         }
 
-        // ОТКРЫТИЕ ПЛАВАЮЩЕГО ОКНА
         function openWindow(ev) {
             activeNodeId = ev.id;
             document.querySelectorAll('.timeline-node-item').forEach(n => n.classList.remove('active'));
@@ -742,12 +738,10 @@
             activeNodeId = null;
         }
 
-        // ПЕРЕТАСКИВАНИЕ И СВАЙПЫ (МЫШЬ + ТАЧСКРИН ДЛЯ ТЕЛЕФОНОВ)
         const viewport = document.getElementById('timelineViewport');
         let isMouseDown = false;
         let startX, scrollLeft;
 
-        // Мышь
         viewport.addEventListener('mousedown', (e) => {
             if (e.target.closest('.timeline-node-item') || e.target.closest('.period-bar-item')) return;
             isMouseDown = true;
@@ -763,7 +757,6 @@
             viewport.scrollLeft = scrollLeft - (x - startX) * 1.5;
         });
 
-        // Тач для телефонов
         viewport.addEventListener('touchstart', (e) => {
             startX = e.touches[0].pageX - viewport.offsetLeft;
             scrollLeft = viewport.scrollLeft;
@@ -774,7 +767,6 @@
             viewport.scrollLeft = scrollLeft - (x - startX) * 1.5;
         }, { passive: true });
 
-        // Колесико
         viewport.addEventListener('wheel', (e) => {
             if (e.deltaY !== 0) {
                 e.preventDefault();
@@ -782,13 +774,11 @@
             }
         }, { passive: false });
 
-        // Стрелки клавиатуры
         window.addEventListener('keydown', (e) => {
             if (e.key === 'ArrowRight') viewport.scrollLeft += 120;
             if (e.key === 'ArrowLeft') viewport.scrollLeft -= 120;
         });
 
-        // DRAG ДЛЯ ПЛАВАЮЩЕГО ОКНА
         const windowEl = document.getElementById('floatingWindow');
         const headerEl = document.getElementById('windowHeader');
         let isDraggingWindow = false, winOffsetX = 0, winOffsetY = 0;
@@ -803,12 +793,11 @@
             if (!isDraggingWindow) return;
             windowEl.style.left = `${e.clientX - winOffsetX}px`;
             windowEl.style.top = `${e.clientY - winOffsetY}px`;
-            windowEl.style.transform = 'none'; // Снимаем центрирование после первого перемещения
+            windowEl.style.transform = 'none';
         });
 
         document.addEventListener('mouseup', () => isDraggingWindow = false);
 
-        // ПОИСК И НАСТРОЙКИ
         function handleSearch() {
             const q = document.getElementById('searchInput').value.toLowerCase().trim();
             if (!q) return;

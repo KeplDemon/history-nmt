@@ -28,7 +28,6 @@
       overflow-x: hidden;
     }
 
-    /* Шапка */
     .header-container {
       background-color: var(--panel-bg);
       border-bottom: 1px solid var(--border-color);
@@ -45,33 +44,15 @@
     .logo { font-weight: 900; font-size: 1.1rem; }
     .logo span { color: var(--accent-gold); }
 
-    .settings-trigger-btn {
-      background: none; border: 1px solid var(--border-color);
-      border-radius: 6px; color: var(--text-main); font-size: 0.85rem;
-      font-weight: 600; cursor: pointer; padding: 0.3rem 0.6rem;
-    }
-
-    .nav-links { display: flex; gap: 0.4rem; overflow-x: auto; scrollbar-width: none; }
-    .nav-links::-webkit-scrollbar { display: none; }
-
-    .nav-btn {
-      background: none; border: none; color: var(--text-muted);
-      font-size: 0.85rem; font-weight: 600; padding: 0.3rem 0.6rem;
-      border-radius: 6px; white-space: nowrap; cursor: pointer;
-    }
-    .nav-btn.active { color: var(--text-main); background-color: var(--border-color); }
-
     .search-box input {
       width: 100%; background: var(--bg-color); border: 1px solid var(--border-color);
       color: var(--text-main); padding: 0.5rem 0.8rem; border-radius: 8px; font-size: 0.85rem; outline: none;
     }
 
-    /* ТАЙМЛАЙН КОНТЕЙНЕР */
     .timeline-container {
       position: relative;
       width: 100%;
       margin-top: 1rem;
-      background: var(--bg-color);
     }
 
     .timeline-scroll-area {
@@ -96,7 +77,6 @@
       padding-right: 4rem;
     }
 
-    /* Главная ось */
     .timeline-axis-line {
       position: absolute;
       top: 50%;
@@ -108,7 +88,6 @@
       transform: translateY(-50%);
     }
 
-    /* СТРЕЛКА СТРОГО НА ЛИНИИСПРАВА (НЕ СЪЕЗЖАЕТ) */
     .fixed-arrow-right {
       position: absolute;
       right: 10px;
@@ -122,7 +101,7 @@
       padding: 2px 5px;
     }
 
-    /* Полоска процесса (Над осью) */
+    /* Полоска процесса */
     .period-bar {
       position: absolute;
       height: 4px;
@@ -130,11 +109,10 @@
       cursor: pointer;
       transition: transform 0.15s, height 0.15s, opacity 0.2s;
       z-index: 4;
-      opacity: 0.9;
+      opacity: 0.85;
     }
-    .period-bar:hover { height: 6px; opacity: 1; }
+    .period-bar:hover { height: 7px; opacity: 1; transform: translateY(-1px); }
 
-    /* Точки */
     .tick-wrapper { display: flex; align-items: center; position: relative; }
 
     .tick-item {
@@ -189,7 +167,6 @@
     .tick-year { font-weight: 800; font-size: 0.82rem; color: var(--accent-gold); }
     .tick-short-title { font-size: 0.78rem; color: var(--text-muted); line-height: 1.2; margin-top: 2px; }
 
-    /* Волнистая линия разрыва */
     .time-gap-break {
       width: 25px;
       height: 10px;
@@ -200,7 +177,24 @@
       opacity: 0.5;
     }
 
-    /* Конспект под таймлайном */
+    /* Floating Tooltip при наведении на отрезок */
+    .floating-tooltip {
+      position: fixed;
+      display: none;
+      background: var(--panel-bg);
+      border: 1px solid var(--accent-blue);
+      color: var(--text-main);
+      padding: 0.6rem 0.9rem;
+      border-radius: 8px;
+      font-size: 0.8rem;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.5);
+      z-index: 2000;
+      pointer-events: none;
+      max-width: 260px;
+    }
+    .floating-tooltip-title { font-weight: 700; color: var(--accent-blue); margin-bottom: 3px; }
+
+    /* Конспект */
     .speech-bubble {
       position: relative; 
       margin: 1.5rem 1rem; 
@@ -224,6 +218,43 @@
     .bubble-body ul { margin-left: 1.2rem; margin-top: 0.4rem; }
     .bubble-body li { margin-bottom: 0.3rem; }
 
+    /* Галерея картинок в конспекте */
+    .images-gallery {
+      display: flex;
+      gap: 10px;
+      margin-top: 1rem;
+      overflow-x: auto;
+      padding-bottom: 5px;
+    }
+    .img-card {
+      background: var(--bg-color);
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      padding: 6px;
+      flex: 0 0 auto;
+      max-width: 220px;
+    }
+    .img-card img {
+      width: 100%;
+      height: 120px;
+      object-fit: cover;
+      border-radius: 6px;
+    }
+    .img-caption {
+      font-size: 0.72rem;
+      color: var(--text-muted);
+      margin-top: 4px;
+      text-align: center;
+    }
+
+    /* Аккордеоны */
+    .accordion-container { margin-top: 1rem; display: flex; flex-direction: column; gap: 0.5rem; }
+    .accordion-item { border: 1px solid var(--border-color); border-radius: 8px; background: var(--bg-color); overflow: hidden; }
+    .accordion-header { padding: 0.6rem 0.8rem; font-size: 0.82rem; font-weight: 700; color: var(--accent-gold); display: flex; justify-content: space-between; align-items: center; cursor: pointer; }
+    .accordion-header::after { content: '▼'; font-size: 0.65rem; }
+    .accordion-content { display: none; padding: 0.7rem 0.8rem; border-top: 1px solid var(--border-color); font-size: 0.82rem; line-height: 1.4; color: #cbd5e1; }
+    .accordion-item.open .accordion-content { display: block; }
+
     .bubble-terms { 
       margin-top: 0.8rem; 
       padding-top: 0.6rem; 
@@ -238,16 +269,7 @@
   <header class="header-container">
     <div class="top-row">
       <div class="logo">EduPrep <span>НМТ</span></div>
-      <button id="open-settings-btn" class="settings-trigger-btn">⚙ Налаштування</button>
     </div>
-
-    <nav class="nav-links">
-      <button class="nav-btn active">Історія України</button>
-      <button class="nav-btn">Діячі</button>
-      <button class="nav-btn">Пам'ятки</button>
-      <button class="nav-btn">Шпори</button>
-    </nav>
-
     <div class="search-box">
       <input type="text" id="search-input" placeholder="Пошук року, події чи терміну...">
     </div>
@@ -270,17 +292,22 @@
         <h3 id="det-title"></h3>
       </div>
       <div class="bubble-body" id="det-body"></div>
+      <div id="det-images" class="images-gallery"></div>
+      <div class="accordion-container" id="det-accordions"></div>
       <div class="bubble-terms" id="det-terms"></div>
     </div>
   </main>
+
+  <div id="floating-tooltip" class="floating-tooltip">
+    <div id="tooltip-title" class="floating-tooltip-title"></div>
+    <div id="tooltip-desc"></div>
+  </div>
 
   <script src="data.js"></script>
   <script>
     function toRoman(num) {
       var lookup = {M:1000,CM:900,D:500,CD:400,C:100,XC:90,L:50,XL:40,X:10,IX:9,V:5,IV:4,I:1}, roman = '', i;
-      for (i in lookup) {
-        while (num >= lookup[i]) { roman += i; num -= lookup[i]; }
-      }
+      for (i in lookup) { while (num >= lookup[i]) { roman += i; num -= lookup[i]; } }
       return roman;
     }
 
@@ -302,11 +329,8 @@
 
       if (num < 0) {
         var abs = Math.abs(num);
-        if (abs >= 1000) {
-          return toRoman(Math.round(abs / 1000)) + ' тис. до н. е.';
-        } else {
-          return toRoman(Math.ceil(abs / 100)) + ' ст. до н. е.';
-        }
+        if (abs >= 1000) return toRoman(Math.round(abs / 1000)) + ' тис. до н. е.';
+        return toRoman(Math.ceil(abs / 100)) + ' ст. до н. е.';
       } else {
         return num + ' р.';
       }
@@ -398,8 +422,9 @@
     function renderPeriods(tickElements) {
       if (typeof periodsData === 'undefined') return;
       var container = document.getElementById('timeline-ticks');
+      var tooltip = document.getElementById('floating-tooltip');
 
-      periodsData.forEach(function(period) {
+      periodsData.forEach(function(period, index) {
         var startEl = tickElements[period.startEventId];
         var endEl = tickElements[period.endEventId];
 
@@ -415,8 +440,36 @@
           bar.className = 'period-bar';
           bar.style.left = leftPos + 'px';
           bar.style.width = (rightPos - leftPos) + 'px';
-          bar.style.top = 'calc(50% - 12px)';
+          
+          // Параллельные слои для нескольких отрезков
+          var topOffset = -12 - (index * 8);
+          bar.style.top = 'calc(50% + ' + topOffset + 'px)';
           bar.style.backgroundColor = period.color || '#3b82f6';
+
+          // Интерактив всплывающего окна
+          function showTooltip(e) {
+            tooltip.style.display = 'block';
+            tooltip.style.left = (e.clientX + 12) + 'px';
+            tooltip.style.top = (e.clientY + 12) + 'px';
+            document.getElementById('tooltip-title').innerText = period.title;
+            document.getElementById('tooltip-desc').innerText = period.description;
+
+            startEl.classList.add('highlighted');
+            endEl.classList.add('highlighted');
+          }
+
+          function hideTooltip() {
+            tooltip.style.display = 'none';
+            startEl.classList.remove('highlighted');
+            endEl.classList.remove('highlighted');
+          }
+
+          bar.onmousemove = showTooltip;
+          bar.onmouseleave = hideTooltip;
+          bar.onclick = function(e) {
+            e.stopPropagation();
+            showTooltip(e);
+          };
 
           container.appendChild(bar);
         }
@@ -429,6 +482,40 @@
       document.getElementById('det-title').innerText = item.title;
       document.getElementById('det-body').innerHTML = item.details.fullText;
       
+      // Картинки
+      var imgContainer = document.getElementById('det-images');
+      imgContainer.innerHTML = '';
+      if (item.images && item.images.length > 0) {
+        item.images.forEach(function(img) {
+          var card = document.createElement('div');
+          card.className = 'img-card';
+          card.innerHTML = '<img src="' + img.url + '" alt="НМТ Пам\'ятка"><div class="img-caption">' + img.caption + '</div>';
+          imgContainer.appendChild(card);
+        });
+        imgContainer.style.display = 'flex';
+      } else {
+        imgContainer.style.display = 'none';
+      }
+
+      // Аккордеоны
+      var accContainer = document.getElementById('det-accordions');
+      accContainer.innerHTML = '';
+      if (item.details.accordions && item.details.accordions.length > 0) {
+        item.details.accordions.forEach(function(acc) {
+          var accItem = document.createElement('div');
+          accItem.className = 'accordion-item';
+          accItem.innerHTML = 
+            '<div class="accordion-header">' + acc.title + '</div>' +
+            '<div class="accordion-content">' + acc.content + '</div>';
+          
+          accItem.querySelector('.accordion-header').onclick = function() {
+            accItem.classList.toggle('open');
+          };
+          accContainer.appendChild(accItem);
+        });
+      }
+
+      // Термины
       var termsBox = document.getElementById('det-terms');
       if (item.details.terms && item.details.terms.length > 0) {
         termsBox.innerHTML = '<b>Терміни НМТ:</b> ' + item.details.terms.join(' • ');

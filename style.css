@@ -9,7 +9,6 @@
   --bubble-bg: #1e293b;
 }
 
-/* Светлая тема */
 body.light-theme {
   --bg-color: #f1f5f9;
   --panel-bg: #ffffff;
@@ -27,35 +26,44 @@ body {
   min-height: 100vh;
   display: flex;
   flex-direction: column;
-  overflow-x: hidden;
 }
 
-/* Шапка с горизонтальными вкладками */
-.navbar {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
+/* Header Container */
+.header-container {
   background-color: var(--panel-bg);
   border-bottom: 1px solid var(--border-color);
-  padding: 0.5rem 1rem;
-  gap: 0.5rem;
+  padding: 0.8rem 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
   position: sticky;
   top: 0;
   z-index: 100;
 }
 
-.logo {
-  font-weight: 900;
-  font-size: 0.95rem;
-  white-space: nowrap;
+.top-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
+
+.logo { font-weight: 900; font-size: 1rem; }
 .logo span { color: var(--accent-gold); }
 
+.settings-trigger-btn {
+  background: none;
+  border: none;
+  color: var(--text-main);
+  font-size: 1.3rem;
+  cursor: pointer;
+}
+
+/* Nav Links */
 .nav-links {
   display: flex;
+  gap: 0.4rem;
   overflow-x: auto;
-  gap: 0.3rem;
-  scrollbar-width: none; /* Скрываем скроллбар */
+  scrollbar-width: none;
 }
 .nav-links::-webkit-scrollbar { display: none; }
 
@@ -65,7 +73,7 @@ body {
   color: var(--text-muted);
   font-size: 0.8rem;
   font-weight: 600;
-  padding: 0.4rem 0.6rem;
+  padding: 0.3rem 0.6rem;
   border-radius: 6px;
   white-space: nowrap;
   cursor: pointer;
@@ -75,42 +83,43 @@ body {
   background-color: var(--border-color);
 }
 
-.settings-trigger-btn {
-  background: none;
-  border: none;
+/* Search Box */
+.search-box input {
+  width: 100%;
+  background: var(--bg-color);
+  border: 1px solid var(--border-color);
   color: var(--text-main);
-  font-size: 1.2rem;
-  cursor: pointer;
-  padding: 0.2rem 0.5rem;
+  padding: 0.5rem 0.8rem;
+  border-radius: 8px;
+  font-size: 0.85rem;
+  outline: none;
 }
 
-/* Таймлайн с прибитой стрелкой */
+/* Timeline & Arrow Fix */
 .timeline-container {
   position: relative;
   width: 100%;
   margin-top: 2rem;
-  padding: 1rem 0;
 }
 
 .fixed-arrow-right {
-  position: fixed;
+  position: absolute;
   right: 5px;
-  top: 48%;
-  font-size: 1.2rem;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 1rem;
   color: var(--accent-gold);
   z-index: 10;
   pointer-events: none;
   background: var(--bg-color);
-  padding: 2px 5px;
-  border-radius: 4px;
+  padding: 0 4px;
 }
 
 .timeline-scroll-area {
   display: flex;
   overflow-x: auto;
   position: relative;
-  padding: 2rem 3rem 2rem 1rem;
-  scrollbar-width: thin;
+  padding: 3rem 2.5rem 3rem 1rem;
 }
 
 .timeline-axis-line {
@@ -118,14 +127,14 @@ body {
   top: 50%;
   left: 0;
   right: 0;
-  height: 3px;
+  height: 2px;
   background-color: var(--accent-gold);
   z-index: 1;
 }
 
 .timeline-ticks {
   display: flex;
-  gap: 3rem;
+  gap: 3.5rem;
   position: relative;
   z-index: 2;
   align-items: center;
@@ -136,7 +145,7 @@ body {
   flex-direction: column;
   align-items: center;
   cursor: pointer;
-  min-width: 110px;
+  min-width: 100px;
   text-align: center;
 }
 
@@ -146,38 +155,37 @@ body {
   background: var(--accent-gold);
   border-radius: 50%;
   border: 2px solid var(--bg-color);
-  margin: 8px 0;
+  margin: 6px 0;
   transition: transform 0.2s;
 }
 
 .tick-item:hover .tick-mark, .tick-item.active .tick-mark {
-  transform: scale(1.5);
+  transform: scale(1.4);
   background: var(--accent-blue);
 }
 
 .tick-year {
   font-weight: 800;
-  font-size: 0.85rem;
+  font-size: 0.8rem;
   color: var(--accent-gold);
 }
 
 .tick-short-title {
   font-size: 0.75rem;
   color: var(--text-muted);
-  max-width: 100px;
+  max-width: 110px;
   line-height: 1.1;
 }
 
-/* Пузырёк (Speech Bubble) конспекта */
+/* Bubble */
 .speech-bubble {
   position: relative;
-  margin: 10px 8px; /* 8px от краев экрана */
+  margin: 15px 8px;
   background: var(--bubble-bg);
   border: 2px solid var(--accent-blue);
   border-radius: 12px;
   padding: 1.2rem;
-  box-shadow: 0 10px 25px rgba(0,0,0,0.5);
-  animation: fadeIn 0.25s ease-out;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.4);
 }
 .speech-bubble.hidden { display: none; }
 
@@ -192,20 +200,11 @@ body {
   cursor: pointer;
 }
 
-.bubble-year {
-  color: var(--accent-gold);
-  font-weight: 800;
-  font-size: 1.1rem;
-}
+.bubble-year { color: var(--accent-gold); font-weight: 800; font-size: 1rem; }
 
-.bubble-body {
-  margin-top: 0.8rem;
-  font-size: 0.9rem;
-  line-height: 1.5;
-  color: var(--text-main);
-}
+.bubble-body { margin-top: 0.8rem; font-size: 0.85rem; line-height: 1.4; }
 
-/* Модалка настроек */
+/* Modal */
 .modal.hidden { display: none; }
 .modal-overlay {
   position: fixed; top: 0; left: 0; right: 0; bottom: 0;
@@ -214,73 +213,15 @@ body {
 .modal-content {
   position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%);
   background: var(--panel-bg); border: 1px solid var(--border-color);
-  border-radius: 12px; padding: 1.5rem; width: 90%; max-width: 400px; z-index: 201;
+  border-radius: 12px; padding: 1.2rem; width: 85%; max-width: 360px; z-index: 201;
 }
 .modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; }
-.modal-close { background: none; border: none; font-size: 1.5rem; color: var(--text-main); cursor: pointer; }
+.modal-close { background: none; border: none; font-size: 1.4rem; color: var(--text-main); cursor: pointer; }
 .setting-item { margin-bottom: 1rem; }
-.setting-item label { display: block; font-size: 0.85rem; color: var(--text-muted); margin-bottom: 0.4rem; }
+.setting-item label { display: block; font-size: 0.8rem; color: var(--text-muted); margin-bottom: 0.4rem; }
 .toggle-group { display: flex; gap: 0.5rem; }
 .btn-toggle {
   flex: 1; padding: 0.4rem; background: var(--bg-color); border: 1px solid var(--border-color);
   color: var(--text-main); border-radius: 6px; cursor: pointer; font-size: 0.8rem;
 }
 .btn-toggle.active { background: var(--accent-blue); border-color: var(--accent-blue); }
-
-@keyframes fadeIn {
-  from { opacity: 0; transform: translateY(-10px); }
-  to { opacity: 1; transform: translateY(0); }
-}
-.nav-btn.active, .nav-btn:hover { color: var(--text-main); background: var(--border-color); }
-
-/* Controls */
-.controls-bar {
-  display: flex; gap: 1.5rem; padding: 1rem 2rem;
-  background: rgba(30, 41, 59, 0.5); border-bottom: 1px solid var(--border-color); flex-wrap: wrap;
-}
-.control-group { display: flex; align-items: center; gap: 0.5rem; font-size: 0.85rem; color: var(--text-muted); }
-.btn-toggle {
-  background: var(--bg-color); border: 1px solid var(--border-color);
-  color: var(--text-main); padding: 0.3rem 0.7rem; border-radius: 6px; cursor: pointer;
-}
-.btn-toggle.active { background: var(--accent-color); border-color: var(--accent-color); }
-.search-box input {
-  background: var(--bg-color); border: 1px solid var(--border-color);
-  color: #fff; padding: 0.4rem 0.8rem; border-radius: 6px; outline: none;
-}
-
-/* Timeline Layout */
-.timeline-wrapper {
-  padding: 2rem; overflow-x: auto; position: relative;
-}
-.timeline-wrapper.horizontal .timeline-track {
-  display: flex; gap: 2rem; min-width: max-content; padding-bottom: 2rem;
-}
-.timeline-wrapper.vertical .timeline-track {
-  display: flex; flex-direction: column; gap: 1.5rem; max-width: 800px; margin: 0 auto;
-}
-
-/* Timeline Card */
-.event-card {
-  background: var(--card-bg); border: 1px solid var(--border-color);
-  border-radius: 12px; padding: 1.2rem; width: 280px; cursor: pointer;
-  transition: transform 0.2s, border-color 0.2s; position: relative;
-}
-.event-card:hover { transform: translateY(-5px); border-color: var(--accent-color); }
-.card-year { font-size: 1.2rem; font-weight: 900; color: var(--accent-gold); margin-bottom: 0.4rem; }
-.card-title { font-size: 0.95rem; font-weight: 700; margin-bottom: 0.5rem; }
-.card-desc { font-size: 0.8rem; color: var(--text-muted); line-height: 1.4; }
-
-/* Details Panel */
-.details-panel {
-  background: var(--panel-bg); border-top: 2px solid var(--accent-color);
-  padding: 2rem; position: relative; animation: slideUp 0.3s ease;
-}
-.details-panel.hidden { display: none; }
-.close-btn { position: absolute; top: 1rem; right: 1rem; font-size: 1.5rem; background: none; border: none; color: #fff; cursor: pointer; }
-.details-year { color: var(--accent-gold); font-weight: 900; font-size: 1.5rem; }
-
-@keyframes slideUp {
-  from { opacity: 0; transform: translateY(20px); }
-  to { opacity: 1; transform: translateY(0); }
-}

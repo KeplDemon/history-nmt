@@ -24,6 +24,9 @@ const eventsData = [
       accordions: [
         {
           title: "📌 Інші стоянки раннього та середнього палеоліту",
+          images: [
+            { url: "https://mukachevo.net/uploads/media/images/image/24/94/2494a2d4119e4ab4bd8872839b639685j22kjggfvxzv313_image.jpg", caption: "Реконструкція стоянки Королеве" }
+          ],
           content: "📍 <b>Роксолани</b> (Одещина)<br>📍 <b>Киїк-Коба</b> (Крим) — стоянка неандертальців (середній палеоліт, мустьєрська доба)."
         }
       ]

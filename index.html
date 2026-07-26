@@ -49,12 +49,7 @@
       z-index: 100;
     }
 
-    .top-row {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-
+    .top-row { display: flex; justify-content: space-between; align-items: center; }
     .logo { font-weight: 900; font-size: 1.1rem; }
     .logo span { color: var(--accent-gold); }
 
@@ -69,326 +64,117 @@
       padding: 0.3rem 0.6rem;
     }
 
-    .nav-links {
-      display: flex;
-      gap: 0.4rem;
-      overflow-x: auto;
-      scrollbar-width: none;
-    }
+    .nav-links { display: flex; gap: 0.4rem; overflow-x: auto; scrollbar-width: none; }
     .nav-links::-webkit-scrollbar { display: none; }
 
     .nav-btn {
-      background: none;
-      border: none;
-      color: var(--text-muted);
-      font-size: 0.85rem;
-      font-weight: 600;
-      padding: 0.3rem 0.6rem;
-      border-radius: 6px;
-      white-space: nowrap;
-      cursor: pointer;
+      background: none; border: none; color: var(--text-muted);
+      font-size: 0.85rem; font-weight: 600; padding: 0.3rem 0.6rem;
+      border-radius: 6px; white-space: nowrap; cursor: pointer;
     }
-    .nav-btn.active {
-      color: var(--text-main);
-      background-color: var(--border-color);
-    }
+    .nav-btn.active { color: var(--text-main); background-color: var(--border-color); }
 
     .search-box input {
-      width: 100%;
-      background: var(--bg-color);
-      border: 1px solid var(--border-color);
-      color: var(--text-main);
-      padding: 0.5rem 0.8rem;
-      border-radius: 8px;
-      font-size: 0.85rem;
-      outline: none;
+      width: 100%; background: var(--bg-color); border: 1px solid var(--border-color);
+      color: var(--text-main); padding: 0.5rem 0.8rem; border-radius: 8px; font-size: 0.85rem; outline: none;
     }
 
-    /* Главный контейнер шкалы */
-    .timeline-container {
-      position: relative;
-      width: 100%;
-      margin-top: 1rem;
-      overflow: hidden;
-    }
+    /* Таймлайн контейнер */
+    .timeline-container { position: relative; width: 100%; margin-top: 1rem; overflow: hidden; }
 
     .timeline-scroll-area {
-      display: flex;
-      overflow-x: auto;
-      position: relative;
-      padding: 3rem 1rem;
-      width: 100%;
-      cursor: grab;
-      user-select: none;
-      scrollbar-width: none; /* Скрываем скроллбар */
+      display: flex; overflow-x: auto; position: relative; padding: 3.5rem 1rem;
+      width: 100%; cursor: grab; user-select: none; scrollbar-width: none;
     }
-
     .timeline-scroll-area::-webkit-scrollbar { display: none; }
     .timeline-scroll-area:active { cursor: grabbing; }
 
-    /* Горизонтальная ось */
-    .timeline-scroll-area.horizontal {
-      min-width: 100%;
-    }
+    .timeline-scroll-area.horizontal { min-width: 100%; }
 
+    /* Золотая линия аккуратно заканчивается перед стрелкой */
     .timeline-scroll-area.horizontal .timeline-axis-line {
-      position: absolute;
-      top: 50%;
-      left: 0;
-      right: 1.5rem; /* Обрезаем линию строго перед стрелкой */
-      height: 3px;
-      background-color: var(--accent-gold);
-      z-index: 1;
+      position: absolute; top: 50%; left: 0; right: 1.5rem;
+      height: 3px; background-color: var(--accent-gold); z-index: 1;
     }
 
     .timeline-scroll-area.horizontal .timeline-ticks {
-      display: flex;
-      gap: 4rem;
-      position: relative;
-      z-index: 2;
-      align-items: center;
-      width: max-content;
-      padding-right: 5rem;
+      display: flex; position: relative; z-index: 2; align-items: center;
+      width: max-content; padding-right: 4rem;
     }
 
-    /* Стрелка без рамки и без хвоста */
+    /* Стрелка аккуратная без рамок */
     .fixed-arrow-right {
-      position: absolute;
-      right: 5px;
-      top: 50%;
-      transform: translateY(-50%);
-      font-size: 1rem;
-      color: var(--accent-gold);
-      z-index: 10;
-      pointer-events: none;
-      background: transparent;
-      padding: 0;
-      border: none;
-      line-height: 1;
+      position: absolute; right: 6px; top: 50%; transform: translateY(-50%);
+      font-size: 0.9rem; color: var(--accent-gold); z-index: 10;
+      pointer-events: none; background: transparent; padding: 0; border: none;
     }
 
-    /* Вертикальный режим */
-    .timeline-scroll-area.vertical {
-      flex-direction: column;
-      align-items: center;
-      padding: 2rem 1rem;
-      overflow-x: hidden;
-      cursor: default;
-    }
+    /* Элемент точки */
+    .tick-wrapper { display: flex; align-items: center; }
 
-    .timeline-scroll-area.vertical .timeline-axis-line {
-      position: absolute;
-      top: 0;
-      bottom: 0;
-      left: 50%;
-      transform: translateX(-50%);
-      width: 3px;
-      height: 100%;
-      background-color: var(--accent-gold);
-      z-index: 1;
-      right: auto;
-    }
-
-    .timeline-scroll-area.vertical .timeline-ticks {
-      display: flex;
-      flex-direction: column;
-      gap: 2.5rem;
-      position: relative;
-      z-index: 2;
-      width: 100%;
-      max-width: 360px;
-      padding-right: 0;
-    }
-
-    .timeline-scroll-area.vertical .tick-item {
-      width: 100%;
-      flex-direction: row;
-      justify-content: space-between;
-      align-items: center;
-      background: var(--panel-bg);
-      padding: 0.8rem 1rem;
-      border-radius: 10px;
-      border: 1px solid var(--border-color);
-    }
-
-    /* Точки */
     .tick-item {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      cursor: pointer;
-      min-width: 130px;
-      text-align: center;
+      display: flex; flex-direction: column; align-items: center;
+      cursor: pointer; min-width: 120px; text-align: center;
     }
 
     .tick-mark {
-      width: 16px;
-      height: 16px;
-      background: var(--accent-gold);
-      border-radius: 50%;
-      border: 3px solid var(--bg-color);
-      margin: 6px 0;
+      width: 16px; height: 16px; background: var(--accent-gold);
+      border-radius: 50%; border: 3px solid var(--bg-color); margin: 6px 0;
       transition: transform 0.2s, background-color 0.2s;
     }
 
     .tick-item:hover .tick-mark, .tick-item.active .tick-mark {
-      transform: scale(1.4);
-      background: var(--accent-blue);
+      transform: scale(1.4); background: var(--accent-blue);
     }
 
-    .tick-year {
-      font-weight: 800;
-      font-size: 0.85rem;
-      color: var(--accent-gold);
-    }
+    .tick-year { font-weight: 800; font-size: 0.85rem; color: var(--accent-gold); }
+    .tick-short-title { font-size: 0.8rem; color: var(--text-muted); max-width: 130px; line-height: 1.2; }
 
-    .tick-short-title {
-      font-size: 0.8rem;
-      color: var(--text-muted);
-      max-width: 130px;
-      line-height: 1.2;
+    /* Значок разрыва времени для больших эпох */
+    .time-gap-break {
+      display: flex; align-items: center; justify-content: center;
+      color: var(--accent-gold); font-weight: bold; font-size: 1.2rem;
+      padding: 0 10px; opacity: 0.6; user-select: none;
     }
 
     /* Карточка-конспект */
     .speech-bubble {
-      position: relative;
-      margin: 1rem;
-      background: var(--bubble-bg);
-      border: 2px solid var(--accent-blue);
-      border-radius: 14px;
-      padding: 1.4rem;
+      position: relative; margin: 1rem; background: var(--bubble-bg);
+      border: 2px solid var(--accent-blue); border-radius: 14px; padding: 1.4rem;
       box-shadow: 0 10px 25px rgba(0,0,0,0.5);
     }
     .speech-bubble.hidden { display: none !important; }
 
     .bubble-close {
-      position: absolute;
-      top: 10px;
-      right: 14px;
-      font-size: 1.6rem;
-      background: none;
-      border: none;
-      color: var(--text-muted);
-      cursor: pointer;
+      position: absolute; top: 10px; right: 14px; font-size: 1.6rem;
+      background: none; border: none; color: var(--text-muted); cursor: pointer;
     }
 
-    .bubble-year { 
-      color: var(--accent-gold); 
-      font-weight: 900; 
-      font-size: 1.15rem; 
-      display: inline-block;
-      margin-bottom: 4px;
-    }
+    .bubble-year { color: var(--accent-gold); font-weight: 900; font-size: 1.15rem; margin-bottom: 4px; display: inline-block; }
+    .bubble-header h3 { font-size: 1.1rem; font-weight: 700; color: var(--text-main); }
+    .bubble-body { margin-top: 1rem; font-size: 0.95rem; line-height: 1.6; color: var(--text-main); }
+    .bubble-terms { margin-top: 1rem; padding-top: 0.8rem; border-top: 1px dashed var(--border-color); font-size: 0.85rem; color: var(--accent-gold); }
 
-    .bubble-header h3 {
-      font-size: 1.1rem;
-      font-weight: 700;
-      color: var(--text-main);
-    }
+    /* Спойлеры */
+    .accordion-container { margin-top: 1rem; display: flex; flex-direction: column; gap: 0.6rem; }
+    .accordion-item { border: 1px solid var(--border-color); border-radius: 8px; background: var(--panel-bg); overflow: hidden; }
+    .accordion-header { padding: 0.7rem 1rem; font-size: 0.85rem; font-weight: 700; color: var(--accent-gold); display: flex; justify-content: space-between; align-items: center; cursor: pointer; }
+    .accordion-header::after { content: '▼'; font-size: 0.7rem; }
+    .accordion-content { display: none; padding: 0.8rem 1rem; border-top: 1px solid var(--border-color); background: var(--bg-color); font-size: 0.85rem; line-height: 1.4; }
+    .accordion-item.open .accordion-content { display: block; }
+    .accordion-content img { max-width: 100%; border-radius: 8px; margin-top: 0.5rem; border: 1px solid var(--border-color); }
 
-    .bubble-body { 
-      margin-top: 1rem; 
-      font-size: 0.95rem; 
-      line-height: 1.6; 
-      color: var(--text-main);
-    }
-
-    .bubble-terms {
-      margin-top: 1rem;
-      padding-top: 0.8rem;
-      border-top: 1px dashed var(--border-color);
-      font-size: 0.85rem;
-      color: var(--accent-gold);
-    }
-
-    /* Раскрывающие элементы */
-    .accordion-container {
-      margin-top: 1rem;
-      display: flex;
-      flex-direction: column;
-      gap: 0.6rem;
-    }
-
-    .accordion-item {
-      border: 1px solid var(--border-color);
-      border-radius: 8px;
-      background: var(--panel-bg);
-      overflow: hidden;
-    }
-
-    .accordion-header {
-      padding: 0.7rem 1rem;
-      font-size: 0.85rem;
-      font-weight: 700;
-      color: var(--accent-gold);
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      cursor: pointer;
-    }
-
-    .accordion-header::after {
-      content: '▼';
-      font-size: 0.7rem;
-    }
-
-    .accordion-content {
-      display: none;
-      padding: 0.8rem 1rem;
-      border-top: 1px solid var(--border-color);
-      background: var(--bg-color);
-      font-size: 0.85rem;
-      line-height: 1.4;
-    }
-
-    .accordion-item.open .accordion-content {
-      display: block;
-    }
-
-    .accordion-content img {
-      max-width: 100%;
-      border-radius: 8px;
-      margin-top: 0.5rem;
-      border: 1px solid var(--border-color);
-    }
-
-    /* Модалка настроек */
-    .modal-wrapper {
-      display: none;
-      position: fixed;
-      top: 0; left: 0; width: 100%; height: 100%;
-      z-index: 1000;
-    }
+    /* Модалка */
+    .modal-wrapper { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 1000; }
     .modal-wrapper.open { display: block !important; }
-
-    .modal-overlay {
-      position: absolute;
-      top: 0; left: 0; width: 100%; height: 100%;
-      background: rgba(0,0,0,0.7);
-    }
-
-    .modal-content {
-      position: absolute;
-      top: 50%; left: 50%;
-      transform: translate(-50%, -50%);
-      background: var(--panel-bg);
-      border: 1px solid var(--border-color);
-      border-radius: 12px;
-      padding: 1.2rem;
-      width: 90%;
-      max-width: 380px;
-      z-index: 1001;
-    }
-
+    .modal-overlay { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); }
+    .modal-content { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); background: var(--panel-bg); border: 1px solid var(--border-color); border-radius: 12px; padding: 1.2rem; width: 90%; max-width: 380px; z-index: 1001; }
     .modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; }
     .modal-close { background: none; border: none; font-size: 1.4rem; color: var(--text-main); cursor: pointer; }
     .setting-item { margin-bottom: 1.2rem; }
     .setting-item label { display: block; font-size: 0.8rem; color: var(--text-muted); margin-bottom: 0.4rem; }
     .toggle-group { display: flex; gap: 0.5rem; }
-    .btn-toggle {
-      flex: 1; padding: 0.5rem 0.3rem; background: var(--bg-color); border: 1px solid var(--border-color);
-      color: var(--text-main); border-radius: 6px; cursor: pointer; font-size: 0.75rem; text-align: center;
-    }
+    .btn-toggle { flex: 1; padding: 0.5rem 0.3rem; background: var(--bg-color); border: 1px solid var(--border-color); color: var(--text-main); border-radius: 6px; cursor: pointer; font-size: 0.75rem; text-align: center; }
     .btn-toggle.active { background: var(--accent-blue); border-color: var(--accent-blue); }
   </style>
 </head>
@@ -448,22 +234,6 @@
             <button id="btn-theme-light" class="btn-toggle">Світла</button>
           </div>
         </div>
-
-        <div class="setting-item">
-          <label>Орієнтація шкали:</label>
-          <div class="toggle-group">
-            <button id="btn-orient-horiz" class="btn-toggle active">Горизонтальна</button>
-            <button id="btn-orient-vert" class="btn-toggle">Вертикальна</button>
-          </div>
-        </div>
-
-        <div class="setting-item">
-          <label>Відстань між датами:</label>
-          <div class="toggle-group">
-            <button id="btn-gap-equal" class="btn-toggle active">Нормальна</button>
-            <button id="btn-gap-wide" class="btn-toggle">Широка</button>
-          </div>
-        </div>
       </div>
     </div>
   </div>
@@ -471,18 +241,20 @@
   <script>
     var currentActiveId = null;
 
+    // gapType: 'huge' (века/тысячелетия), 'medium' (годы), 'small' (месяцы)
     var eventsData = [
       {
         id: "1",
         year: "1 млн р. тому",
-        title: "Поява першої людини",
+        title: "Перші люди (Королеве)",
+        gapType: "huge",
         details: {
-          fullText: "<b>Палеоліт (Кам'яний вік).</b> Поява найдавніших людей на території України.<br>Стоянки: <b>с. Королеве (Закарпаття)</b>, Мізин, Кирилівка, Межиріч.",
-          terms: ["Палеоліт", "Привласнювальне господарство", "Стоянка"],
+          fullText: "<b>Палеоліт (Кам'яний вік).</b> Поява першої людини на території України.<br>Найдавніша стоянка — <b>с. Королеве (Закарпаття)</b>.<br>Інші стоянки: Мізин, Кирилівка, Межиріч, Киїк-Коба.",
+          terms: ["Палеоліт", "Привласнювальне господарство", "Стоянка", "Антропогенез"],
           accordions: [
             {
-              title: "🗺 Карта палеолітичних стоянок",
-              content: "Стоянка Королеве — найдавніша стоянка в Україні.<br><img src='https://upload.wikimedia.org/wikipedia/commons/thumb/d/d4/Ukraine_topographic_map-blank.svg/640px-Ukraine_topographic_map-blank.svg.png' alt='Карта'>"
+              title: "🗺 Палеолітичні стоянки України",
+              content: "📍 <b>Королеве</b> — найдавніша стоянка (1 млн років тому)<br>📍 <b>Мізин</b> — браслет з меандровим орнаментом, житла з кісток мамонта<br>📍 <b>Кирилівка</b> — стоянка в Києві"
             }
           ]
         }
@@ -491,49 +263,70 @@
         id: "2",
         year: "IV - III тис. до н.е.",
         title: "Трипільська культура",
+        gapType: "huge",
         details: {
-          fullText: "<b>Енеоліт (Мідно-кам'яний вік).</b> Освоєння міді, землеробство, мальована кераміка, протоміста.",
-          terms: ["Енеоліт", "Відтворювальне господарство", "Протоміста"],
+          fullText: "<b>Енеоліт (Мідно-кам'яний вік).</b> Расцвет відтворювального господарства (землеробство та скотарство).<br>Відкрита <b>Вікентієм Хвойкою</b> у 1893-1896 рр. поблизу с. Трипілля.",
+          terms: ["Енеоліт", "Відтворювальне господарство", "Протоміста", "Мальована кераміка"],
           accordions: [
             {
-              title: "👤 Видатна постать: Вікентій Хвойка",
-              content: "<b>Вікентій Хвойка</b> — археолог, який у 1893-1896 рр. відкрив трипільську культуру."
-            },
-            {
-              title: "🏺 Пам'ятка: Трипільська кераміка",
-              content: "Основними орнаментами є спіралі, лінії та зображення тварин.<br><img src='https://upload.wikimedia.org/wikipedia/commons/thumb/7/70/Trypillia_pottery.jpg/440px-Trypillia_pottery.jpg' alt='Кераміка'>"
+              title: "🏺 Особливості трипільців",
+              content: "• Будували двоповерхові будинки та великі протоміста (Майданецьке, Тальянки)<br>• Орнаментований керамічний посуд (спіралі, зображення змій)<br>• Через виснаження землі кожні 50-80 років спалювали свої поселення"
             }
           ]
         }
       },
       {
         id: "3",
-        year: "VII - III ст. до н.е.",
-        title: "Велика Скіфія",
+        year: "VIII - VI ст. до н.е.",
+        title: "Велика грецька колонізація",
+        gapType: "medium",
         details: {
-          fullText: "Могутня держава кочовиків-скіфів у Північному Причорномор'ї.",
-          terms: ["Курган", "Пектораль", "Звіриний стиль"],
+          fullText: "Заснування перших античних міст-держав на Північному Причорномор'ї: <b>Тіра, Ольвія, Херсонес, Пантікапей</b>.",
+          terms: ["Метрополія", "Колонія", "Поліс"],
           accordions: [
             {
-              title: "🏆 Пам'ятка: Золота Пектораль",
-              content: "Шедевр еліністичного мистецтва з кургану <b>Товста Могила</b>.<br><img src='https://upload.wikimedia.org/wikipedia/commons/thumb/1/1a/Golden_pectoral_from_Tovsta_Mohyla.jpg/640px-Golden_pectoral_from_Tovsta_Mohyla.jpg' alt='Пектораль'>"
+              title: "🏛 Грецькі міста-колонії",
+              content: "📍 <b>Тіра</b> — сучасний Білгород-Дністровський<br>📍 <b>Ольвія</b> — поблизу Миколаєва<br>📍 <b>Херсонес</b> — Севастополь<br>📍 <b>Пантікапей</b> — Керч"
             }
           ]
         }
       },
       {
         id: "4",
-        year: "860 р.",
-        title: "Похід Аскольда на Царгород",
+        year: "VII - III ст. до н.е.",
+        title: "Велика Скіфія",
+        gapType: "medium",
         details: {
-          fullText: "Перший задокументований морський похід київського князя Аскольда на Візантію (Константинополь). Внаслідок походу була укладена перша відома русько-візантійська угода.",
-          terms: ["Аскольд", "Візантія", "Християнізація"],
+          fullText: "Могутня держава кочовиків-скіфів. Розквіт при князі Атеї. Соціальне розшарування (Кургани).",
+          terms: ["Курган", "Пектораль", "Звіриний стиль", "Атей"],
           accordions: [
             {
-              title: "👤 Князь Аскольд",
-              content: "Правив у Києві разом із Діром. Здійснив вдалий похід на Царгород у 860 році."
+              title: "🏆 Шедеври скіфської культури",
+              content: "<b>Золота Пектораль</b> з кургану Товста Могила (знайдена Б. Мозолевським у 1971 р.).<br><b>Золотий гребінь</b> з кургану Солоха."
             }
           ]
+        }
+      },
+      {
+        id: "5",
+        year: "860 р.",
+        title: "Похід Аскольда на Царгород",
+        gapType: "medium",
+        details: {
+          fullText: "Перший морський похід київського князя Аскольда на Візантію. Укладено першу русько-візантійську угоду.",
+          terms: ["Аскольд", "Візантія", "Християнізація"],
+          accordions: []
+        }
+      },
+      {
+        id: "6",
+        year: "882 р.",
+        title: "Об'єднання Києва та Новгорода",
+        gapType: "small",
+        details: {
+          fullText: "Князь <b>Олег</b> вбиває Аскольда, захоплює Київ і проголошує його «матір'ю міст руських». Утворення Русі-України.",
+          terms: ["Князь Олег", "Полюддя", "Київська Русь"],
+          accordions: []
         }
       }
     ];
@@ -550,15 +343,24 @@
 
       for (var i = 0; i < data.length; i++) {
         (function(item) {
+          var wrapper = document.createElement('div');
+          wrapper.className = 'tick-wrapper';
+
+          // Динамический отступ в зависимости от эпохи
+          var marginValue = '40px';
+          if (item.gapType === 'huge') marginValue = '140px';
+          else if (item.gapType === 'medium') marginValue = '80px';
+          else if (item.gapType === 'small') marginValue = '35px';
+
           var tick = document.createElement('div');
           tick.className = 'tick-item' + (currentActiveId === item.id ? ' active' : '');
+          tick.style.marginRight = marginValue;
           tick.innerHTML = 
             '<div class="tick-year">' + item.year + '</div>' +
             '<div class="tick-mark"></div>' +
             '<div class="tick-short-title">' + item.title + '</div>';
           
-          tick.onclick = function(e) {
-            // Если кликнули по той же точке повторно — скрываем баббл!
+          tick.onclick = function() {
             if (currentActiveId === item.id) {
               closeBubble();
             } else {
@@ -572,7 +374,18 @@
             }
           };
 
-          container.appendChild(tick);
+          wrapper.appendChild(tick);
+
+          // Если разрыв огромен — добавляем визуальный разделитель «~»
+          if (item.gapType === 'huge' && i < data.length - 1) {
+            var gapMark = document.createElement('div');
+            gapMark.className = 'time-gap-break';
+            gapMark.innerText = '≈';
+            gapMark.style.marginRight = marginValue;
+            wrapper.appendChild(gapMark);
+          }
+
+          container.appendChild(wrapper);
         })(data[i]);
       }
     }
@@ -624,40 +437,27 @@
       currentActiveId = null;
     }
 
-    // РЕАЛИЗАЦИЯ ТЯНУЧЕЙ ШКАЛЫ (DRAG TO SCROLL)
+    // Перетаскивание мышкой
     var scrollArea = document.getElementById('scroll-area');
-    var isDown = false;
-    var startX, scrollLeft;
+    var isDown = false, startX, scrollLeft;
 
     scrollArea.addEventListener('mousedown', function(e) {
       isDown = true;
       startX = e.pageX - scrollArea.offsetLeft;
       scrollLeft = scrollArea.scrollLeft;
     });
-
-    scrollArea.addEventListener('mouseleave', function() {
-      isDown = false;
-    });
-
-    scrollArea.addEventListener('mouseup', function() {
-      isDown = false;
-    });
-
+    scrollArea.addEventListener('mouseleave', function() { isDown = false; });
+    scrollArea.addEventListener('mouseup', function() { isDown = false; });
     scrollArea.addEventListener('mousemove', function(e) {
       if (!isDown) return;
       e.preventDefault();
       var x = e.pageX - scrollArea.offsetLeft;
-      var walk = (x - startX) * 1.5; // Скорость прокрутки
-      scrollArea.scrollLeft = scrollLeft - walk;
+      scrollArea.scrollLeft = scrollLeft - (x - startX) * 1.5;
     });
 
-    // Отрисовка
     renderTimeline(eventsData);
 
-    // Закрытие по крестику
     document.getElementById('close-bubble').onclick = closeBubble;
-
-    // Поиск
     document.getElementById('search-input').oninput = function(e) {
       var val = e.target.value.toLowerCase().trim();
       var filtered = [];
@@ -672,58 +472,20 @@
       renderTimeline(filtered);
     };
 
-    // Настройки
     var modal = document.getElementById('settings-modal');
     document.getElementById('open-settings-btn').onclick = function() { modal.classList.add('open'); };
     document.getElementById('close-settings-btn').onclick = function() { modal.classList.remove('open'); };
     document.getElementById('modal-overlay').onclick = function() { modal.classList.remove('open'); };
 
-    // Тема
-    var lightBtn = document.getElementById('btn-theme-light');
-    var darkBtn = document.getElementById('btn-theme-dark');
-    lightBtn.onclick = function() {
+    document.getElementById('btn-theme-light').onclick = function() {
       document.body.classList.add('light-theme');
       this.classList.add('active');
-      darkBtn.classList.remove('active');
+      document.getElementById('btn-theme-dark').classList.remove('active');
     };
-    darkBtn.onclick = function() {
+    document.getElementById('btn-theme-dark').onclick = function() {
       document.body.classList.remove('light-theme');
       this.classList.add('active');
-      lightBtn.classList.remove('active');
-    };
-
-    // Ориентация
-    var arrow = document.getElementById('main-arrow');
-    var horizBtn = document.getElementById('btn-orient-horiz');
-    var vertBtn = document.getElementById('btn-orient-vert');
-
-    horizBtn.onclick = function() {
-      scrollArea.className = 'timeline-scroll-area horizontal';
-      arrow.style.display = 'block';
-      this.classList.add('active');
-      vertBtn.classList.remove('active');
-    };
-    vertBtn.onclick = function() {
-      scrollArea.className = 'timeline-scroll-area vertical';
-      arrow.style.display = 'none';
-      this.classList.add('active');
-      horizBtn.classList.remove('active');
-    };
-
-    // Интервал
-    var ticks = document.getElementById('timeline-ticks');
-    var gapEqual = document.getElementById('btn-gap-equal');
-    var gapWide = document.getElementById('btn-gap-wide');
-
-    gapEqual.onclick = function() {
-      ticks.style.gap = '4rem';
-      this.classList.add('active');
-      gapWide.classList.remove('active');
-    };
-    gapWide.onclick = function() {
-      ticks.style.gap = '7rem';
-      this.classList.add('active');
-      gapEqual.classList.remove('active');
+      document.getElementById('btn-theme-light').classList.remove('active');
     };
   </script>
 </body>

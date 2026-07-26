@@ -17,15 +17,6 @@
       --bubble-bg: #1e293b;
     }
 
-    body.light-theme {
-      --bg-color: #f1f5f9;
-      --panel-bg: #ffffff;
-      --text-main: #0f172a;
-      --text-muted: #64748b;
-      --border-color: #cbd5e1;
-      --bubble-bg: #ffffff;
-    }
-
     * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Inter', sans-serif; }
 
     body {
@@ -34,6 +25,7 @@
       min-height: 100vh;
       display: flex;
       flex-direction: column;
+      overflow-x: hidden;
     }
 
     .header-container {
@@ -78,14 +70,13 @@
       position: relative;
       width: 100%;
       margin-top: 1rem;
-      overflow: hidden;
     }
 
     .timeline-scroll-area {
       display: flex;
       overflow-x: auto;
       position: relative;
-      padding: 3rem 1rem 3rem 1rem;
+      padding: 6rem 1rem 6rem 1rem;
       width: 100%;
       cursor: grab;
       user-select: none;
@@ -100,10 +91,10 @@
       z-index: 2;
       align-items: center;
       width: max-content;
-      padding-right: 4rem;
+      padding-right: 5rem;
     }
 
-    /* Главная золотая линия цельная во всю длину */
+    /* Главная ось */
     .timeline-axis-line {
       position: absolute;
       top: 50%;
@@ -112,21 +103,25 @@
       height: 3px;
       background-color: var(--accent-gold);
       z-index: 1;
+      transform: translateY(-50%);
     }
 
-    /* Стрелка в конце линии */
+    /* СТРЕЛКА НА ПРАВОМ КРАЮ ЭКРАНА (FIXED) */
     .fixed-arrow-right {
-      position: absolute;
-      right: 1.5rem;
+      position: fixed;
+      right: 1rem;
       top: 50%;
       transform: translateY(-50%);
-      font-size: 0.9rem;
+      font-size: 1.2rem;
       color: var(--accent-gold);
-      z-index: 10;
+      z-index: 50;
       pointer-events: none;
+      background: var(--bg-color);
+      padding: 4px;
+      border-radius: 50%;
     }
 
-    /* Тонкие аккуратные отрезки (Периоды) ПРЯМО над базовой осью */
+    /* Полоска процесса (Над осью) */
     .period-bar {
       position: absolute;
       height: 4px;
@@ -134,16 +129,11 @@
       cursor: pointer;
       transition: transform 0.15s, height 0.15s, opacity 0.2s;
       z-index: 4;
-      opacity: 0.85;
+      opacity: 0.9;
     }
+    .period-bar:hover { height: 6px; opacity: 1; }
 
-    .period-bar:hover {
-      height: 6px;
-      opacity: 1;
-      transform: translateY(-1px);
-    }
-
-    /* Точки событий */
+    /* Элемент точки */
     .tick-wrapper { display: flex; align-items: center; position: relative; }
 
     .tick-item {
@@ -151,46 +141,67 @@
       flex-direction: column;
       align-items: center;
       cursor: pointer;
-      min-width: 120px;
+      min-width: 110px;
       text-align: center;
       position: relative;
       z-index: 3;
     }
 
+    /* ТОЧКА СТРОГО НА ОСИ */
     .tick-mark {
       width: 16px;
       height: 16px;
       background: var(--accent-gold);
       border-radius: 50%;
       border: 3px solid var(--bg-color);
-      margin: 6px 0;
-      transition: transform 0.2s, background-color 0.2s, border-color 0.2s;
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      z-index: 5;
+      transition: transform 0.2s, background-color 0.2s;
     }
 
     .tick-item:hover .tick-mark, 
     .tick-item.active .tick-mark {
-      transform: scale(1.35);
+      transform: translate(-50%, -50%) scale(1.4);
       background: var(--accent-blue);
     }
 
-    /* Подсветка связанной точки при наведении на отрезок */
     .tick-item.highlighted .tick-mark {
-      transform: scale(1.4);
+      transform: translate(-50%, -50%) scale(1.4);
       background: #60a5fa !important;
       border-color: #ffffff !important;
       box-shadow: 0 0 10px #60a5fa;
     }
 
-    .tick-year { font-weight: 800; font-size: 0.85rem; color: var(--accent-gold); }
-    .tick-short-title { font-size: 0.8rem; color: var(--text-muted); max-width: 130px; line-height: 1.2; }
-
-    .time-gap-break {
-      display: flex; align-items: center; justify-content: center;
-      color: var(--accent-gold); font-weight: bold; font-size: 1.2rem;
-      padding: 0 10px; opacity: 0.6; user-select: none;
+    /* Блок текста (Сверху или Снизу) */
+    .tick-content-box {
+      position: absolute;
+      width: 120px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
     }
 
-    /* Всплывающее окошко при наведении на отрезок */
+    .pos-top { bottom: 25px; }
+    .pos-bottom { top: 25px; }
+
+    .tick-year { font-weight: 800; font-size: 0.82rem; color: var(--accent-gold); }
+    .tick-short-title { font-size: 0.78rem; color: var(--text-muted); line-height: 1.2; margin-top: 2px; }
+
+    /* Красивый волнистый разрыв времени */
+    .time-gap-break {
+      width: 30px;
+      height: 12px;
+      position: relative;
+      z-index: 3;
+      background: radial-gradient(circle, var(--accent-gold) 20%, transparent 20%);
+      background-size: 6px 6px;
+      opacity: 0.6;
+    }
+
+    /* Tooltip */
     .floating-tooltip {
       position: fixed;
       display: none;
@@ -205,10 +216,9 @@
       pointer-events: none;
       max-width: 260px;
     }
-
     .floating-tooltip-title { font-weight: 700; color: var(--accent-blue); margin-bottom: 3px; }
 
-    /* Конспект под шкалой */
+    /* Конспект */
     .speech-bubble {
       position: relative; margin: 1rem; background: var(--bubble-bg);
       border: 2px solid var(--accent-blue); border-radius: 14px; padding: 1.4rem;
@@ -225,21 +235,6 @@
     .bubble-header h3 { font-size: 1.1rem; font-weight: 700; color: var(--text-main); }
     .bubble-body { margin-top: 1rem; font-size: 0.95rem; line-height: 1.6; color: var(--text-main); }
     .bubble-terms { margin-top: 1rem; padding-top: 0.8rem; border-top: 1px dashed var(--border-color); font-size: 0.85rem; color: var(--accent-gold); }
-
-    .accordion-container { margin-top: 1rem; display: flex; flex-direction: column; gap: 0.6rem; }
-    .accordion-item { border: 1px solid var(--border-color); border-radius: 8px; background: var(--panel-bg); overflow: hidden; }
-    .accordion-header { padding: 0.7rem 1rem; font-size: 0.85rem; font-weight: 700; color: var(--accent-gold); display: flex; justify-content: space-between; align-items: center; cursor: pointer; }
-    .accordion-header::after { content: '▼'; font-size: 0.7rem; }
-    .accordion-content { display: none; padding: 0.8rem 1rem; border-top: 1px solid var(--border-color); background: var(--bg-color); font-size: 0.85rem; line-height: 1.4; }
-    .accordion-item.open .accordion-content { display: block; }
-
-    /* Настройки */
-    .modal-wrapper { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 1000; }
-    .modal-wrapper.open { display: block !important; }
-    .modal-overlay { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); }
-    .modal-content { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); background: var(--panel-bg); border: 1px solid var(--border-color); border-radius: 12px; padding: 1.2rem; width: 90%; max-width: 380px; z-index: 1001; }
-    .modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; }
-    .modal-close { background: none; border: none; font-size: 1.4rem; color: var(--text-main); cursor: pointer; }
   </style>
 </head>
 <body>
@@ -268,8 +263,8 @@
         <div class="timeline-ticks" id="timeline-ticks">
           <div class="timeline-axis-line"></div>
         </div>
-        <div class="fixed-arrow-right">►</div>
       </div>
+      <div class="fixed-arrow-right">►</div>
     </div>
 
     <div id="details-bubble" class="speech-bubble hidden">
@@ -279,7 +274,6 @@
         <h3 id="det-title"></h3>
       </div>
       <div class="bubble-body" id="det-body"></div>
-      <div class="accordion-container" id="det-accordions"></div>
       <div class="bubble-terms" id="det-terms"></div>
     </div>
   </main>
@@ -289,20 +283,63 @@
     <div id="tooltip-desc"></div>
   </div>
 
-  <div id="settings-modal" class="modal-wrapper">
-    <div class="modal-overlay" id="modal-overlay"></div>
-    <div class="modal-content">
-      <div class="modal-header">
-        <h3>Налаштування</h3>
-        <button id="close-settings-btn" class="modal-close">&times;</button>
-      </div>
-      <p style="font-size:0.85rem; color:var(--text-muted);">Тут будуть налаштування теми та орієнтації.</p>
-    </div>
-  </div>
-
   <script src="data.js"></script>
 
   <script>
+    // Римские цифры
+    function toRoman(num) {
+      var lookup = {M:1000,CM:900,D:500,CD:400,C:100,XC:90,L:50,XL:40,X:10,IX:9,V:5,IV:4,I:1}, roman = '', i;
+      for (i in lookup) {
+        while (num >= lookup[i]) { roman += i; num -= lookup[i]; }
+      }
+      return roman;
+    }
+
+    // Автоматический конвертер дат в красивый украинский текст
+    function parseDateToText(dateInput) {
+      if (typeof dateInput === 'string') {
+        var parts = dateInput.split('.');
+        if (parts.length === 3) {
+          var months = ["січня","лютого","березня","квітня","травня","червня","липня","серпня","вересня","жовтня","листопада","грудня"];
+          var mIndex = parseInt(parts[1], 10) - 1;
+          return parseInt(parts[0], 10) + ' ' + months[mIndex] + ' ' + parts[2] + ' р.';
+        }
+        if (parts.length === 2) {
+          var monthsCap = ["Січень","Лютий","Березень","Квітень","Травень","Червень","Липень","Серпень","Вересень","Жовтень","Листопад","Грудень"];
+          var mIndex = parseInt(parts[0], 10) - 1;
+          return monthsCap[mIndex] + ' ' + parts[1] + ' р.';
+        }
+      }
+
+      var num = parseFloat(dateInput);
+      if (isNaN(num)) return dateInput;
+
+      if (num < 0) {
+        var abs = Math.abs(num);
+        if (abs >= 1000) {
+          var thous = Math.round(abs / 1000);
+          return toRoman(thous) + ' тис. до н. е.';
+        } else {
+          var cent = Math.ceil(abs / 100);
+          return toRoman(cent) + ' ст. до н. е.';
+        }
+      } else {
+        return num + ' р.';
+      }
+    }
+
+    // Расчет числового значения года для дистанций
+    function getNumericYear(dateInput) {
+      if (typeof dateInput === 'number') return dateInput;
+      if (typeof dateInput === 'string') {
+        var parts = dateInput.split('.');
+        if (parts.length === 3) return parseFloat(parts[2]) + (parseFloat(parts[1])/12);
+        if (parts.length === 2) return parseFloat(parts[1]) + (parseFloat(parts[0])/12);
+        return parseFloat(dateInput) || 0;
+      }
+      return 0;
+    }
+
     var currentActiveId = null;
 
     function renderTimeline(data) {
@@ -311,57 +348,82 @@
       
       container.innerHTML = '<div class="timeline-axis-line"></div>';
 
-      if (!data || data.length === 0) {
-        container.innerHTML += '<div style="padding: 20px; color: #94a3b8;">Подій не знайдено</div>';
-        return;
-      }
+      if (!data || data.length === 0) return;
+
+      // Сортировка по дате
+      data.sort(function(a, b) {
+        return getNumericYear(a.date) - getNumericYear(b.date);
+      });
 
       var tickElements = {};
 
+      // Определяем, какие точки входят в процессы (чтобы их текст сместить вниз)
+      var pointsInPeriods = {};
+      if (typeof periodsData !== 'undefined') {
+        periodsData.forEach(function(p) {
+          pointsInPeriods[p.startEventId] = true;
+          pointsInPeriods[p.endEventId] = true;
+        });
+      }
+
       for (var i = 0; i < data.length; i++) {
-        (function(item) {
+        (function(item, index) {
+          var displayYear = item.yearText || parseDateToText(item.date);
+          
           var wrapper = document.createElement('div');
           wrapper.className = 'tick-wrapper';
 
-          var marginValue = '40px';
-          if (item.gapType === 'huge') marginValue = '130px';
-          else if (item.gapType === 'medium') marginValue = '75px';
-          else if (item.gapType === 'small') marginValue = '35px';
+          // Динамический расчет расстояния между точками
+          var gap = 70; 
+          if (index < data.length - 1) {
+            var diff = Math.abs(getNumericYear(data[index+1].date) - getNumericYear(item.date));
+            if (diff > 500) gap = 140;
+            else if (diff > 100) gap = 100;
+            else if (diff < 5) gap = 50;
+          }
 
           var tick = document.createElement('div');
           tick.className = 'tick-item' + (currentActiveId === item.id ? ' active' : '');
-          tick.style.marginRight = marginValue;
+          tick.style.marginRight = gap + 'px';
           tick.setAttribute('data-id', item.id);
+
+          // Умное распределение текст сверху/снизу
+          var positionClass = 'pos-top';
+          if (pointsInPeriods[item.id] || index % 2 !== 0) {
+            positionClass = 'pos-bottom';
+          }
+
           tick.innerHTML = 
-            '<div class="tick-year">' + item.year + '</div>' +
             '<div class="tick-mark"></div>' +
-            '<div class="tick-short-title">' + item.title + '</div>';
+            '<div class="tick-content-box ' + positionClass + '">' +
+              '<div class="tick-year">' + displayYear + '</div>' +
+              '<div class="tick-short-title">' + item.title + '</div>' +
+            '</div>';
           
           tick.onclick = function() {
             if (currentActiveId === item.id) {
               closeBubble();
             } else {
-              var allTicks = document.querySelectorAll('.tick-item');
-              for (var j = 0; j < allTicks.length; j++) allTicks[j].classList.remove('active');
+              document.querySelectorAll('.tick-item').forEach(function(el) { el.classList.remove('active'); });
               tick.classList.add('active');
               currentActiveId = item.id;
-              openBubble(item);
+              openBubble(item, displayYear);
             }
           };
 
           wrapper.appendChild(tick);
 
-          if (item.gapType === 'huge' && i < data.length - 1) {
+          // Добавляем красивый разрыв, если пауза огромная
+          if (gap >= 140 && index < data.length - 1) {
             var gapMark = document.createElement('div');
             gapMark.className = 'time-gap-break';
-            gapMark.innerText = '≈';
-            gapMark.style.marginRight = marginValue;
+            gapMark.style.marginRight = gap + 'px';
             wrapper.appendChild(gapMark);
           }
 
           container.appendChild(wrapper);
           tickElements[item.id] = tick;
-        })(data[i]);
+        })(data[i], i);
       }
 
       setTimeout(function() {
@@ -375,8 +437,7 @@
       var container = document.getElementById('timeline-ticks');
       var tooltip = document.getElementById('floating-tooltip');
 
-      for (var i = 0; i < periodsData.length; i++) {
-        var period = periodsData[i];
+      periodsData.forEach(function(period) {
         var startEl = tickElements[period.startEventId];
         var endEl = tickElements[period.endEventId];
 
@@ -394,69 +455,45 @@
           bar.style.left = leftPos + 'px';
           bar.style.width = width + 'px';
           
-          // Тонкая линия прямо над оранжевой осью (смещение по вертикали для нескольких процессов)
-          var topOffset = -10 - (i * 8); 
-          bar.style.top = 'calc(50% + ' + topOffset + 'px)';
+          // Полоса строго над оранжевой осью
+          bar.style.top = 'calc(50% - 12px)';
           bar.style.backgroundColor = period.color || '#3b82f6';
 
-          (function(p, sEl, eEl) {
-            function showTooltip(e) {
-              tooltip.style.display = 'block';
-              tooltip.style.left = (e.clientX + 12) + 'px';
-              tooltip.style.top = (e.clientY + 12) + 'px';
-              document.getElementById('tooltip-title').innerText = p.title;
-              document.getElementById('tooltip-desc').innerText = p.description;
+          function showTooltip(e) {
+            tooltip.style.display = 'block';
+            tooltip.style.left = (e.clientX + 12) + 'px';
+            tooltip.style.top = (e.clientY + 12) + 'px';
+            document.getElementById('tooltip-title').innerText = period.title;
+            document.getElementById('tooltip-desc').innerText = period.description;
 
-              sEl.classList.add('highlighted');
-              eEl.classList.add('highlighted');
-            }
+            startEl.classList.add('highlighted');
+            endEl.classList.add('highlighted');
+          }
 
-            function hideTooltip() {
-              tooltip.style.display = 'none';
-              sEl.classList.remove('highlighted');
-              eEl.classList.remove('highlighted');
-            }
+          function hideTooltip() {
+            tooltip.style.display = 'none';
+            startEl.classList.remove('highlighted');
+            endEl.classList.remove('highlighted');
+          }
 
-            bar.onmousemove = showTooltip;
-            bar.onmouseleave = hideTooltip;
-            bar.onclick = function(e) {
-              e.stopPropagation();
-              showTooltip(e);
-            };
-          })(period, startEl, endEl);
+          bar.onmousemove = showTooltip;
+          bar.onmouseleave = hideTooltip;
+          bar.onclick = function(e) {
+            e.stopPropagation();
+            showTooltip(e);
+          };
 
           container.appendChild(bar);
         }
-      }
+      });
     }
 
-    function openBubble(item) {
+    function openBubble(item, displayYear) {
       var bubble = document.getElementById('details-bubble');
-      document.getElementById('det-year').innerText = item.year;
+      document.getElementById('det-year').innerText = displayYear;
       document.getElementById('det-title').innerText = item.title;
       document.getElementById('det-body').innerHTML = item.details.fullText;
       
-      var accContainer = document.getElementById('det-accordions');
-      accContainer.innerHTML = '';
-
-      if (item.details.accordions && item.details.accordions.length > 0) {
-        for (var i = 0; i < item.details.accordions.length; i++) {
-          (function(acc) {
-            var accItem = document.createElement('div');
-            accItem.className = 'accordion-item';
-            accItem.innerHTML = 
-              '<div class="accordion-header">' + acc.title + '</div>' +
-              '<div class="accordion-content">' + acc.content + '</div>';
-            
-            accItem.querySelector('.accordion-header').onclick = function() {
-              accItem.classList.toggle('open');
-            };
-
-            accContainer.appendChild(accItem);
-          })(item.details.accordions[i]);
-        }
-      }
-
       var termsBox = document.getElementById('det-terms');
       if (item.details.terms && item.details.terms.length > 0) {
         termsBox.innerHTML = '<b>Терміни НМТ:</b> ' + item.details.terms.join(' • ');
@@ -470,12 +507,11 @@
 
     function closeBubble() {
       document.getElementById('details-bubble').classList.add('hidden');
-      var allTicks = document.querySelectorAll('.tick-item');
-      for (var j = 0; j < allTicks.length; j++) allTicks[j].classList.remove('active');
+      document.querySelectorAll('.tick-item').forEach(function(el) { el.classList.remove('active'); });
       currentActiveId = null;
     }
 
-    // СКРОЛЛ И ДРАГ
+    // Скролл мышкой / тачпадом
     var scrollArea = document.getElementById('scroll-area');
     var isDown = false, startX, scrollLeft;
 
@@ -505,30 +541,11 @@
       }
     });
 
-    // Инициализация при загрузке
     if (typeof eventsData !== 'undefined') {
       renderTimeline(eventsData);
     }
 
     document.getElementById('close-bubble').onclick = closeBubble;
-    document.getElementById('search-input').oninput = function(e) {
-      var val = e.target.value.toLowerCase().trim();
-      var filtered = [];
-      for (var i = 0; i < eventsData.length; i++) {
-        var item = eventsData[i];
-        if (item.year.toLowerCase().indexOf(val) !== -1 || 
-            item.title.toLowerCase().indexOf(val) !== -1 ||
-            item.details.fullText.toLowerCase().indexOf(val) !== -1) {
-          filtered.push(item);
-        }
-      }
-      renderTimeline(filtered);
-    };
-
-    var modal = document.getElementById('settings-modal');
-    document.getElementById('open-settings-btn').onclick = function() { modal.classList.add('open'); };
-    document.getElementById('close-settings-btn').onclick = function() { modal.classList.remove('open'); };
-    document.getElementById('modal-overlay').onclick = function() { modal.classList.remove('open'); };
   </script>
 </body>
 </html>
